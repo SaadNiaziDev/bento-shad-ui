@@ -1,0 +1,94 @@
+{
+  "name": "bento-shad-ui",
+  "version": "0.1.0",
+  "description": "Bento-grid UI library with shadcn/ui anatomy: framework-free CSS, a typed vanilla core, React components, a shadcn/Tailwind v4 theme and a Flutter theme from one token file.",
+  "keywords": [
+    "ui",
+    "design-system",
+    "bento",
+    "shadcn",
+    "tailwind",
+    "react",
+    "css",
+    "components",
+    "dark-mode",
+    "flutter"
+  ],
+  "license": "MIT",
+  "author": "Saad Ali Khan (https://github.com/SaadNiaziDev)",
+  "homepage": "https://saadniazidev.github.io/bento-shad-ui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaadNiaziDev/bento-shad-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SaadNiaziDev/bento-shad-ui/issues"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css",
+    "./dist/auto.js",
+    "./dist/bento.iife.js",
+    "./dist/bento.iife.min.js"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/types/core/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/core/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./auto": {
+      "types": "./dist/types/core/index.d.ts",
+      "default": "./dist/auto.js"
+    },
+    "./react": {
+      "types": "./dist/types/react/index.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./bento.css": "./dist/bento.css",
+    "./bento.min.css": "./dist/bento.min.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./shadcn-theme.css": "./dist/shadcn-theme.css",
+    "./tokens.json": "./dist/tokens.json",
+    "./flutter/bento_theme.dart": "./dist/flutter/bento_theme.dart",
+    "./llms.txt": "./llms.txt",
+    "./llms-full.txt": "./llms-full.txt",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "r",
+    "docs",
+    "llms.txt",
+    "llms-full.txt",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs",
+    "check": "npm run typecheck && npm run build && npm test"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "esbuild": "^0.24.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

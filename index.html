@@ -1,0 +1,1421 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>bento-shad-ui</title>
+<meta name="description" content="bento-shad-ui: a bento-grid UI library with shadcn/ui anatomy. CSS, a typed core, React components, a shadcn/Tailwind v4 theme and a Flutter theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="dist/bento.css">
+<style>
+  /* ---- Documentation page only. Components live in dist/bento.css. ---- */
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body { margin: 0; min-height: 100vh; }
+  .doc-header { position: sticky; top: 0; z-index: 30; background: var(--background); border-bottom: 1px solid var(--border); }
+  .doc-header-in { display: flex; align-items: center; gap: 14px; padding-block: 10px; flex-wrap: wrap; }
+  .doc-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; letter-spacing: -0.02em; color: inherit; text-decoration: none; }
+  .doc-mark { width: 26px; height: 26px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; flex: none; }
+  .doc-mark i { border-radius: 4px; background: var(--foreground); }
+  .doc-mark i:first-child { grid-row: span 2; }
+  .doc-mark i:nth-child(2) { background: var(--brand); }
+  .doc-version { font-family: var(--font-sans); font-size: 11px; color: var(--muted-foreground); font-weight: 500; }
+  .doc-nav { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .doc-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+  .doc-main { padding-block: 24px 72px; display: flex; flex-direction: column; gap: 56px; }
+  .doc-main[data-width="phone"] { max-width: 410px; margin-block: 24px; border: 10px solid #1d1d21; border-radius: 46px; padding: 20px 10px 40px; }
+  .doc-section { display: flex; flex-direction: column; gap: 14px; }
+  .doc-section-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+  .doc-group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  .doc-group-head h3 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.015em; }
+  .doc-group-head span { font-size: 13px; color: var(--muted-foreground); }
+  .doc-demo { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .doc-code { max-height: 380px; }
+  .doc-c > .bk-tile-header .doc-code-btn { margin: -4px -6px 0 0; }
+  .doc-swatch-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px 24px; }
+  .doc-swatch-group h4 { margin: 0 0 8px; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+  .doc-swatches { display: flex; flex-direction: column; gap: 6px; }
+  .doc-swatch { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .doc-swatch i { width: 32px; height: 32px; flex: none; border-radius: 9px; border: 1px solid var(--border); }
+  .doc-swatch div { min-width: 0; display: flex; flex-direction: column; }
+  .doc-swatch b { font-family: var(--font-sans); font-size: 12px; font-weight: 500; }
+  .doc-swatch span { font-family: var(--font-sans); font-size: 11px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .doc-spec { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 14px; align-items: baseline; }
+  .doc-spec > .bk-eyebrow { font-size: 10.5px; }
+  .doc-radius { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px; }
+  .doc-radius div { display: flex; flex-direction: column; gap: 6px; align-items: center; font-family: var(--font-sans); font-size: 11px; color: var(--muted-foreground); }
+  .doc-radius i { width: 100%; aspect-ratio: 1; background: var(--muted); border: 1.5px solid var(--foreground); border-right-color: transparent; border-bottom-color: transparent; }
+  .doc-shadows { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .doc-shadows div { height: 56px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-family: var(--font-sans); font-size: 11px; color: var(--muted-foreground); }
+  .doc-space { display: flex; flex-direction: column; gap: 7px; }
+  .doc-space div { display: flex; align-items: center; gap: 10px; font-family: var(--font-sans); font-size: 11px; color: var(--muted-foreground); }
+  .doc-space i { height: 10px; border-radius: 3px; background: var(--brand); }
+  .doc-space span { width: 34px; text-align: right; }
+  .doc-tones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .doc-tones .bk-tile { --tile-pad: 10px; border-radius: 14px; font-size: 12px; font-weight: 600; gap: 0; }
+  .doc-cell { min-height: 84px; display: grid; place-items: center; border: 1.5px dashed var(--input); border-radius: var(--tile-radius); background: var(--muted); font-family: var(--font-sans); font-size: 12px; color: var(--muted-foreground); text-align: center; padding: 8px; }
+  .doc-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; }
+  .doc-icons div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 12px; font-family: var(--font-sans); font-size: 10.5px; color: var(--muted-foreground); }
+  .doc-icons div:hover { background: var(--muted); color: var(--foreground); }
+  .doc-icons .bk-icon { width: 20px; height: 20px; color: var(--foreground); }
+  .doc-rules { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+  .doc-rules b { font-weight: 600; }
+  .doc-art { position: relative; overflow: hidden; background: linear-gradient(var(--tint-sky), color-mix(in oklch, var(--tint-sky) 55%, var(--card))); }
+  .doc-art::before { content: ""; position: absolute; width: 16%; aspect-ratio: 1; border-radius: 50%; right: 20%; top: 16%; background: var(--chart-4); }
+  .doc-art::after { content: ""; position: absolute; left: -15%; right: -15%; bottom: -45%; height: 80%; border-radius: 50%; background: var(--chart-3); box-shadow: 34vw 6vw 0 -2vw color-mix(in oklch, var(--chart-3) 60%, var(--foreground)); }
+  .doc-frame { display: flex; flex-direction: column; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: calc(var(--tile-radius) + 6px); background: var(--background); min-width: 0; }
+  .doc-hero { display: flex; flex-direction: column; gap: 14px; padding: 36px 12px 28px; }
+  .doc-phone { width: 100%; max-width: 360px; margin-inline: auto; border: 10px solid #1d1d21; border-radius: 46px; background: var(--background); overflow: hidden; }
+  .doc-phone-screen { display: flex; flex-direction: column; gap: 12px; padding: 10px 12px 14px; }
+  .doc-statusbar { display: flex; justify-content: space-between; padding: 2px 10px 4px; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .doc-files { display: flex; flex-direction: column; }
+  .doc-files div { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .doc-files div:last-child { border-bottom: 0; }
+  .doc-files code { font-family: var(--font-sans); font-size: 12.5px; font-weight: 500; }
+  .doc-files span { color: var(--muted-foreground); }
+  .doc-footer { padding-block: 28px 40px; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 13px; }
+  @media (max-width: 720px) { .doc-tools .doc-hide-sm { display: none; } }
+</style>
+</head>
+<body class="bk">
+
+<!-- Icon sprite: Lucide-style 24px stroke icons. Use any icon set you like in your own project. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.3-4.3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 5-5.5"/></symbol>
+  <symbol id="i-triangle" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16v-7"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.8 1.2 6.9-6.2-3.2L5.8 21 7 14.1 2 9.3l6.9-1z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M22 3H2l8 9.5V19l4 2v-8.5z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-bold" viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 0 8H6zM6 12h9a4 4 0 0 1 0 8H6z"/></symbol>
+  <symbol id="i-italic" viewBox="0 0 24 24"><path d="M19 4h-9M14 20H5M15 4 9 20"/></symbol>
+  <symbol id="i-underline" viewBox="0 0 24 24"><path d="M6 4v6a6 6 0 0 0 12 0V4M4 20h16"/></symbol>
+  <symbol id="i-align-left" viewBox="0 0 24 24"><path d="M21 6H3M15 12H3M17 18H3"/></symbol>
+  <symbol id="i-align-center" viewBox="0 0 24 24"><path d="M21 6H3M17 12H7M19 18H5"/></symbol>
+  <symbol id="i-align-right" viewBox="0 0 24 24"><path d="M21 6H3M21 12H9M21 18H7"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  <symbol id="i-command" viewBox="0 0 24 24"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></symbol>
+</svg>
+
+<header class="doc-header">
+  <div class="bk-container doc-header-in">
+    <a class="doc-logo" href="#overview"><span class="doc-mark" aria-hidden="true"><i></i><i></i><i></i></span>bento-shad-ui <span class="doc-version">v0.1.0</span></a>
+    <nav class="doc-nav" aria-label="Sections">
+      <a class="bk-navbar-link" href="#foundations">Foundations</a>
+      <a class="bk-navbar-link" href="#components">Components</a>
+      <a class="bk-navbar-link" href="#patterns">Patterns</a>
+      <a class="bk-navbar-link" href="#usage">Usage</a>
+    </nav>
+    <div class="doc-tools">
+      <button class="bk-button doc-hide-sm" data-variant="outline" data-size="sm" type="button" data-bk-open="cmd"><svg class="bk-icon"><use href="#i-search"/></svg>Search<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span></button>
+      <div class="bk-toggle-group" data-type="single" role="group" aria-label="Preview width">
+        <button class="bk-toggle" type="button" id="w-full" aria-pressed="true" data-bk-tooltip="Full width" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-monitor"/></svg></button>
+        <button class="bk-toggle" type="button" id="w-phone" aria-pressed="false" data-bk-tooltip="Phone width" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-phone"/></svg></button>
+      </div>
+      <div class="bk-toggle-group" role="group" aria-label="Theme">
+        <button class="bk-toggle" type="button" data-bk-theme-set="light" aria-label="Light theme" data-bk-tooltip="Light" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-sun"/></svg></button>
+        <button class="bk-toggle" type="button" data-bk-theme-set="dark" aria-label="Dark theme" data-bk-tooltip="Dark" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-moon"/></svg></button>
+        <button class="bk-toggle" type="button" data-bk-theme-set="system" aria-label="System theme" data-bk-tooltip="System" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-monitor"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="bk-container doc-main" id="main">
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="doc-section" id="overview" aria-label="Overview">
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse" style="--tile-pad: 28px; justify-content: space-between;">
+        <span class="bk-eyebrow">UI library · v0.1.0 · MIT</span>
+        <div class="bk-stack" style="--gap: 16px;">
+          <h1 class="bk-display">bento-shad-ui</h1>
+          <p class="bk-lead">shadcn/ui components laid out in bento tiles. CSS, a typed core and React components, in light and dark, with themes for shadcn + Tailwind and Flutter.</p>
+        </div>
+        <div class="bk-row">
+          <a class="bk-button" data-variant="brand" href="#components">Browse components<svg class="bk-icon"><use href="#i-arrow-right"/></svg></a>
+          <a class="bk-button" data-variant="secondary" href="#usage">Quick start</a>
+        </div>
+      </article>
+      <article class="bk-tile" data-tone="peach">
+        <span class="bk-eyebrow">Components</span>
+        <div class="bk-num" style="font-size: 3rem;" id="count-components">47</div>
+        <p class="bk-tile-description" style="margin: 0;">From Button to Command palette, each with copyable markup.</p>
+      </article>
+      <article class="bk-tile" data-tone="sky">
+        <span class="bk-eyebrow">Colour tokens</span>
+        <div class="bk-num" style="font-size: 3rem;" id="count-tokens">49</div>
+        <p class="bk-tile-description" style="margin: 0;">shadcn's names plus brand, status, inverse and tint tokens, per theme.</p>
+      </article>
+      <article class="bk-tile">
+        <div class="bk-tile-header"><div><h2 class="bk-tile-title">Light and dark</h2><p class="bk-tile-description">Every token has both values.</p></div></div>
+        <div class="bk-tabs-list" data-full role="group" aria-label="Theme">
+          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="light">Light</button>
+          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="dark">Dark</button>
+          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="system">System</button>
+        </div>
+        <div class="bk-row" style="--gap: 6px;" aria-hidden="true">
+          <i style="width:28px;height:28px;border-radius:8px;background:var(--background);border:1px solid var(--border)"></i>
+          <i style="width:28px;height:28px;border-radius:8px;background:var(--card);border:1px solid var(--border)"></i>
+          <i style="width:28px;height:28px;border-radius:8px;background:var(--primary)"></i>
+          <i style="width:28px;height:28px;border-radius:8px;background:var(--brand)"></i>
+          <i style="width:28px;height:28px;border-radius:8px;background:var(--tint-sky)"></i>
+        </div>
+      </article>
+      <article class="bk-tile" data-tone="mint">
+        <span class="bk-eyebrow">Works with</span>
+        <ul class="bk-list">
+          <li class="bk-list-item"><svg class="bk-icon"><use href="#i-code"/></svg><span class="bk-grow">Any HTML site</span><span class="bk-list-item-meta">bento.css</span></li>
+          <li class="bk-list-item"><svg class="bk-icon"><use href="#i-layers"/></svg><span class="bk-grow">React · shadcn</span><span class="bk-list-item-meta">/react · registry</span></li>
+          <li class="bk-list-item"><svg class="bk-icon"><use href="#i-phone"/></svg><span class="bk-grow">Flutter</span><span class="bk-list-item-meta">bento_theme.dart</span></li>
+        </ul>
+      </article>
+    </div></div>
+  </section>
+
+  <!-- ===================== FOUNDATIONS ===================== -->
+  <section class="doc-section" id="foundations">
+    <div class="doc-section-head">
+      <span class="bk-eyebrow">01 · Foundations</span>
+      <h2 class="bk-h2">Tokens, type and layout</h2>
+      <p class="bk-muted" style="margin:0">Every value below is a CSS variable. Switch the theme in the header and all of them update.</p>
+    </div>
+
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-full">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Colour</h3><p class="bk-tile-description">shadcn/ui token names, written in OKLCH. Bento extras: brand, status, inverse and five tints for tiles.</p></div></div>
+        <div class="doc-swatch-groups" id="swatches"></div>
+      </article>
+
+      <article class="bk-tile bk-span-2 bk-row-2">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Typography</h3><p class="bk-tile-description">Red Hat Display for headings, Red Hat Text for everything else. No monospace font.</p></div></div>
+        <div class="doc-spec">
+          <span class="bk-eyebrow">.bk-display</span><div class="bk-display" style="font-size: 3rem;">Plan less, go more</div>
+          <span class="bk-eyebrow">.bk-h1</span><div class="bk-h1">Four nights in Lisbon</div>
+          <span class="bk-eyebrow">.bk-h2</span><div class="bk-h2">Day two: Alfama</div>
+          <span class="bk-eyebrow">.bk-h3</span><div class="bk-h3">Getting around</div>
+          <span class="bk-eyebrow">.bk-h4</span><div class="bk-h4">Tram 28 timetable</div>
+          <span class="bk-eyebrow">.bk-lead</span><p class="bk-lead">Everything for the trip, in one place.</p>
+          <span class="bk-eyebrow">.bk-p</span><p class="bk-p">Tram 28 leaves Martim Moniz every 12 minutes. Buy a transit card at the kiosk first, because drivers don't sell tickets.</p>
+          <span class="bk-eyebrow">.bk-large</span><div class="bk-large">Total €640 for 2 travellers</div>
+          <span class="bk-eyebrow">.bk-small</span><div class="bk-small">Updated 2 hours ago</div>
+          <span class="bk-eyebrow">.bk-muted</span><div class="bk-muted">Prices include taxes and fees.</div>
+          <span class="bk-eyebrow">.bk-eyebrow</span><div class="bk-eyebrow">Itinerary · Day 2</div>
+          <span class="bk-eyebrow">.bk-code</span><div><code class="bk-code">TP 1351 · 08:40 → 10:05</code></div>
+        </div>
+      </article>
+
+      <article class="bk-tile">
+        <div><h3 class="bk-tile-title">Radius</h3><p class="bk-tile-description">One <code class="bk-code">--radius</code>, the rest derived.</p></div>
+        <div class="doc-radius">
+          <div><i style="border-radius: var(--radius-sm) 0 0 0"></i>sm</div>
+          <div><i style="border-radius: var(--radius-md) 0 0 0"></i>md</div>
+          <div><i style="border-radius: var(--radius-lg) 0 0 0"></i>lg</div>
+          <div><i style="border-radius: var(--radius-xl) 0 0 0"></i>xl</div>
+          <div><i style="border-radius: var(--radius-2xl) 0 0 0"></i>2xl</div>
+          <div><i style="border-radius: var(--tile-radius) 0 0 0"></i>tile</div>
+        </div>
+      </article>
+
+      <article class="bk-tile">
+        <div><h3 class="bk-tile-title">Elevation</h3><p class="bk-tile-description">Tiles sit flat. Shadows are for things that float.</p></div>
+        <div class="doc-shadows">
+          <div style="box-shadow: var(--shadow-xs)">xs</div>
+          <div style="box-shadow: var(--shadow-sm)">sm</div>
+          <div style="box-shadow: var(--shadow-md)">md</div>
+          <div style="box-shadow: var(--shadow-lg)">lg</div>
+        </div>
+      </article>
+
+      <article class="bk-tile">
+        <div><h3 class="bk-tile-title">Spacing</h3><p class="bk-tile-description">A 4px base. Tiles use 12px gaps and 20px padding.</p></div>
+        <div class="doc-space">
+          <div><span>4</span><i style="width:4px"></i></div>
+          <div><span>8</span><i style="width:8px"></i></div>
+          <div><span>12</span><i style="width:12px"></i></div>
+          <div><span>16</span><i style="width:16px"></i></div>
+          <div><span>20</span><i style="width:20px"></i></div>
+          <div><span>24</span><i style="width:24px"></i></div>
+          <div><span>32</span><i style="width:32px"></i></div>
+          <div><span>48</span><i style="width:48px"></i></div>
+          <div><span>64</span><i style="width:64px"></i></div>
+        </div>
+      </article>
+
+      <article class="bk-tile">
+        <div><h3 class="bk-tile-title">Tile tones</h3><p class="bk-tile-description"><code class="bk-code">data-tone</code> on any tile. Components inside adapt.</p></div>
+        <div class="doc-tones">
+          <div class="bk-tile">default</div>
+          <div class="bk-tile" data-tone="muted">muted</div>
+          <div class="bk-tile" data-tone="peach">peach</div>
+          <div class="bk-tile" data-tone="sky">sky</div>
+          <div class="bk-tile" data-tone="mint">mint</div>
+          <div class="bk-tile" data-tone="lilac">lilac</div>
+          <div class="bk-tile" data-tone="butter">butter</div>
+          <div class="bk-tile" data-tone="inverse">inverse</div>
+          <div class="bk-tile" data-tone="brand" style="grid-column: 1 / -1">brand</div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-full doc-c" data-component="Bento grid">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Bento grid</h3><p class="bk-tile-description">4 columns when the container is wider than 900px, 2 down to 560px, then 1. Spans reset when a tile no longer fits.</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-bento">
+            <div class="bk-bento-grid">
+              <div class="doc-cell bk-span-2 bk-row-2">.bk-span-2 .bk-row-2</div>
+              <div class="doc-cell">.bk-tile</div>
+              <div class="doc-cell">.bk-tile</div>
+              <div class="doc-cell bk-span-2">.bk-span-2</div>
+              <div class="doc-cell bk-span-full" style="min-height: 56px;">.bk-span-full</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">Icons</h3><p class="bk-tile-description">24px stroke icons in the Lucide style. Add <code class="bk-code">class="bk-icon"</code> to any SVG.</p></div>
+        <div class="doc-icons" id="icons"></div>
+      </article>
+
+      <article class="bk-tile bk-span-2" data-tone="butter">
+        <div><h3 class="bk-tile-title">Rules for bento layouts</h3><p class="bk-tile-description">What keeps a bento page calm instead of busy.</p></div>
+        <ul class="doc-rules">
+          <li><b>One idea per tile.</b> If a tile needs a second heading, split it.</li>
+          <li><b>Size by importance.</b> The main thing gets 2 × 2; supporting facts get 1 × 1.</li>
+          <li><b>Tint sparingly.</b> At most one toned tile in four, and only one inverse tile per view.</li>
+          <li><b>Fill every row.</b> Pick spans that add up to 4. Dense flow fills small gaps.</li>
+          <li><b>Same padding everywhere.</b> Change tile size, never the inner padding.</li>
+          <li><b>Flat tiles, floating overlays.</b> Shadows only on menus, dialogs and toasts.</li>
+        </ul>
+      </article>
+    </div></div>
+  </section>
+
+  <!-- ===================== COMPONENTS ===================== -->
+  <section class="doc-section" id="components">
+    <div class="doc-section-head">
+      <span class="bk-eyebrow">02 · Components</span>
+      <h2 class="bk-h2">Components</h2>
+      <p class="bk-muted" style="margin:0">shadcn/ui anatomy, plain HTML. Press <b>Code</b> on any tile to see and copy its markup.</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="doc-group-head"><h3>Actions</h3><span>Button, Button group, Toggle, Kbd, Tooltip</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-2 bk-row-2 doc-c" data-component="Button">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Button</h3><p class="bk-tile-description">7 variants · 7 sizes · icon, loading and disabled states</p></div></div>
+        <div class="doc-demo">
+          <span class="bk-eyebrow">Variants</span>
+          <div class="bk-row">
+            <button class="bk-button" type="button">Book trip</button>
+            <button class="bk-button" data-variant="brand" type="button">Upgrade</button>
+            <button class="bk-button" data-variant="secondary" type="button">Save</button>
+            <button class="bk-button" data-variant="outline" type="button">Share</button>
+            <button class="bk-button" data-variant="ghost" type="button">Cancel</button>
+            <button class="bk-button" data-variant="destructive" type="button">Delete</button>
+            <button class="bk-button" data-variant="link" type="button">View terms</button>
+          </div>
+          <span class="bk-eyebrow">Sizes</span>
+          <div class="bk-row">
+            <button class="bk-button" data-size="xs" type="button">Extra small</button>
+            <button class="bk-button" data-size="sm" type="button">Small</button>
+            <button class="bk-button" type="button">Default</button>
+            <button class="bk-button" data-size="lg" type="button">Large</button>
+          </div>
+          <span class="bk-eyebrow">With icons</span>
+          <div class="bk-row">
+            <button class="bk-button" data-variant="outline" type="button"><svg class="bk-icon"><use href="#i-plus"/></svg>Add trip</button>
+            <button class="bk-button" data-variant="secondary" type="button">Next<svg class="bk-icon"><use href="#i-arrow-right"/></svg></button>
+            <button class="bk-button" data-variant="outline" data-size="icon-sm" type="button" aria-label="Edit"><svg class="bk-icon"><use href="#i-pencil"/></svg></button>
+            <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Download"><svg class="bk-icon"><use href="#i-download"/></svg></button>
+            <button class="bk-button" data-size="icon-lg" type="button" aria-label="Add"><svg class="bk-icon" data-size="lg"><use href="#i-plus"/></svg></button>
+          </div>
+          <span class="bk-eyebrow">States</span>
+          <div class="bk-row">
+            <button class="bk-button" data-loading type="button"><span class="bk-spinner" data-size="sm"></span>Saving</button>
+            <button class="bk-button" data-variant="outline" type="button" disabled>Disabled</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Button group">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Button group</h3><p class="bk-tile-description">Joined buttons and a split button</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-button-group" role="group" aria-label="Range">
+            <button class="bk-button" data-variant="outline" data-size="sm" type="button">Day</button>
+            <button class="bk-button" data-variant="outline" data-size="sm" type="button">Week</button>
+            <button class="bk-button" data-variant="outline" data-size="sm" type="button">Month</button>
+          </div>
+          <div class="bk-button-group">
+            <button class="bk-button" data-size="sm" type="button">Save draft</button>
+            <button class="bk-button" data-size="icon-sm" type="button" aria-label="More save options"><svg class="bk-icon"><use href="#i-chevron-down"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Toggle">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Toggle · Toggle group</h3><p class="bk-tile-description">Multiple or single choice</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row" style="--gap: 4px;">
+            <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="true" aria-label="Bold"><svg class="bk-icon"><use href="#i-bold"/></svg></button>
+            <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="false" aria-label="Italic"><svg class="bk-icon"><use href="#i-italic"/></svg></button>
+            <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="false" aria-label="Underline"><svg class="bk-icon"><use href="#i-underline"/></svg></button>
+          </div>
+          <div class="bk-toggle-group" data-type="single" role="group" aria-label="Alignment">
+            <button class="bk-toggle" type="button" aria-pressed="true" aria-label="Align left"><svg class="bk-icon"><use href="#i-align-left"/></svg></button>
+            <button class="bk-toggle" type="button" aria-pressed="false" aria-label="Align center"><svg class="bk-icon"><use href="#i-align-center"/></svg></button>
+            <button class="bk-toggle" type="button" aria-pressed="false" aria-label="Align right"><svg class="bk-icon"><use href="#i-align-right"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Kbd">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Kbd</h3><p class="bk-tile-description">Keyboard shortcuts in text</p></div></div>
+        <div class="doc-demo">
+          <p class="bk-muted" style="margin:0">Press <span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span> to search.</p>
+          <p class="bk-muted" style="margin:0">Or <span class="bk-kbd-group"><kbd class="bk-kbd">Ctrl</kbd>+<kbd class="bk-kbd">K</kbd></span> on Windows.</p>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Tooltip">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Tooltip</h3><p class="bk-tile-description">CSS only, on hover and keyboard focus</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row">
+            <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Copy link" data-bk-tooltip="Copy link"><svg class="bk-icon"><use href="#i-link"/></svg></button>
+            <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Favourite" data-bk-tooltip="Add to favourites"><svg class="bk-icon"><use href="#i-heart"/></svg></button>
+            <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Delete" data-bk-tooltip="Delete" data-bk-tooltip-side="bottom"><svg class="bk-icon"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+      </article>
+    </div></div>
+
+    <!-- Forms -->
+    <div class="doc-group-head"><h3>Forms</h3><span>Form, Calendar, Input, Textarea, Select, Search, Checkbox, Radio group, Switch, Slider, Input OTP, File upload</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-2 bk-row-2 doc-c" data-component="Form">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Form</h3><p class="bk-tile-description">Fields, a choice card group and a submit button together</p></div></div>
+        <div class="doc-demo">
+          <form class="bk-form doc-form">
+            <div class="bk-form-row">
+              <div class="bk-field"><label class="bk-label" for="f-name">Full name</label><input class="bk-input" id="f-name" autocomplete="name" value="Maya Kim"></div>
+              <div class="bk-field"><label class="bk-label" for="f-email">Email</label><input class="bk-input" id="f-email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+            </div>
+            <div class="bk-field">
+              <label class="bk-label" for="f-pass">Password</label>
+              <input class="bk-input" id="f-pass" type="password" autocomplete="new-password" aria-describedby="f-pass-d">
+              <p class="bk-field-description" id="f-pass-d">At least 10 characters, with one number.</p>
+            </div>
+            <fieldset class="bk-fieldset">
+              <legend>Plan</legend>
+              <div class="bk-form-row">
+                <label class="bk-choice"><input class="bk-radio" type="radio" name="plan" checked><span class="bk-option-text"><span>Free</span><span>3 trips, 1 traveller</span></span><span class="bk-choice-price">€0</span></label>
+                <label class="bk-choice"><input class="bk-radio" type="radio" name="plan"><span class="bk-option-text"><span>Plus</span><span>Unlimited trips, 6 travellers</span></span><span class="bk-choice-price">€4/mo</span></label>
+              </div>
+            </fieldset>
+            <label class="bk-option"><input class="bk-checkbox" type="checkbox" required><span>I agree to the terms and privacy policy</span></label>
+            <button class="bk-button" data-block type="submit">Create account</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-row-2 doc-c" data-component="Calendar">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Calendar</h3><p class="bk-tile-description">Single day or range. Click two days.</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-calendar" data-mode="range" aria-label="March 2026">
+            <div class="bk-calendar-head">
+              <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Previous month"><svg class="bk-icon"><use href="#i-chevron-left"/></svg></button>
+              <span class="bk-calendar-title">March 2026</span>
+              <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Next month"><svg class="bk-icon"><use href="#i-chevron-right"/></svg></button>
+            </div>
+            <div class="bk-calendar-grid">
+              <span class="bk-calendar-weekday">Mo</span><span class="bk-calendar-weekday">Tu</span><span class="bk-calendar-weekday">We</span><span class="bk-calendar-weekday">Th</span><span class="bk-calendar-weekday">Fr</span><span class="bk-calendar-weekday">Sa</span><span class="bk-calendar-weekday">Su</span>
+              <button class="bk-calendar-day" data-outside tabindex="-1">23</button><button class="bk-calendar-day" data-outside tabindex="-1">24</button><button class="bk-calendar-day" data-outside tabindex="-1">25</button><button class="bk-calendar-day" data-outside tabindex="-1">26</button><button class="bk-calendar-day" data-outside tabindex="-1">27</button><button class="bk-calendar-day" data-outside tabindex="-1">28</button><button class="bk-calendar-day">1</button>
+              <button class="bk-calendar-day">2</button><button class="bk-calendar-day">3</button><button class="bk-calendar-day">4</button><button class="bk-calendar-day">5</button><button class="bk-calendar-day">6</button><button class="bk-calendar-day">7</button><button class="bk-calendar-day">8</button>
+              <button class="bk-calendar-day" data-today>9</button><button class="bk-calendar-day">10</button><button class="bk-calendar-day">11</button><button class="bk-calendar-day" data-range="start" aria-selected="true">12</button><button class="bk-calendar-day" data-range="middle">13</button><button class="bk-calendar-day" data-range="middle">14</button><button class="bk-calendar-day" data-range="middle">15</button>
+              <button class="bk-calendar-day" data-range="end" aria-selected="true">16</button><button class="bk-calendar-day">17</button><button class="bk-calendar-day">18</button><button class="bk-calendar-day">19</button><button class="bk-calendar-day">20</button><button class="bk-calendar-day">21</button><button class="bk-calendar-day">22</button>
+              <button class="bk-calendar-day">23</button><button class="bk-calendar-day">24</button><button class="bk-calendar-day">25</button><button class="bk-calendar-day">26</button><button class="bk-calendar-day">27</button><button class="bk-calendar-day">28</button><button class="bk-calendar-day">29</button>
+              <button class="bk-calendar-day">30</button><button class="bk-calendar-day">31</button><button class="bk-calendar-day" data-outside tabindex="-1">1</button><button class="bk-calendar-day" data-outside tabindex="-1">2</button><button class="bk-calendar-day" data-outside tabindex="-1">3</button><button class="bk-calendar-day" data-outside tabindex="-1">4</button><button class="bk-calendar-day" data-outside tabindex="-1">5</button>
+            </div>
+          </div>
+          <p class="bk-muted" style="margin:0" id="cal-out">12–16 March · 4 nights</p>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Input">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Input</h3><p class="bk-tile-description">Label, help text, error</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-field"><label class="bk-label" for="in-1">Email</label><input class="bk-input" id="in-1" type="email" placeholder="you@example.com"><p class="bk-field-description">We'll send the itinerary here.</p></div>
+          <div class="bk-field"><label class="bk-label" for="in-2">Promo code</label><input class="bk-input" id="in-2" value="SUMMER" aria-invalid="true" aria-describedby="in-2-e"><p class="bk-field-error" id="in-2-e">This code expired on 31 August.</p></div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Textarea">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Textarea</h3><p class="bk-tile-description">Resizes vertically</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-field"><label class="bk-label" for="ta-1">Notes for the host</label><textarea class="bk-textarea" id="ta-1" placeholder="Arrival time, allergies, anything else"></textarea><p class="bk-field-description">Up to 500 characters.</p></div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Select">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Select</h3><p class="bk-tile-description">Native select, styled</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-field"><label class="bk-label" for="sel-1">Destination</label>
+            <select class="bk-select" id="sel-1">
+              <optgroup label="Portugal"><option>Lisbon</option><option>Porto</option></optgroup>
+              <optgroup label="Spain"><option>Madrid</option><option>Seville</option></optgroup>
+            </select>
+          </div>
+          <div class="bk-field"><label class="bk-label" for="sel-2">Travellers</label>
+            <select class="bk-select" id="sel-2"><option>1 adult</option><option selected>2 adults</option><option>2 adults, 1 child</option></select>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Search">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Search</h3><p class="bk-tile-description">Input group with icon and shortcut</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-input-group">
+            <svg class="bk-icon"><use href="#i-search"/></svg>
+            <input class="bk-input" type="search" placeholder="Search trips" aria-label="Search trips">
+            <span class="bk-input-end bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+          </div>
+          <div class="bk-input-group">
+            <svg class="bk-icon"><use href="#i-map-pin"/></svg>
+            <input class="bk-input" value="Lisbon, Portugal" aria-label="Location">
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Checkbox">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Checkbox</h3><p class="bk-tile-description">Checked, unchecked, indeterminate</p></div></div>
+        <div class="doc-demo">
+          <label class="bk-option"><input class="bk-checkbox" type="checkbox" data-indeterminate><span class="bk-option-text"><span>All extras</span></span></label>
+          <label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span class="bk-option-text"><span>Window seat</span><span>Free on flights over 2 hours</span></span></label>
+          <label class="bk-option"><input class="bk-checkbox" type="checkbox"><span class="bk-option-text"><span>Extra checked bag</span><span>€35 each way</span></span></label>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Radio group">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Radio group</h3><p class="bk-tile-description">One choice from a short list</p></div></div>
+        <div class="doc-demo">
+          <fieldset class="bk-radio-group">
+            <legend class="bk-sr-only">Cabin class</legend>
+            <label class="bk-option"><input class="bk-radio" type="radio" name="cabin" checked><span>Economy</span></label>
+            <label class="bk-option"><input class="bk-radio" type="radio" name="cabin"><span>Premium economy</span></label>
+            <label class="bk-option"><input class="bk-radio" type="radio" name="cabin"><span>Business</span></label>
+          </fieldset>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Switch">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Switch</h3><p class="bk-tile-description">Instant on or off settings</p></div></div>
+        <div class="doc-demo">
+          <label class="bk-switch-row"><span>Price alerts</span><input class="bk-switch" type="checkbox" role="switch" checked></label>
+          <label class="bk-switch-row"><span>Offline maps</span><input class="bk-switch" type="checkbox" role="switch" data-tone="brand" checked></label>
+          <label class="bk-switch-row"><span>Share location</span><input class="bk-switch" type="checkbox" role="switch"></label>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Slider">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Slider</h3><p class="bk-tile-description">Native range with a live value</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-field">
+            <div class="bk-row bk-between"><label class="bk-label" for="sl-1">Max nightly price</label><output class="bk-small" for="sl-1">€140</output></div>
+            <input class="bk-slider" id="sl-1" type="range" min="40" max="400" step="10" value="140" data-prefix="€">
+          </div>
+          <div class="bk-field">
+            <div class="bk-row bk-between"><label class="bk-label" for="sl-2">Walking distance</label><output class="bk-small" for="sl-2">15 min</output></div>
+            <input class="bk-slider" id="sl-2" type="range" min="5" max="45" step="5" value="15" data-suffix=" min">
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Input OTP">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Input OTP</h3><p class="bk-tile-description">Auto-advance, backspace and paste</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-otp" role="group" aria-label="Verification code">
+            <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 1" value="4"><input inputmode="numeric" maxlength="1" aria-label="Digit 2" value="8"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"></div>
+            <span class="bk-otp-separator" aria-hidden="true"></span>
+            <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
+          </div>
+          <p class="bk-field-description">Sent to m•••@example.com</p>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="File upload">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">File upload</h3><p class="bk-tile-description">Drop zone with a real file input</p></div></div>
+        <div class="doc-demo">
+          <label class="bk-dropzone">
+            <input type="file" multiple accept="image/*,.pdf">
+            <svg class="bk-icon" data-size="lg"><use href="#i-upload"/></svg>
+            <span class="bk-small">Drop files or click to upload</span>
+            <span class="bk-caption">PNG, JPG or PDF, up to 10 MB</span>
+            <span class="bk-dropzone-files"></span>
+          </label>
+        </div>
+      </article>
+    </div></div>
+
+    <!-- Data display -->
+    <div class="doc-group-head"><h3>Data display</h3><span>Card, Stat, Ring, Chart, Table, Badge, Avatar, List, Accordion, Media, Meter</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-row-2 doc-c" data-component="Card">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Card</h3><p class="bk-tile-description">Header, action, content, footer</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-card">
+            <div class="bk-card-header">
+              <h4 class="bk-card-title">Lisbon, 4 nights</h4>
+              <div class="bk-card-action"><span class="bk-badge" data-variant="success" data-dot>Booked</span></div>
+              <p class="bk-card-description">12–16 March · 2 travellers</p>
+            </div>
+            <div class="bk-card-content"><div class="bk-media doc-art" style="--ratio: 16 / 10"></div></div>
+            <div class="bk-card-footer"><span class="bk-large">€640</span><button class="bk-button" data-size="sm" type="button">View plan</button></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Stat">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Stat</h3><p class="bk-tile-description">KPI with trend and sparkline</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-stat">
+            <span class="bk-stat-label">Bookings this month</span>
+            <span class="bk-stat-value">1,284</span>
+            <span class="bk-stat-delta" data-trend="up">+12.4% vs February</span>
+          </div>
+          <svg class="bk-spark" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="Bookings rose from 12 to 31 per day over 7 days">
+            <polygon points="0,27.3 16.7,19.3 33.3,23.3 50,14 66.7,18 83.3,7.3 100,2 100,32 0,32"/>
+            <polyline points="0,27.3 16.7,19.3 33.3,23.3 50,14 66.7,18 83.3,7.3 100,2"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Progress ring" data-tone="peach">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Progress ring</h3><p class="bk-tile-description">One number, at a glance</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row" style="--gap: 14px; flex-wrap: nowrap;">
+            <div class="bk-ring" style="--p: 71" role="img" aria-label="71% of budget used"><span>71%</span></div>
+            <div class="bk-stack" style="--gap: 2px;"><span class="bk-large">€640</span><span class="bk-muted">of €900 budget</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Bar chart">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Bar chart</h3><p class="bk-tile-description">CSS bars to scale (max 80). Hover a bar for its value.</p></div><span class="bk-badge" data-variant="secondary">330 this week</span></div>
+        <div class="doc-demo">
+          <div class="bk-chart" role="img" aria-label="Bookings per day: Mon 32, Tue 45, Wed 28, Thu 52, Fri 61, Sat 74, Sun 38">
+            <div class="bk-bars">
+              <div class="bk-bar" data-muted style="--v: 40%" data-value="32"></div>
+              <div class="bk-bar" data-muted style="--v: 56.25%" data-value="45"></div>
+              <div class="bk-bar" data-muted style="--v: 35%" data-value="28"></div>
+              <div class="bk-bar" data-muted style="--v: 65%" data-value="52"></div>
+              <div class="bk-bar" data-muted style="--v: 76.25%" data-value="61"></div>
+              <div class="bk-bar" style="--v: 92.5%" data-value="74" data-show></div>
+              <div class="bk-bar" data-muted style="--v: 47.5%" data-value="38"></div>
+            </div>
+            <div class="bk-bar-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Table">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Table</h3><p class="bk-tile-description">Scrolls sideways inside its tile on small screens</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-table-wrap">
+            <table class="bk-table">
+              <thead><tr><th>Guest</th><th>Trip</th><th>Dates</th><th>Status</th><th data-align="end">Amount</th></tr></thead>
+              <tbody>
+                <tr><td><div class="bk-row" style="flex-wrap:nowrap"><span class="bk-avatar" data-size="sm">MK</span>Maya Kim</div></td><td>Lisbon</td><td>12–16 Mar</td><td><span class="bk-badge" data-variant="success">Paid</span></td><td data-align="end">€640.00</td></tr>
+                <tr><td><div class="bk-row" style="flex-wrap:nowrap"><span class="bk-avatar" data-size="sm">JR</span>Jonas Ruiz</div></td><td>Porto</td><td>2–5 Apr</td><td><span class="bk-badge" data-variant="warning">Pending</span></td><td data-align="end">€410.00</td></tr>
+                <tr><td><div class="bk-row" style="flex-wrap:nowrap"><span class="bk-avatar" data-size="sm">AS</span>Amira Saleh</div></td><td>Seville</td><td>18–21 Apr</td><td><span class="bk-badge" data-variant="outline">Draft</span></td><td data-align="end">€385.50</td></tr>
+                <tr><td><div class="bk-row" style="flex-wrap:nowrap"><span class="bk-avatar" data-size="sm">LT</span>Leo Tan</div></td><td>Madrid</td><td>9–12 May</td><td><span class="bk-badge" data-variant="destructive">Refunded</span></td><td data-align="end">−€220.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Badge">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Badge</h3><p class="bk-tile-description">8 variants, optional dot</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row" style="--gap: 6px;">
+            <span class="bk-badge">Default</span>
+            <span class="bk-badge" data-variant="brand">New</span>
+            <span class="bk-badge" data-variant="secondary">Draft</span>
+            <span class="bk-badge" data-variant="outline">3 nights</span>
+            <span class="bk-badge" data-variant="success" data-dot>Paid</span>
+            <span class="bk-badge" data-variant="warning" data-dot>Pending</span>
+            <span class="bk-badge" data-variant="info">Info</span>
+            <span class="bk-badge" data-variant="destructive">Overdue</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Avatar">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Avatar</h3><p class="bk-tile-description">Sizes, status, group</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row" style="--gap: 10px;">
+            <span class="bk-avatar" data-size="sm">MK</span>
+            <span class="bk-avatar" data-status="online">JR</span>
+            <span class="bk-avatar" data-size="lg" data-status="busy">AS</span>
+            <span class="bk-avatar" data-size="lg" data-shape="square">LT</span>
+          </div>
+          <div class="bk-avatar-group">
+            <span class="bk-avatar" style="background: var(--tint-peach); color: var(--tint-peach-foreground)">MK</span>
+            <span class="bk-avatar" style="background: var(--tint-sky); color: var(--tint-sky-foreground)">JR</span>
+            <span class="bk-avatar" style="background: var(--tint-mint); color: var(--tint-mint-foreground)">AS</span>
+            <span class="bk-avatar">+3</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-row-2 doc-c" data-component="List">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">List</h3><p class="bk-tile-description">Activity feed or settings rows</p></div></div>
+        <div class="doc-demo">
+          <ul class="bk-list">
+            <li class="bk-list-item"><span class="bk-avatar" data-size="sm">MK</span><div class="bk-list-item-text"><span>Maya booked Lisbon</span><span>Hotel Chiado, 4 nights</span></div><span class="bk-list-item-meta">2m</span></li>
+            <li class="bk-list-item"><span class="bk-avatar" data-size="sm">JR</span><div class="bk-list-item-text"><span>Jonas added a day trip</span><span>Sintra, Wed 14</span></div><span class="bk-list-item-meta">1h</span></li>
+            <li class="bk-list-item"><span class="bk-avatar" data-size="sm">AS</span><div class="bk-list-item-text"><span>Amira left a note</span><span>"Book the tram early"</span></div><span class="bk-list-item-meta">3h</span></li>
+            <li class="bk-list-item"><span class="bk-avatar" data-size="sm">LT</span><div class="bk-list-item-text"><span>Leo paid his share</span><span>€160.00</span></div><span class="bk-list-item-meta">Yesterday</span></li>
+            <li class="bk-list-item"><span class="bk-avatar" data-size="sm">MK</span><div class="bk-list-item-text"><span>Maya changed the dates</span><span>Now 12–16 March</span></div><span class="bk-list-item-meta">Mon</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Accordion">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Accordion</h3><p class="bk-tile-description">Native &lt;details&gt;, so it works without JS</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-accordion">
+            <details class="bk-accordion-item" open><summary class="bk-accordion-trigger">Can I change my dates?</summary><div class="bk-accordion-content">Yes. Change them up to 48 hours before check-in at no cost. After that, the host's policy applies.</div></details>
+            <details class="bk-accordion-item"><summary class="bk-accordion-trigger">How do shared payments work?</summary><div class="bk-accordion-content">Each traveller pays their share by card. The booking is confirmed when the last share is paid.</div></details>
+            <details class="bk-accordion-item"><summary class="bk-accordion-trigger">Do the maps work offline?</summary><div class="bk-accordion-content">On Plus, yes. Download a city from the trip page before you leave.</div></details>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Media">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Media</h3><p class="bk-tile-description">Aspect-ratio box for images and video</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-media doc-art" style="--ratio: 4 / 3">
+            <!-- <img src="photo.jpg" alt="Alfama rooftops"> -->
+            <span class="bk-media-caption">Alfama, Lisbon</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Meter">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Meter</h3><p class="bk-tile-description">Parts of a whole, with legend</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-stack" style="--gap: 4px;"><span class="bk-stat-label">Trip budget</span><span class="bk-large">€900</span></div>
+          <div class="bk-meter" role="img" aria-label="Stay 46%, travel 22%, food 12%, unspent 20%">
+            <span style="--v: 46%; --c: var(--chart-1)"></span>
+            <span style="--v: 22%; --c: var(--chart-2)"></span>
+            <span style="--v: 12%; --c: var(--chart-3)"></span>
+          </div>
+          <div class="bk-legend"><span style="--c: var(--chart-1)">Stay 46%</span><span style="--c: var(--chart-2)">Travel 22%</span><span style="--c: var(--chart-3)">Food 12%</span><span style="--c: var(--muted)">Unspent 20%</span></div>
+        </div>
+      </article>
+    </div></div>
+
+    <!-- Feedback -->
+    <div class="doc-group-head"><h3>Feedback</h3><span>Alert, Toast, Progress, Spinner, Skeleton, Empty state</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-2 bk-row-2 doc-c" data-component="Alert">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Alert</h3><p class="bk-tile-description">Default, info, success, warning, destructive</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-alert" role="status"><svg class="bk-icon"><use href="#i-info"/></svg><div class="bk-alert-title">Flight time changed</div><div class="bk-alert-description">TP 1351 now leaves at 09:15, 35 minutes later.</div></div>
+          <div class="bk-alert" data-variant="info" role="status"><svg class="bk-icon"><use href="#i-info"/></svg><div class="bk-alert-title">Check-in opens tomorrow</div><div class="bk-alert-description">We'll remind you 24 hours before departure.</div></div>
+          <div class="bk-alert" data-variant="success" role="status"><svg class="bk-icon"><use href="#i-check-circle"/></svg><div class="bk-alert-title">Booking confirmed</div><div class="bk-alert-description">Everyone has paid their share.</div></div>
+          <div class="bk-alert" data-variant="warning" role="status"><svg class="bk-icon"><use href="#i-triangle"/></svg><div class="bk-alert-title">Passport expires soon</div><div class="bk-alert-description">Some countries need 6 months of validity.</div></div>
+          <div class="bk-alert" data-variant="destructive" role="alert"><svg class="bk-icon"><use href="#i-alert"/></svg><div class="bk-alert-title">Payment failed</div><div class="bk-alert-description">Your card was declined. Update it to keep the booking.</div><div class="bk-alert-actions"><button class="bk-button" data-variant="destructive" data-size="xs" type="button">Update card</button></div></div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Toast">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Toast</h3><p class="bk-tile-description">Bottom-right, auto-dismiss</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" data-bk-toast='{"title":"Trip saved","description":"Lisbon, 12–16 March","variant":"success"}'>Show success</button>
+          <button class="bk-button" data-variant="outline" type="button" data-bk-toast='{"title":"Payment failed","description":"Your card was declined.","variant":"destructive"}'>Show error</button>
+          <button class="bk-button" data-variant="ghost" type="button" data-bk-toast='{"title":"Link copied"}'>Show default</button>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Progress">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Progress</h3><p class="bk-tile-description">Linear, three tones</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-stack" style="--gap: 6px;"><div class="bk-row bk-between bk-muted"><span>Packing list</span><span>17 of 25</span></div><div class="bk-progress" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Packing list"><span style="--v: 68%"></span></div></div>
+          <div class="bk-progress" data-tone="brand" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Upload"><span style="--v: 40%"></span></div>
+          <div class="bk-progress" data-tone="success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Done"><span style="--v: 100%"></span></div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Spinner">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Spinner</h3><p class="bk-tile-description">Inherits text colour</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-row" style="--gap: 16px;"><span class="bk-spinner" data-size="sm"></span><span class="bk-spinner"></span><span class="bk-spinner" data-size="lg" style="color: var(--brand)"></span></div>
+          <div class="bk-row bk-muted"><span class="bk-spinner" data-size="sm"></span>Checking availability</div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Skeleton">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Skeleton</h3><p class="bk-tile-description">Placeholder while loading</p></div></div>
+        <div class="doc-demo" aria-busy="true" aria-label="Loading">
+          <div class="bk-row" style="flex-wrap:nowrap; --gap: 10px;"><span class="bk-skeleton" style="width:40px;height:40px;border-radius:50%"></span><div class="bk-stack bk-grow" style="--gap:6px"><span class="bk-skeleton" style="height:12px;width:70%"></span><span class="bk-skeleton" style="height:12px;width:45%"></span></div></div>
+          <span class="bk-skeleton" style="height:72px;border-radius:var(--radius-xl)"></span>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-full doc-c" data-component="Empty state">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Empty state</h3><p class="bk-tile-description">Says what will appear here and how to add the first one</p></div></div>
+        <div class="doc-demo">
+          <div class="bk-empty">
+            <span class="bk-empty-icon"><svg class="bk-icon" data-size="lg"><use href="#i-plane"/></svg></span>
+            <h4 class="bk-empty-title">No trips yet</h4>
+            <p class="bk-empty-description">Trips you plan or get invited to show up here. Start with a city and dates.</p>
+            <div class="bk-empty-actions"><button class="bk-button" type="button"><svg class="bk-icon"><use href="#i-plus"/></svg>Plan a trip</button><button class="bk-button" data-variant="outline" type="button">Import booking</button></div>
+          </div>
+        </div>
+      </article>
+    </div></div>
+
+    <!-- Overlays -->
+    <div class="doc-group-head"><h3>Overlays</h3><span>Dialog, Alert dialog, Sheet, Bottom sheet, Dropdown menu, Popover, Command</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile doc-c" data-component="Dialog">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Dialog</h3><p class="bk-tile-description">Native &lt;dialog&gt;: focus trap, Esc, backdrop click</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" data-bk-open="dlg-edit">Edit profile</button>
+          <dialog class="bk-dialog" id="dlg-edit" aria-labelledby="dlg-edit-t">
+            <form method="dialog">
+              <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" type="button" data-bk-close aria-label="Close"><svg class="bk-icon"><use href="#i-x"/></svg></button>
+              <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="dlg-edit-t">Edit profile</h2><p class="bk-dialog-description">Your name and email show on shared trips.</p></div>
+              <div class="bk-dialog-body">
+                <div class="bk-field"><label class="bk-label" for="dlg-name">Name</label><input class="bk-input" id="dlg-name" value="Maya Kim" autofocus></div>
+                <div class="bk-field"><label class="bk-label" for="dlg-mail">Email</label><input class="bk-input" id="dlg-mail" type="email" value="maya@example.com"></div>
+              </div>
+              <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" type="button" data-bk-close>Cancel</button><button class="bk-button" type="submit" value="save" data-bk-toast='{"title":"Profile saved","variant":"success"}'>Save changes</button></div>
+            </form>
+          </dialog>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Alert dialog">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Alert dialog</h3><p class="bk-tile-description">Confirms a destructive action</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="destructive" type="button" data-bk-open="dlg-delete">Delete trip</button>
+          <dialog class="bk-dialog" data-variant="alert" id="dlg-delete" role="alertdialog" aria-labelledby="dlg-delete-t" aria-describedby="dlg-delete-d">
+            <span class="bk-dialog-icon"><svg class="bk-icon" data-size="lg"><use href="#i-trash"/></svg></span>
+            <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="dlg-delete-t">Delete "Lisbon, 4 nights"?</h2><p class="bk-dialog-description" id="dlg-delete-d">The itinerary, notes and shared payments are removed for all 6 travellers. This can't be undone.</p></div>
+            <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" type="button" data-bk-close autofocus>Keep trip</button><button class="bk-button" data-variant="destructive" type="button" data-bk-close="delete" data-bk-toast='{"title":"Trip deleted","variant":"destructive"}'>Delete trip</button></div>
+          </dialog>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Sheet">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Sheet</h3><p class="bk-tile-description">Side panel for filters or details</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" data-bk-open="sheet-filters"><svg class="bk-icon"><use href="#i-filter"/></svg>Filters</button>
+          <dialog class="bk-sheet" id="sheet-filters" aria-labelledby="sheet-filters-t">
+            <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" type="button" data-bk-close aria-label="Close"><svg class="bk-icon"><use href="#i-x"/></svg></button>
+            <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="sheet-filters-t">Filters</h2><p class="bk-dialog-description">142 stays match.</p></div>
+            <div class="bk-dialog-body">
+              <div class="bk-field"><div class="bk-row bk-between"><label class="bk-label" for="sh-price">Max nightly price</label><output class="bk-small" for="sh-price">€180</output></div><input class="bk-slider" id="sh-price" type="range" min="40" max="400" step="10" value="180" data-prefix="€"></div>
+              <hr class="bk-separator">
+              <label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span>Free cancellation</span></label>
+              <label class="bk-option"><input class="bk-checkbox" type="checkbox"><span>Breakfast included</span></label>
+              <label class="bk-option"><input class="bk-checkbox" type="checkbox"><span>Pets allowed</span></label>
+            </div>
+            <div class="bk-dialog-footer"><button class="bk-button" data-variant="ghost" type="button">Clear all</button><button class="bk-button" type="button" data-bk-close>Show 142 stays</button></div>
+          </dialog>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Bottom sheet">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Bottom sheet</h3><p class="bk-tile-description">The mobile version of a sheet</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" data-bk-open="sheet-share"><svg class="bk-icon"><use href="#i-users"/></svg>Share trip</button>
+          <dialog class="bk-sheet" data-side="bottom" id="sheet-share" aria-labelledby="sheet-share-t">
+            <div class="bk-sheet-handle" aria-hidden="true"></div>
+            <div class="bk-container" style="max-width: 560px; padding-inline: 0;">
+              <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="sheet-share-t">Share "Lisbon, 4 nights"</h2><p class="bk-dialog-description">People with the link can view the plan.</p></div>
+              <div class="bk-dialog-body">
+                <div class="bk-row" style="flex-wrap: nowrap;"><input class="bk-input" value="https://example.com/t/lis-0312" aria-label="Share link" readonly><button class="bk-button" data-variant="secondary" type="button" data-bk-copy="https://example.com/t/lis-0312">Copy</button></div>
+                <label class="bk-switch-row"><span>Allow editing</span><input class="bk-switch" type="checkbox" role="switch"></label>
+              </div>
+            </div>
+          </dialog>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Dropdown menu">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Dropdown menu</h3><p class="bk-tile-description">Native popover, placed under its button</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" popovertarget="menu-account">Maya Kim<svg class="bk-icon"><use href="#i-chevron-down"/></svg></button>
+          <div class="bk-menu" id="menu-account" popover role="menu">
+            <div class="bk-menu-label">My account</div>
+            <button class="bk-menu-item" role="menuitem" type="button"><svg class="bk-icon"><use href="#i-user"/></svg>Profile<span class="bk-menu-shortcut">⇧⌘P</span></button>
+            <button class="bk-menu-item" role="menuitem" type="button"><svg class="bk-icon"><use href="#i-wallet"/></svg>Billing</button>
+            <button class="bk-menu-item" role="menuitem" type="button"><svg class="bk-icon"><use href="#i-sliders"/></svg>Settings<span class="bk-menu-shortcut">⌘,</span></button>
+            <hr class="bk-menu-separator">
+            <button class="bk-menu-item" role="menuitemcheckbox" aria-checked="true" type="button">Email updates</button>
+            <button class="bk-menu-item" role="menuitemcheckbox" aria-checked="false" type="button">Push notifications</button>
+            <hr class="bk-menu-separator">
+            <button class="bk-menu-item" role="menuitem" data-variant="destructive" type="button"><svg class="bk-icon"><use href="#i-logout"/></svg>Log out</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Popover">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Popover</h3><p class="bk-tile-description">Small form or details on demand</p></div></div>
+        <div class="doc-demo">
+          <button class="bk-button" data-variant="outline" type="button" popovertarget="pop-invite"><svg class="bk-icon"><use href="#i-plus"/></svg>Invite</button>
+          <div class="bk-popover" id="pop-invite" popover>
+            <div class="bk-stack">
+              <div><div class="bk-tile-title">Invite to trip</div><p class="bk-tile-description">They can view and edit the plan.</p></div>
+              <input class="bk-input" type="email" placeholder="friend@example.com" aria-label="Email address">
+              <button class="bk-button" data-size="sm" type="button" data-bk-toast='{"title":"Invite sent","variant":"success"}' popovertarget="pop-invite" popovertargetaction="hide">Send invite</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Command">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Command</h3><p class="bk-tile-description">Type to filter, arrows to move, Enter to run. The header search uses the same component.</p></div><button class="bk-button" data-variant="outline" data-size="sm" type="button" data-bk-open="cmd">Open<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span></button></div>
+        <div class="doc-demo">
+          <div class="bk-command" data-inline>
+            <div class="bk-command-search"><svg class="bk-icon"><use href="#i-search"/></svg><input class="bk-command-input" placeholder="Type a command or search" aria-label="Command"></div>
+            <div class="bk-command-list" role="listbox">
+              <div class="bk-command-group"><div class="bk-command-group-heading">Trips</div>
+                <div class="bk-command-item" role="option"><svg class="bk-icon"><use href="#i-plane"/></svg>Lisbon, 12–16 March</div>
+                <div class="bk-command-item" role="option"><svg class="bk-icon"><use href="#i-plane"/></svg>Porto, 2–5 April</div>
+              </div>
+              <div class="bk-command-group"><div class="bk-command-group-heading">Actions</div>
+                <div class="bk-command-item" role="option" data-keywords="new create"><svg class="bk-icon"><use href="#i-plus"/></svg>New trip<span class="bk-kbd-group"><kbd class="bk-kbd">N</kbd></span></div>
+                <div class="bk-command-item" role="option" data-keywords="people share"><svg class="bk-icon"><use href="#i-users"/></svg>Invite people</div>
+                <div class="bk-command-item" role="option" data-keywords="preferences"><svg class="bk-icon"><use href="#i-sliders"/></svg>Settings<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">,</kbd></span></div>
+              </div>
+              <div class="bk-command-empty" hidden>No results.</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div></div>
+
+    <!-- Navigation -->
+    <div class="doc-group-head"><h3>Navigation</h3><span>Navbar, Tabs, Sidebar, Breadcrumb, Pagination, Bottom nav</span></div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-full doc-c" data-component="Navbar" data-tone="muted">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Navbar</h3><p class="bk-tile-description">Floating pill. Links scroll sideways on narrow screens.</p></div></div>
+        <div class="doc-demo">
+          <nav class="bk-navbar" aria-label="Main">
+            <a class="bk-navbar-brand" href="#"><span class="doc-mark" aria-hidden="true"><i></i><i></i><i></i></span>Tripline</a>
+            <div class="bk-navbar-links">
+              <a class="bk-navbar-link" href="#" aria-current="page">Trips</a>
+              <a class="bk-navbar-link" href="#">Explore</a>
+              <a class="bk-navbar-link" href="#">Saved</a>
+              <a class="bk-navbar-link" href="#">Messages</a>
+            </div>
+            <div class="bk-navbar-actions">
+              <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Notifications"><svg class="bk-icon"><use href="#i-bell"/></svg></button>
+              <button class="bk-button" data-size="sm" type="button"><svg class="bk-icon"><use href="#i-plus"/></svg>New trip</button>
+            </div>
+          </nav>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Tabs">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Tabs</h3><p class="bk-tile-description">Pill and line variants, arrow-key navigation</p></div></div>
+        <div class="doc-demo">
+          <div data-bk-tabs>
+            <div class="bk-tabs-list" role="tablist" aria-label="Itinerary view">
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tp-day" id="tt-day">Day</button>
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tp-week" id="tt-week" aria-selected="true">Week</button>
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tp-month" id="tt-month">Month</button>
+            </div>
+            <div class="bk-tabs-content" role="tabpanel" id="tp-day" aria-labelledby="tt-day" hidden><span class="bk-num">3</span> <span class="bk-muted">activities today</span></div>
+            <div class="bk-tabs-content" role="tabpanel" id="tp-week" aria-labelledby="tt-week"><span class="bk-num">7</span> <span class="bk-muted">activities this week</span></div>
+            <div class="bk-tabs-content" role="tabpanel" id="tp-month" aria-labelledby="tt-month" hidden><span class="bk-num">22</span> <span class="bk-muted">activities in March</span></div>
+          </div>
+          <div data-bk-tabs>
+            <div class="bk-tabs-list" data-variant="line" role="tablist" aria-label="Trip sections">
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-1" aria-selected="true">Itinerary</button>
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-2">Bookings</button>
+              <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-3">Notes</button>
+            </div>
+            <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-1">4 days, 11 stops.</div>
+            <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-2" hidden>2 flights, 1 hotel.</div>
+            <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-3" hidden>3 notes from 2 people.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-row-2 doc-c" data-component="Sidebar">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Sidebar</h3><p class="bk-tile-description">App navigation with groups and counts</p></div></div>
+        <div class="doc-demo" style="flex: 1;">
+          <nav class="bk-sidebar" aria-label="App" style="flex: 1;">
+            <div class="bk-sidebar-brand"><span class="doc-mark" aria-hidden="true"><i></i><i></i><i></i></span>Tripline</div>
+            <a class="bk-sidebar-item" href="#" aria-current="page"><svg class="bk-icon"><use href="#i-home"/></svg>Home</a>
+            <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-plane"/></svg>Trips<span class="bk-badge" data-variant="secondary">4</span></a>
+            <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-inbox"/></svg>Inbox<span class="bk-badge" data-variant="brand">2</span></a>
+            <div class="bk-sidebar-label">Workspace</div>
+            <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-users"/></svg>People</a>
+            <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-sliders"/></svg>Settings</a>
+            <div class="bk-sidebar-footer"><span class="bk-avatar" data-size="sm" data-status="online">MK</span><div class="bk-list-item-text"><span>Maya Kim</span><span>Plus plan</span></div></div>
+          </nav>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Breadcrumb">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Breadcrumb</h3><p class="bk-tile-description">Where you are</p></div></div>
+        <div class="doc-demo">
+          <nav aria-label="Breadcrumb"><ol class="bk-breadcrumb"><li><a href="#">Trips</a></li><li><a href="#">Lisbon</a></li><li><span aria-current="page">Day 2</span></li></ol></nav>
+        </div>
+      </article>
+
+      <article class="bk-tile doc-c" data-component="Pagination">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Pagination</h3><p class="bk-tile-description">For long lists</p></div></div>
+        <div class="doc-demo">
+          <nav class="bk-pagination" aria-label="Pages">
+            <a class="bk-pagination-link" href="#" aria-label="Previous page"><svg class="bk-icon"><use href="#i-chevron-left"/></svg></a>
+            <a class="bk-pagination-link" href="#">1</a>
+            <a class="bk-pagination-link" href="#" aria-current="page">2</a>
+            <a class="bk-pagination-link" href="#">3</a>
+            <span class="bk-pagination-ellipsis">…</span>
+            <a class="bk-pagination-link" href="#" aria-label="Next page"><svg class="bk-icon"><use href="#i-chevron-right"/></svg></a>
+          </nav>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Bottom nav">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Bottom nav</h3><p class="bk-tile-description">Mobile tab bar, 3–5 items</p></div></div>
+        <div class="doc-demo">
+          <nav class="bk-bottom-nav" aria-label="Tabs">
+            <a class="bk-bottom-nav-item" href="#" aria-current="page"><svg class="bk-icon"><use href="#i-home"/></svg>Home</a>
+            <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-search"/></svg>Explore</a>
+            <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-plane"/></svg>Trips</a>
+            <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-user"/></svg>Profile</a>
+          </nav>
+        </div>
+      </article>
+    </div></div>
+  </section>
+
+  <!-- ===================== PATTERNS ===================== -->
+  <section class="doc-section" id="patterns">
+    <div class="doc-section-head">
+      <span class="bk-eyebrow">03 · Patterns</span>
+      <h2 class="bk-h2">Whole screens</h2>
+      <p class="bk-muted" style="margin:0">The components together: a dashboard, a landing section, a phone app and a settings page.</p>
+    </div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+
+      <article class="bk-tile bk-span-full doc-c" data-component="Dashboard">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Dashboard</h3><p class="bk-tile-description">Sidebar, three stats, chart, activity and table</p></div></div>
+        <div class="doc-demo">
+          <div class="doc-frame">
+            <div class="bk-bento"><div class="bk-bento-grid">
+              <nav class="bk-sidebar bk-row-3" aria-label="Dashboard">
+                <div class="bk-sidebar-brand"><span class="doc-mark" aria-hidden="true"><i></i><i></i><i></i></span>Tripline</div>
+                <a class="bk-sidebar-item" href="#" aria-current="page"><svg class="bk-icon"><use href="#i-grid"/></svg>Overview</a>
+                <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-calendar"/></svg>Bookings<span class="bk-badge" data-variant="brand">12</span></a>
+                <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-users"/></svg>Guests</a>
+                <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-chart"/></svg>Reports</a>
+                <div class="bk-sidebar-label">Account</div>
+                <a class="bk-sidebar-item" href="#"><svg class="bk-icon"><use href="#i-sliders"/></svg>Settings</a>
+                <div class="bk-sidebar-footer"><span class="bk-avatar" data-size="sm">MK</span><div class="bk-list-item-text"><span>Maya Kim</span><span>Admin</span></div></div>
+              </nav>
+              <div class="bk-tile"><div class="bk-stat"><span class="bk-stat-label"><svg class="bk-icon" data-size="sm"><use href="#i-wallet"/></svg>Revenue</span><span class="bk-stat-value">€48,210</span><span class="bk-stat-delta" data-trend="up">+8.1% vs February</span></div></div>
+              <div class="bk-tile"><div class="bk-stat"><span class="bk-stat-label"><svg class="bk-icon" data-size="sm"><use href="#i-calendar"/></svg>Bookings</span><span class="bk-stat-value">1,284</span><span class="bk-stat-delta" data-trend="up">+12.4% vs February</span></div></div>
+              <div class="bk-tile" data-tone="peach"><div class="bk-row" style="flex-wrap:nowrap; --gap: 14px;"><div class="bk-ring" style="--p: 82; --size: 64px;" role="img" aria-label="82% occupancy"><span>82%</span></div><div class="bk-stat"><span class="bk-stat-label">Occupancy</span><span class="bk-stat-delta" data-trend="down">−3 pts vs February</span></div></div></div>
+              <div class="bk-tile bk-span-2">
+                <div class="bk-tile-header"><div><h4 class="bk-tile-title">Bookings per day</h4><p class="bk-tile-description">This week · 330 total</p></div><span class="bk-badge" data-variant="secondary">Week</span></div>
+                <div class="bk-chart" role="img" aria-label="Bookings per day: Mon 32, Tue 45, Wed 28, Thu 52, Fri 61, Sat 74, Sun 38">
+                  <div class="bk-bars" style="--h: 130px;">
+                    <div class="bk-bar" data-muted style="--v: 40%" data-value="32"></div><div class="bk-bar" data-muted style="--v: 56.25%" data-value="45"></div><div class="bk-bar" data-muted style="--v: 35%" data-value="28"></div><div class="bk-bar" data-muted style="--v: 65%" data-value="52"></div><div class="bk-bar" data-muted style="--v: 76.25%" data-value="61"></div><div class="bk-bar" style="--v: 92.5%" data-value="74" data-show></div><div class="bk-bar" data-muted style="--v: 47.5%" data-value="38"></div>
+                  </div>
+                  <div class="bk-bar-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                </div>
+              </div>
+              <div class="bk-tile bk-row-2">
+                <h4 class="bk-tile-title">Recent activity</h4>
+                <ul class="bk-list">
+                  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">MK</span><div class="bk-list-item-text"><span>New booking</span><span>Lisbon · €640</span></div><span class="bk-list-item-meta">2m</span></li>
+                  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">JR</span><div class="bk-list-item-text"><span>Payment received</span><span>Porto · €410</span></div><span class="bk-list-item-meta">1h</span></li>
+                  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">AS</span><div class="bk-list-item-text"><span>Review posted</span><span>5 stars, Seville</span></div><span class="bk-list-item-meta">3h</span></li>
+                  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">LT</span><div class="bk-list-item-text"><span>Refund issued</span><span>Madrid · €220</span></div><span class="bk-list-item-meta">1d</span></li>
+                </ul>
+              </div>
+              <div class="bk-tile bk-span-2">
+                <h4 class="bk-tile-title">Upcoming check-ins</h4>
+                <div class="bk-table-wrap"><table class="bk-table">
+                  <thead><tr><th>Guest</th><th>Stay</th><th>Nights</th><th data-align="end">Total</th></tr></thead>
+                  <tbody>
+                    <tr><td>Maya Kim</td><td>Hotel Chiado</td><td>4</td><td data-align="end">€640.00</td></tr>
+                    <tr><td>Jonas Ruiz</td><td>Ribeira Loft</td><td>3</td><td data-align="end">€410.00</td></tr>
+                    <tr><td>Amira Saleh</td><td>Casa Triana</td><td>3</td><td data-align="end">€385.50</td></tr>
+                  </tbody>
+                </table></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-full doc-c" data-component="Landing section">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Landing section</h3><p class="bk-tile-description">Navbar, hero and a bento feature grid</p></div></div>
+        <div class="doc-demo">
+          <div class="doc-frame">
+            <nav class="bk-navbar" aria-label="Site">
+              <a class="bk-navbar-brand" href="#"><span class="doc-mark" aria-hidden="true"><i></i><i></i><i></i></span>Tripline</a>
+              <div class="bk-navbar-links"><a class="bk-navbar-link" href="#">Features</a><a class="bk-navbar-link" href="#">Pricing</a><a class="bk-navbar-link" href="#">Help</a></div>
+              <div class="bk-navbar-actions"><a class="bk-button" data-variant="ghost" data-size="sm" href="#">Log in</a><a class="bk-button" data-size="sm" href="#">Get started</a></div>
+            </nav>
+            <div class="doc-hero">
+              <span class="bk-badge" data-variant="outline" style="align-self: flex-start;">Free for up to 3 trips</span>
+              <h2 class="bk-h1" style="max-width: 16ch;">Every trip, planned in one place</h2>
+              <p class="bk-lead">Dates, stays, tickets and who owes what, shared with everyone going.</p>
+              <div class="bk-row"><a class="bk-button" data-size="lg" href="#">Plan a trip</a><a class="bk-button" data-variant="outline" data-size="lg" href="#">See how it works</a></div>
+            </div>
+            <div class="bk-bento"><div class="bk-bento-grid">
+              <div class="bk-tile bk-span-2 bk-row-2" data-tone="inverse" style="--tile-pad: 24px;">
+                <span class="bk-eyebrow">Plan together</span>
+                <h3 class="bk-h3">Everyone edits the same plan</h3>
+                <p class="bk-muted" style="margin:0">Invite friends by link. Changes show up for everyone at once.</p>
+                <div class="bk-avatar-group"><span class="bk-avatar" style="background:var(--tint-peach);color:var(--tint-peach-foreground)">MK</span><span class="bk-avatar" style="background:var(--tint-sky);color:var(--tint-sky-foreground)">JR</span><span class="bk-avatar" style="background:var(--tint-mint);color:var(--tint-mint-foreground)">AS</span><span class="bk-avatar">+3</span></div>
+                <div class="bk-media doc-art" style="--ratio: 16 / 7; margin-top: auto;"></div>
+              </div>
+              <div class="bk-tile" data-tone="peach"><svg class="bk-icon" data-size="xl"><use href="#i-map-pin"/></svg><h3 class="bk-tile-title">Offline maps</h3><p class="bk-tile-description" style="margin:0">Download a city before you fly.</p></div>
+              <div class="bk-tile" data-tone="sky"><div class="bk-row bk-between"><svg class="bk-icon" data-size="xl"><use href="#i-bell"/></svg><input class="bk-switch" type="checkbox" role="switch" checked aria-label="Price alerts"></div><h3 class="bk-tile-title">Price alerts</h3><p class="bk-tile-description" style="margin:0">We tell you when fares drop.</p></div>
+              <div class="bk-tile bk-span-2">
+                <div class="bk-row bk-between"><h3 class="bk-tile-title">Day by day</h3><span class="bk-badge" data-variant="secondary">Day 2</span></div>
+                <ul class="bk-list">
+                  <li class="bk-list-item"><span class="bk-list-item-meta" style="width:44px">09:00</span><div class="bk-list-item-text"><span>Tram 28 to Alfama</span><span>From Martim Moniz</span></div></li>
+                  <li class="bk-list-item"><span class="bk-list-item-meta" style="width:44px">12:30</span><div class="bk-list-item-text"><span>Lunch at Time Out Market</span><span>Booked for 4</span></div></li>
+                  <li class="bk-list-item"><span class="bk-list-item-meta" style="width:44px">17:00</span><div class="bk-list-item-text"><span>Sunset at Miradouro</span><span>15 min walk</span></div></li>
+                </ul>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Mobile app">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Mobile app</h3><p class="bk-tile-description">2-column bento on a phone with <code class="bk-code">data-cols="2"</code></p></div></div>
+        <div class="doc-demo">
+          <div class="doc-phone">
+            <div class="doc-phone-screen">
+              <div class="doc-statusbar"><span>9:41</span><span>5G</span></div>
+              <div class="bk-row" style="flex-wrap: nowrap; --gap: 10px;">
+                <span class="bk-avatar">MK</span>
+                <div class="bk-grow"><div class="bk-caption">Good morning</div><div class="bk-large" style="line-height:1.2">Maya</div></div>
+                <button class="bk-button" data-variant="outline" data-size="icon-sm" type="button" aria-label="Notifications"><svg class="bk-icon"><use href="#i-bell"/></svg></button>
+              </div>
+              <div class="bk-input-group"><svg class="bk-icon"><use href="#i-search"/></svg><input class="bk-input" placeholder="Where to next?" aria-label="Search destinations"></div>
+              <div class="bk-bento"><div class="bk-bento-grid" data-cols="2" style="--tile-pad: 14px; --tile-radius: 22px;">
+                <div class="bk-tile bk-span-2" data-tone="inverse">
+                  <div class="bk-row bk-between"><span class="bk-eyebrow">Next trip</span><span class="bk-badge" data-variant="brand">12 days</span></div>
+                  <div class="bk-h3">Lisbon</div>
+                  <div class="bk-media doc-art" style="--ratio: 16 / 7;"></div>
+                </div>
+                <div class="bk-tile" data-tone="peach"><div class="bk-ring" style="--p: 71; --size: 56px; --w: 6px;" role="img" aria-label="71% of budget used"><span style="font-size:13px">71%</span></div><div><div class="bk-small">Budget</div><div class="bk-caption">€640 of €900</div></div></div>
+                <div class="bk-tile" data-tone="sky"><svg class="bk-icon" data-size="xl"><use href="#i-cloud"/></svg><div><div class="bk-num" style="font-size:1.75rem">18°</div><div class="bk-caption">Lisbon, cloudy</div></div></div>
+                <div class="bk-tile bk-span-2" data-tone="butter"><div class="bk-row bk-between"><span class="bk-small">Packing list</span><span class="bk-caption">17 of 25</span></div><div class="bk-progress" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Packing list"><span style="--v: 68%"></span></div></div>
+              </div></div>
+              <nav class="bk-bottom-nav" aria-label="App tabs">
+                <a class="bk-bottom-nav-item" href="#" aria-current="page"><svg class="bk-icon"><use href="#i-home"/></svg>Home</a>
+                <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-search"/></svg>Explore</a>
+                <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-plane"/></svg>Trips</a>
+                <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon"><use href="#i-user"/></svg>Profile</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2 doc-c" data-component="Settings">
+        <div class="bk-tile-header"><div><h3 class="bk-tile-title">Settings</h3><p class="bk-tile-description">Card form with grouped switches</p></div></div>
+        <div class="doc-demo">
+          <form class="bk-card doc-form">
+            <div class="bk-card-header"><h4 class="bk-card-title">Profile</h4><p class="bk-card-description">How other travellers see you.</p></div>
+            <div class="bk-card-content bk-form">
+              <div class="bk-row" style="--gap: 14px;"><span class="bk-avatar" data-size="xl">MK</span><div class="bk-row"><button class="bk-button" data-variant="outline" data-size="sm" type="button">Change photo</button><button class="bk-button" data-variant="ghost" data-size="sm" type="button">Remove</button></div></div>
+              <div class="bk-form-row">
+                <div class="bk-field"><label class="bk-label" for="st-name">Display name</label><input class="bk-input" id="st-name" value="Maya Kim"></div>
+                <div class="bk-field"><label class="bk-label" for="st-lang">Language</label><select class="bk-select" id="st-lang"><option>English</option><option>Português</option><option>Español</option><option>اردو</option></select></div>
+              </div>
+              <hr class="bk-separator">
+              <div class="bk-stack">
+                <span class="bk-label">Notifications</span>
+                <label class="bk-switch-row"><span class="bk-option-text"><span>Price drops</span><span>When a saved fare gets cheaper</span></span><input class="bk-switch" type="checkbox" role="switch" checked></label>
+                <label class="bk-switch-row"><span class="bk-option-text"><span>Trip changes</span><span>When someone edits a shared plan</span></span><input class="bk-switch" type="checkbox" role="switch" checked></label>
+                <label class="bk-switch-row"><span class="bk-option-text"><span>Newsletter</span><span>Once a month</span></span><input class="bk-switch" type="checkbox" role="switch"></label>
+              </div>
+            </div>
+            <div class="bk-card-footer"><button class="bk-button" data-variant="ghost" type="reset">Discard</button><button class="bk-button" type="submit">Save changes</button></div>
+          </form>
+        </div>
+      </article>
+    </div></div>
+  </section>
+
+  <!-- ===================== USAGE ===================== -->
+  <section class="doc-section" id="usage">
+    <div class="doc-section-head">
+      <span class="bk-eyebrow">04 · Usage</span>
+      <h2 class="bk-h2">Install and use</h2>
+      <p class="bk-muted" style="margin:0">Pick the layer for your stack. Full guides are in <a href="https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs" style="color:inherit">docs/</a>, and AI agents can read <a href="llms-full.txt" style="color:inherit">llms-full.txt</a>.</p>
+    </div>
+    <div class="bk-bento"><div class="bk-bento-grid">
+      <article class="bk-tile bk-span-2 bk-row-2">
+        <div><h3 class="bk-tile-title">Install</h3><p class="bk-tile-description">Straight from GitHub. Always pin a tag.</p></div>
+<pre class="bk-codeblock">npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0</pre>
+        <div class="doc-files">
+          <div><code>bento-shad-ui/bento.css</code><span>Tokens and every component. Any website or web app.</span></div>
+          <div><code>bento-shad-ui</code><span>Typed vanilla core: theme, toasts, popovers, tabs, command, calendar. SSR-safe ESM.</span></div>
+          <div><code>bento-shad-ui/auto</code><span>The core, started on import.</span></div>
+          <div><code>bento-shad-ui/react</code><span>React components with TypeScript types, marked "use client".</span></div>
+          <div><code>shadcn-theme.css</code><span>globals.css for shadcn/ui on Tailwind v4, plus bento utilities.</span></div>
+          <div><code>r/*.json</code><span>shadcn registry items: <code>bento-theme</code>, <code>bento-grid</code>.</span></div>
+          <div><code>flutter/bento_theme.dart</code><span>ThemeData for light and dark, every token as a ThemeExtension.</span></div>
+          <div><code>llms.txt</code><span>Docs index for AI agents; <code>llms-full.txt</code> has every guide.</span></div>
+        </div>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">Plain HTML, from the CDN</h3><p class="bk-tile-description">No build step. The script exposes <code class="bk-code">window.BentoUI</code>.</p></div>
+<pre class="bk-codeblock">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.min.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.iife.min.js" defer&gt;&lt;/script&gt;
+
+&lt;body class="bk"&gt;
+  &lt;div class="bk-bento"&gt;&lt;div class="bk-bento-grid"&gt;
+    &lt;article class="bk-tile bk-span-2"&gt;…&lt;/article&gt;
+    &lt;article class="bk-tile" data-tone="peach"&gt;…&lt;/article&gt;
+  &lt;/div&gt;&lt;/div&gt;
+&lt;/body&gt;</pre>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">React and Next.js</h3><p class="bk-tile-description">Typed, controlled or uncontrolled, <code class="bk-code">asChild</code> for router links.</p></div>
+<pre class="bk-codeblock">import 'bento-shad-ui/bento.css';
+import { BentoGrid, Tile, Stat, Button, toast } from 'bento-shad-ui/react';
+
+&lt;BentoGrid&gt;
+  &lt;Tile span={2} rows={2} tone="inverse"&gt;
+    &lt;Button variant="brand" onClick={() =&gt; toast('Saved')}&gt;Save&lt;/Button&gt;
+  &lt;/Tile&gt;
+  &lt;Tile tone="peach"&gt;&lt;Stat label="Bookings" value="1,284" /&gt;&lt;/Tile&gt;
+&lt;/BentoGrid&gt;</pre>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">shadcn/ui + Tailwind v4</h3><p class="bk-tile-description">Keep shadcn's components. Add the theme and the grid from the registry.</p></div>
+<pre class="bk-codeblock">npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json
+
+&lt;BentoGrid&gt;
+  &lt;BentoTile span={2} rows={2}&gt;&lt;Card&gt;…&lt;/Card&gt;&lt;/BentoTile&gt;
+  &lt;BentoTile tone="peach"&gt;…&lt;/BentoTile&gt;
+&lt;/BentoGrid&gt;</pre>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">Flutter</h3><p class="bk-tile-description">Copy one file into lib/. Add the two Red Hat fonts.</p></div>
+<pre class="bk-codeblock">MaterialApp(
+  theme: BentoTheme.light(),
+  darkTheme: BentoTheme.dark(),
+);
+
+final c = Theme.of(context).extension&lt;BentoColors&gt;()!;
+Container(
+  padding: const EdgeInsets.all(BentoTheme.tilePadding),
+  decoration: BentoTheme.tile(c, color: c.tintPeach),
+);</pre>
+      </article>
+
+      <article class="bk-tile bk-span-2" data-tone="inverse">
+        <div><h3 class="bk-tile-title">For AI coding agents</h3><p class="bk-tile-description">Point the agent at the docs written for it, and paste the rules into your project's CLAUDE.md.</p></div>
+<pre class="bk-codeblock">node_modules/bento-shad-ui/llms.txt        index
+node_modules/bento-shad-ui/llms-full.txt   every guide, one file
+
+# CLAUDE.md
+UI uses bento-shad-ui. Read node_modules/bento-shad-ui/llms-full.txt
+before writing UI. Tokens only, no hex. No monospace font.</pre>
+      </article>
+
+      <article class="bk-tile bk-span-2">
+        <div><h3 class="bk-tile-title">Rebrand</h3><p class="bk-tile-description">Override tokens after the kit's CSS. Keep text at 4.5:1 and rings at 3:1.</p></div>
+<pre class="bk-codeblock">:root {
+  --brand: oklch(0.62 0.19 255);
+  --brand-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.52 0.19 255);
+  --tile-radius: 1.25rem;
+}</pre>
+      </article>
+    </div></div>
+  </section>
+</main>
+
+<footer class="doc-footer"><div class="bk-container bk-row bk-between"><span>bento-shad-ui v0.1.0 · MIT · <a href="https://github.com/SaadNiaziDev/bento-shad-ui" style="color:inherit">GitHub</a></span><span>Fonts: Red Hat Display, Red Hat Text (SIL OFL)</span></div></footer>
+
+<!-- Command palette for this page (opens with ⌘K / Ctrl+K) -->
+<dialog class="bk-command" id="cmd" data-bk-hotkey aria-label="Search the kit">
+  <div class="bk-command-search"><svg class="bk-icon"><use href="#i-search"/></svg><input class="bk-command-input" placeholder="Search components and sections" aria-label="Search"></div>
+  <div class="bk-command-list" role="listbox" id="cmd-list"></div>
+  <div class="bk-command-footer"><span><kbd class="bk-kbd">↑</kbd><kbd class="bk-kbd">↓</kbd> move</span><span><kbd class="bk-kbd">↵</kbd> open</span><span><kbd class="bk-kbd">esc</kbd> close</span></div>
+</dialog>
+
+<script>
+/* Documentation page logic. Runs before dist/bento.iife.js so code samples are captured untouched. */
+(function () {
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  // 1. Snapshot every demo's markup and add a Code button.
+  function dedent(html) {
+    var lines = html.replace(/\t/g, '  ').split('\n');
+    while (lines.length && !lines[0].trim()) lines.shift();
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+    var min = Infinity;
+    lines.forEach(function (l) { if (l.trim()) min = Math.min(min, l.match(/^ */)[0].length); });
+    return lines.map(function (l) { return l.slice(min === Infinity ? 0 : min); }).join('\n');
+  }
+  $$('.doc-c').forEach(function (tile, i) {
+    var demo = tile.querySelector('.doc-demo');
+    var head = tile.querySelector('.bk-tile-header');
+    if (!demo || !head) return;
+    var code = dedent(demo.innerHTML).replace(/ class="doc-[a-z-]+"/g, '');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'bk-button doc-code-btn';
+    btn.setAttribute('data-variant', 'ghost'); btn.setAttribute('data-size', 'xs');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<svg class="bk-icon" data-size="sm"><use href="#i-code"/></svg>Code';
+    var actions = head.querySelector('.bk-button, .bk-badge');
+    if (actions) { var wrap = document.createElement('div'); wrap.className = 'bk-row'; wrap.style.flexWrap = 'nowrap'; actions.replaceWith(wrap); wrap.appendChild(actions); wrap.appendChild(btn); }
+    else head.appendChild(btn);
+    var panel = null;
+    btn.addEventListener('click', function () {
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.className = 'bk-stack';
+        panel.style.setProperty('--gap', '8px');
+        panel.innerHTML = '<div class="bk-row bk-between"><span class="bk-eyebrow">HTML</span><button class="bk-button" data-variant="outline" data-size="xs" type="button"><svg class="bk-icon" data-size="sm"><use href="#i-copy"/></svg>Copy</button></div><pre class="bk-codeblock doc-code"></pre>';
+        panel.querySelector('pre').textContent = code;
+        panel.querySelector('button').addEventListener('click', function () {
+          var ok = function () { BentoUI.toast({ title: 'Markup copied', description: tile.getAttribute('data-component'), variant: 'success' }); };
+          try { navigator.clipboard.writeText(code).then(ok, function () { selectPre(); }); } catch (e) { selectPre(); }
+          function selectPre() { var r = document.createRange(); r.selectNodeContents(panel.querySelector('pre')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+        });
+        tile.appendChild(panel);
+      } else {
+        panel.hidden = !panel.hidden;
+      }
+      btn.setAttribute('aria-expanded', String(!panel.hidden));
+      btn.lastChild.textContent = panel.hidden ? 'Code' : 'Hide code';
+    });
+    if (!tile.id) tile.id = 'c-' + tile.getAttribute('data-component').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  });
+
+  // 2. Colour swatches (values read live from the CSS, so they follow the theme).
+  var GROUPS = [
+    ['Surface', ['background', 'foreground', 'card', 'card-foreground', 'popover', 'popover-foreground', 'muted', 'muted-foreground']],
+    ['Action', ['primary', 'primary-foreground', 'secondary', 'secondary-foreground', 'accent', 'accent-foreground', 'brand', 'brand-foreground']],
+    ['Lines and status', ['border', 'input', 'ring', 'destructive', 'destructive-foreground', 'success', 'warning', 'info', 'inverse', 'inverse-foreground']],
+    ['Tile tints', ['tint-peach', 'tint-peach-foreground', 'tint-sky', 'tint-sky-foreground', 'tint-mint', 'tint-mint-foreground', 'tint-lilac', 'tint-lilac-foreground', 'tint-butter', 'tint-butter-foreground']],
+    ['Charts', ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5']],
+    ['Sidebar', ['sidebar', 'sidebar-foreground', 'sidebar-primary', 'sidebar-primary-foreground', 'sidebar-accent', 'sidebar-accent-foreground', 'sidebar-border', 'sidebar-ring']]
+  ];
+  function renderSwatches() {
+    var cs = getComputedStyle(document.body);
+    document.getElementById('swatches').innerHTML = GROUPS.map(function (g) {
+      return '<div class="doc-swatch-group"><h4>' + g[0] + '</h4><div class="doc-swatches">' + g[1].map(function (n) {
+        var v = cs.getPropertyValue('--' + n).trim();
+        return '<div class="doc-swatch"><i style="background:var(--' + n + ')"></i><div><b>--' + n + '</b><span title="' + v + '">' + v + '</span></div></div>';
+      }).join('') + '</div></div>';
+    }).join('');
+  }
+  renderSwatches();
+  document.addEventListener('bk:theme', function () { requestAnimationFrame(renderSwatches); });
+  var tokenCount = GROUPS.reduce(function (n, g) { return n + g[1].length; }, 0);
+  document.getElementById('count-tokens').textContent = tokenCount;
+
+  // 3. Counts and icon grid.
+  var components = $$('#components .doc-c');
+  document.getElementById('count-components').textContent = components.length;
+  document.getElementById('icons').innerHTML = $$('symbol').map(function (s) {
+    var n = s.id.replace('i-', '');
+    return '<div><svg class="bk-icon"><use href="#' + s.id + '"/></svg>' + n + '</div>';
+  }).join('');
+
+  // 4. Command palette items.
+  var sections = [['Overview', 'overview', 'home'], ['Foundations', 'foundations', 'palette'], ['Components', 'components', 'grid'], ['Patterns', 'patterns', 'layers'], ['Usage', 'usage', 'code']];
+  var item = function (label, href, icon, extra) { return '<a class="bk-command-item" role="option" href="#' + href + '"' + (extra || '') + '><svg class="bk-icon"><use href="#i-' + icon + '"/></svg>' + label + '</a>'; };
+  document.getElementById('cmd-list').innerHTML =
+    '<div class="bk-command-group"><div class="bk-command-group-heading">Sections</div>' + sections.map(function (s) { return item(s[0], s[1], s[2] === 'palette' ? 'layers' : s[2]); }).join('') + '</div>' +
+    '<div class="bk-command-group"><div class="bk-command-group-heading">Components</div>' + $$('.doc-c').map(function (t) { return item(t.getAttribute('data-component'), t.id, 'grid'); }).join('') + '</div>' +
+    '<div class="bk-command-group"><div class="bk-command-group-heading">Theme</div>' +
+      '<div class="bk-command-item" role="option" data-bk-theme-set="light" data-keywords="theme"><svg class="bk-icon"><use href="#i-sun"/></svg>Light theme</div>' +
+      '<div class="bk-command-item" role="option" data-bk-theme-set="dark" data-keywords="theme"><svg class="bk-icon"><use href="#i-moon"/></svg>Dark theme</div>' +
+      '<div class="bk-command-item" role="option" data-bk-theme-set="system" data-keywords="theme"><svg class="bk-icon"><use href="#i-monitor"/></svg>System theme</div></div>' +
+    '<div class="bk-command-empty" hidden>No results.</div>';
+
+  // 5. Preview width.
+  var main = document.getElementById('main');
+  document.getElementById('w-full').addEventListener('click', function () { main.removeAttribute('data-width'); });
+  document.getElementById('w-phone').addEventListener('click', function () { main.setAttribute('data-width', 'phone'); window.scrollTo({ top: 0 }); });
+
+  // 6. Demo forms and calendar readout.
+  document.addEventListener('submit', function (e) {
+    if (!e.target.classList.contains('doc-form')) return;
+    e.preventDefault();
+    BentoUI.toast({ title: 'Saved', description: 'This is a demo form, so nothing was sent.', variant: 'success' });
+  });
+  document.addEventListener('bk:change', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('bk-calendar') || !e.detail.start) return;
+    var s = +e.detail.start, en = +e.detail.end, n = en - s;
+    document.getElementById('cal-out').textContent = (s === en ? s + ' March' : s + '–' + en + ' March · ' + n + (n === 1 ? ' night' : ' nights'));
+  });
+})();
+</script>
+<script src="dist/bento.iife.js"></script>
+</body>
+</html>

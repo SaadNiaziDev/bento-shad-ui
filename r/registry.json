@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "bento-shad-ui",
+  "homepage": "https://saadniazidev.github.io/bento-shad-ui/",
+  "items": [
+    {
+      "name": "bento-theme",
+      "type": "registry:theme",
+      "title": "Bento theme",
+      "description": "bento-shad-ui v0.1.0 tokens: shadcn colours plus brand, status, inverse and tile tints, light and dark."
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:ui",
+      "title": "Bento grid",
+      "description": "BentoGrid and BentoTile for shadcn/ui projects: container-query grid, span and row props, eight tile tones."
+    }
+  ]
+}

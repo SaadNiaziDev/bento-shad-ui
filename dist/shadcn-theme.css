@@ -1,0 +1,226 @@
+/* bento-shad-ui v0.1.0 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui
+   shadcn/ui on Tailwind CSS v4: use this file as app/globals.css (or merge the theme parts into yours).
+   Fonts: load "Red Hat Text" and "Red Hat Display" with next/font or a <link>. See docs/shadcn.md. */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Red Hat Text", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Red Hat Display", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
+  --color-tint-peach: var(--tint-peach);
+  --color-tint-peach-foreground: var(--tint-peach-foreground);
+  --color-tint-sky: var(--tint-sky);
+  --color-tint-sky-foreground: var(--tint-sky-foreground);
+  --color-tint-mint: var(--tint-mint);
+  --color-tint-mint-foreground: var(--tint-mint-foreground);
+  --color-tint-lilac: var(--tint-lilac);
+  --color-tint-lilac-foreground: var(--tint-lilac-foreground);
+  --color-tint-butter: var(--tint-butter);
+  --color-tint-butter-foreground: var(--tint-butter-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-tile: var(--tile-radius);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
+:root {
+  --radius: 1rem;
+  --tile-radius: 1.625rem;
+  --tile-gap: 12px;
+  --tile-pad: 20px;
+  --background: oklch(0.955 0.005 95.1);
+  --foreground: oklch(0.202 0.008 285.67);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.202 0.008 285.67);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.202 0.008 285.67);
+  --primary: oklch(0.202 0.008 285.67);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.934 0.008 91.49);
+  --secondary-foreground: oklch(0.202 0.008 285.67);
+  --muted: oklch(0.964 0.005 95.1);
+  --muted-foreground: oklch(0.502 0.009 99.02);
+  --accent: oklch(0.946 0.008 91.48);
+  --accent-foreground: oklch(0.202 0.008 285.67);
+  --destructive: oklch(0.532 0.167 32.26);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.912 0.01 93.58);
+  --input: oklch(0.626 0.012 95.25);
+  --ring: oklch(0.614 0.18 39.73);
+  --chart-1: oklch(0.727 0.176 41.2);
+  --chart-2: oklch(0.655 0.156 262.5);
+  --chart-3: oklch(0.626 0.118 163.53);
+  --chart-4: oklch(0.81 0.144 79.25);
+  --chart-5: oklch(0.616 0.155 293.63);
+  --sidebar: oklch(0.985 0.003 106.45);
+  --sidebar-foreground: oklch(0.202 0.008 285.67);
+  --sidebar-primary: oklch(0.202 0.008 285.67);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.946 0.008 91.48);
+  --sidebar-accent-foreground: oklch(0.202 0.008 285.67);
+  --sidebar-border: oklch(0.912 0.01 93.58);
+  --sidebar-ring: oklch(0.614 0.18 39.73);
+  --brand: oklch(0.727 0.176 41.2);
+  --brand-foreground: oklch(0.202 0.008 285.67);
+  --success: oklch(0.515 0.112 156.53);
+  --warning: oklch(0.513 0.119 61.48);
+  --info: oklch(0.516 0.156 260.97);
+  --inverse: oklch(0.202 0.008 285.67);
+  --inverse-foreground: oklch(0.964 0.005 95.1);
+  --tint-peach: oklch(0.929 0.043 57.14);
+  --tint-peach-foreground: oklch(0.346 0.08 46.5);
+  --tint-sky: oklch(0.932 0.03 256.01);
+  --tint-sky-foreground: oklch(0.351 0.094 257.47);
+  --tint-mint: oklch(0.939 0.033 159.4);
+  --tint-mint-foreground: oklch(0.379 0.07 157.3);
+  --tint-lilac: oklch(0.926 0.034 298.52);
+  --tint-lilac-foreground: oklch(0.357 0.13 289.73);
+  --tint-butter: oklch(0.951 0.056 93.96);
+  --tint-butter-foreground: oklch(0.404 0.083 86.86);
+  --shadow-xs: 0 1px 2px rgb(22 22 26 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(22 22 26 / 0.08), 0 1px 2px rgb(22 22 26 / 0.04);
+  --shadow-md: 0 8px 20px -6px rgb(22 22 26 / 0.12), 0 2px 4px rgb(22 22 26 / 0.04);
+  --shadow-lg: 0 24px 48px -12px rgb(22 22 26 / 0.22), 0 4px 12px rgb(22 22 26 / 0.06);
+}
+
+.dark {
+  --background: oklch(0.169 0.004 285.95);
+  --foreground: oklch(0.964 0.005 95.1);
+  --card: oklch(0.219 0.006 285.91);
+  --card-foreground: oklch(0.964 0.005 95.1);
+  --popover: oklch(0.241 0.008 285.82);
+  --popover-foreground: oklch(0.964 0.005 95.1);
+  --primary: oklch(0.964 0.005 95.1);
+  --primary-foreground: oklch(0.202 0.008 285.67);
+  --secondary: oklch(0.27 0.007 285.9);
+  --secondary-foreground: oklch(0.964 0.005 95.1);
+  --muted: oklch(0.258 0.007 285.87);
+  --muted-foreground: oklch(0.711 0.009 98.93);
+  --accent: oklch(0.287 0.009 285.82);
+  --accent-foreground: oklch(0.964 0.005 95.1);
+  --destructive: oklch(0.708 0.186 31.68);
+  --destructive-foreground: oklch(0.202 0.008 285.67);
+  --border: oklch(0.287 0.007 285.93);
+  --input: oklch(0.538 0.011 292.6);
+  --ring: oklch(0.727 0.176 41.2);
+  --chart-1: oklch(0.753 0.155 41.64);
+  --chart-2: oklch(0.729 0.14 263.89);
+  --chart-3: oklch(0.734 0.128 163.21);
+  --chart-4: oklch(0.844 0.132 83.49);
+  --chart-5: oklch(0.705 0.144 294.36);
+  --sidebar: oklch(0.192 0.004 286.02);
+  --sidebar-foreground: oklch(0.964 0.005 95.1);
+  --sidebar-primary: oklch(0.964 0.005 95.1);
+  --sidebar-primary-foreground: oklch(0.202 0.008 285.67);
+  --sidebar-accent: oklch(0.27 0.007 285.9);
+  --sidebar-accent-foreground: oklch(0.964 0.005 95.1);
+  --sidebar-border: oklch(0.287 0.007 285.93);
+  --sidebar-ring: oklch(0.727 0.176 41.2);
+  --brand: oklch(0.727 0.176 41.2);
+  --brand-foreground: oklch(0.202 0.008 285.67);
+  --success: oklch(0.734 0.128 163.21);
+  --warning: oklch(0.821 0.142 79.57);
+  --info: oklch(0.729 0.14 263.89);
+  --inverse: oklch(0.964 0.005 95.1);
+  --inverse-foreground: oklch(0.202 0.008 285.67);
+  --tint-peach: oklch(0.285 0.04 49.22);
+  --tint-peach-foreground: oklch(0.888 0.07 56.16);
+  --tint-sky: oklch(0.267 0.044 258.28);
+  --tint-sky-foreground: oklch(0.869 0.059 257.19);
+  --tint-mint: oklch(0.274 0.036 162.01);
+  --tint-mint-foreground: oklch(0.881 0.067 158.87);
+  --tint-lilac: oklch(0.258 0.059 293.32);
+  --tint-lilac-foreground: oklch(0.862 0.068 297.1);
+  --tint-butter: oklch(0.286 0.043 88.43);
+  --tint-butter-foreground: oklch(0.916 0.086 93.95);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 8px 20px -6px rgb(0 0 0 / 0.6), 0 2px 4px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 24px 48px -12px rgb(0 0 0 / 0.7), 0 4px 12px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Bento layout. Wrap the grid in "@container" so it follows its own width:
+   <div class="@container"><div class="bento-grid"><div class="bento-tile @xl:col-span-2">…</div></div></div> */
+@utility bento-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: dense;
+  gap: var(--tile-gap);
+  @container (min-width: 36rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @container (min-width: 56rem) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@utility bento-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  padding: var(--tile-pad);
+  border: 1px solid var(--border);
+  border-radius: var(--tile-radius);
+  background: var(--card);
+  color: var(--card-foreground);
+}

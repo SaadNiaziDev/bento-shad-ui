@@ -1,0 +1,1883 @@
+# bento-shad-ui v0.1.0: full documentation for LLMs
+
+> Every guide in one file. Source: https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs. Index: llms.txt.
+
+<!-- docs/getting-started.md -->
+
+# Getting started
+
+bento-shad-ui is a UI library for interfaces laid out as bento grids: rounded tiles of different sizes, one idea per tile. The components follow shadcn/ui anatomy and token names, so the library fits next to shadcn and Tailwind, and it also works on a plain HTML page and in Flutter.
+
+## One token file, five ways to use it
+
+Every colour, radius and font lives in `src/tokens.json`. The build turns it into:
+
+| Layer | Import | Use it when |
+|---|---|---|
+| CSS | `bento-shad-ui/bento.css` | Any website or web app. Classes start with `bk-`. |
+| Core (TypeScript) | `bento-shad-ui` or the CDN script | You want theme switching, tabs, dialogs, menus, toasts and the command palette to work from HTML attributes. |
+| React | `bento-shad-ui/react` | React 18/19, Next.js, Vite. Typed components with no Tailwind needed. |
+| shadcn theme + registry | `bento-shad-ui/shadcn-theme.css`, `npx shadcn add …/r/bento-theme.json` | You already use shadcn/ui and Tailwind v4 and want this look plus `BentoGrid`/`BentoTile`. |
+| Flutter | `dist/flutter/bento_theme.dart` | Flutter apps: `ThemeData` for light and dark plus every token as a `ThemeExtension`. |
+
+You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react` and a Flutter app on `bento_theme.dart` share the same colours.
+
+## Quick start: plain HTML
+
+```html
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.iife.min.js" defer></script>
+</head>
+<body class="bk">
+  <main class="bk-container">
+    <div class="bk-bento">
+      <div class="bk-bento-grid">
+        <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">
+          <h1 class="bk-h1">Hello</h1>
+          <button class="bk-button" data-variant="brand" data-bk-toast='{"title":"It works"}'>Try me</button>
+        </article>
+        <article class="bk-tile" data-tone="peach">One idea</article>
+        <article class="bk-tile">Another idea</article>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+```
+
+## Quick start: React / Next.js
+
+```bash
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
+```
+
+```tsx
+import 'bento-shad-ui/bento.css';
+import { BentoGrid, Tile, TileTitle, Button, toast } from 'bento-shad-ui/react';
+
+export default function Page() {
+  return (
+    <BentoGrid>
+      <Tile span={2} rows={2} tone="inverse">
+        <TileTitle>Hello</TileTitle>
+        <Button variant="brand" onClick={() => toast({ title: 'It works' })}>Try me</Button>
+      </Tile>
+      <Tile tone="peach">One idea</Tile>
+      <Tile>Another idea</Tile>
+    </BentoGrid>
+  );
+}
+```
+
+Add `className="bk"` to `<body>` (or wrap your app in an element with it) so base typography and colours apply.
+
+## Core ideas
+
+- **Tokens** are CSS variables with shadcn's names (`--background`, `--primary`, `--muted-foreground`…) plus bento extras (`--brand`, `--success`, `--inverse`, `--tint-peach`…). Components use nothing else, so changing a token restyles everything.
+- **Tiles** are the unit of layout. A tile spans 1–4 columns and 1–3 rows. Grids follow their container's width (container queries), so the same markup works in a sidebar, a modal or a full page.
+- **Tones** (`data-tone` / `tone`) colour a tile and adjust the tokens inside it, so buttons and inputs in a peach or inverse tile still look right.
+- **Variants** are attributes in HTML (`data-variant="outline"`, `data-size="sm"`) and props in React (`variant="outline" size="sm"`).
+- **Dark mode** is `class="dark"` or `data-theme="dark"` on `<html>`; `data-theme="system"` follows the OS.
+- **No monospace font.** The library uses Red Hat Display for headings and Red Hat Text for everything else, including code and keyboard keys.
+
+## Versioning
+
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.1.0`, `@v0.1.0`).
+
+## Next
+
+- [Installation](installation.md): every install method, fonts, updating
+- [HTML](html.md), [React](react.md), [shadcn/ui](shadcn.md), [Flutter](flutter.md)
+- [Theming](theming.md), [Layout](layout.md), [Components](components.md)
+- [JavaScript API](javascript-api.md), [Accessibility](accessibility.md), [Using with AI agents](ai-agents.md)
+
+<!-- docs/installation.md -->
+
+# Installation
+
+Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). For npm installs, Node 18+. For React, React 18 or 19.
+
+## 1. npm, from GitHub
+
+The package is installed straight from the GitHub repository. Always pin a tag.
+
+```bash
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
+# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.0
+# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.0
+```
+
+What you can import:
+
+| Import | What it is |
+|---|---|
+| `bento-shad-ui/bento.css` | Tokens + all component styles (`bento.min.css` for the minified file) |
+| `bento-shad-ui/tokens.css` | Tokens only (CSS variables for light and dark) |
+| `bento-shad-ui` | Typed vanilla core: `start`, `init`, `toast`, `setTheme`, `themeScript`… (ESM, SSR-safe) |
+| `bento-shad-ui/auto` | Same as above, and starts the behaviours on import |
+| `bento-shad-ui/react` | React components (ESM, marked `"use client"`) |
+| `bento-shad-ui/shadcn-theme.css` | `globals.css` for shadcn/ui on Tailwind v4 |
+| `bento-shad-ui/tokens.json` | Raw tokens for other tools |
+| `bento-shad-ui/flutter/bento_theme.dart` | Flutter theme (copy it into `lib/`) |
+| `bento-shad-ui/llms-full.txt` | All docs in one file for AI agents |
+
+The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it with no config.
+
+## 2. CDN (no build step)
+
+jsDelivr serves files from the GitHub tag:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.iife.min.js" defer></script>
+```
+
+The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
+
+As an ES module without a bundler:
+
+```html
+<script type="module">
+  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/index.js';
+  start();
+</script>
+```
+
+## 3. shadcn/ui registry
+
+In a project that already ran `npx shadcn@latest init`:
+
+```bash
+# theme: colours, fonts, radius, tile sizes, light + dark
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-theme.json
+# BentoGrid + BentoTile component (installs the theme too)
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json
+```
+
+Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.md).
+
+## 4. Flutter
+
+Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
+
+```bash
+curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/dist/flutter/bento_theme.dart
+```
+
+See [flutter.md](flutter.md).
+
+## Fonts
+
+The library expects **Red Hat Display** (headings) and **Red Hat Text** (body). Both are free under the SIL Open Font License. There is no monospace font.
+
+Google Fonts:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
+```
+
+Next.js (`next/font`, self-hosted, no layout shift):
+
+```tsx
+// app/layout.tsx
+import { Red_Hat_Display, Red_Hat_Text } from 'next/font/google';
+const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
+const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
+// <html className={`${text.variable} ${display.variable}`}> …
+```
+
+```css
+/* globals.css, after bento.css */
+:root {
+  --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+If the fonts fail to load, the system UI font is used; nothing breaks.
+
+## Updating
+
+```bash
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+```
+
+Read `CHANGELOG.md` first. For CDN links, change the tag in the URL.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| Components have no styles | Import `bento-shad-ui/bento.css` once, and add `class="bk"` to `<body>`. |
+| `ERR_REQUIRE_ESM` | The package is ESM-only. Use `import`, or set `"type": "module"`. |
+| Dark mode flashes on load | Add the theme script to `<head>`: `<ThemeScript />` in React, `themeScript` string elsewhere. See [theming.md](theming.md). |
+| Menus or popovers don't open | They use the native `popover` attribute (browsers since 2024). Update the browser. |
+| Next.js: "functions cannot be passed to Client Components" | Event-handler props (`onClick`, `onValueChange`) need a component marked `"use client"`. |
+| Grid stays at one column | `.bk-bento-grid` must sit inside `.bk-bento` (React's `BentoGrid` does this for you). |
+
+<!-- docs/html.md -->
+
+# Using with plain HTML
+
+Works with any server or static site: plain HTML, PHP, Rails, Django, Laravel, htmx, Astro, Eleventy.
+
+## Page setup
+
+```html
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- 1. no dark-mode flash: copy the string exported as `themeScript`, or this line -->
+  <script>(function(){try{var r=document.documentElement,t=null;try{t=localStorage.getItem('bk-theme')}catch(e){}if(t!=='light'&&t!=='dark'&&t!=='system')t=r.getAttribute('data-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',t);r.classList.toggle('dark',d);}catch(e){}})();</script>
+  <!-- 2. fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
+  <!-- 3. styles and behaviours -->
+  <link rel="stylesheet" href="/vendor/bento-shad-ui/bento.min.css">
+  <script src="/vendor/bento-shad-ui/bento.iife.min.js" defer></script>
+</head>
+<body class="bk">
+  …
+</body>
+</html>
+```
+
+`class="bk"` on `<body>` sets the font, base size, colours and focus rings. Without it, components still render, but plain text around them uses browser defaults.
+
+## Layout
+
+```html
+<main class="bk-container">
+  <div class="bk-bento">            <!-- the box the grid measures -->
+    <div class="bk-bento-grid">     <!-- 4 / 2 / 1 columns -->
+      <article class="bk-tile bk-span-2 bk-row-2">…</article>
+      <article class="bk-tile" data-tone="peach">…</article>
+      <article class="bk-tile">…</article>
+      <article class="bk-tile bk-span-2">…</article>
+    </div>
+  </div>
+</main>
+```
+
+See [layout.md](layout.md) for spans, rows, tones and rules.
+
+## Components
+
+Every component is markup plus classes. Variants are data attributes:
+
+```html
+<button class="bk-button" data-variant="outline" data-size="sm">Share</button>
+<span class="bk-badge" data-variant="success" data-dot>Paid</span>
+<div class="bk-alert" data-variant="destructive" role="alert">…</div>
+```
+
+The full catalogue with markup is in [components.md](components.md). The live kit (`index.html`) has a **Code** button on every tile.
+
+## Behaviours (optional script)
+
+Without JavaScript, everything renders and these still work: buttons, inputs, native selects, checkboxes, radios, switches, sliders, accordions (`<details>`) and tooltips (CSS). The script adds the following, driven by attributes:
+
+| Attribute / class | What happens |
+|---|---|
+| `data-bk-theme-set="light\|dark\|system"` | Click sets the theme and remembers it |
+| `data-bk-open="id"` on a button | Opens `<dialog id="id">` (dialog, sheet, command) |
+| `data-bk-close` inside a dialog | Closes it. `data-bk-close="value"` sets `returnValue` |
+| `popovertarget="id"` + `.bk-menu[popover]` / `.bk-popover[popover]` | Places the menu under its button and flips it when there's no room |
+| `data-bk-toast='{"title":"Saved","variant":"success"}'` | Shows a toast on click |
+| `data-bk-copy="text"` or `data-bk-copy-target="#selector"` | Copies to the clipboard and confirms with a toast |
+| `[data-bk-tabs]` with `role="tab"` + `aria-controls` | Tabs with arrow-key navigation |
+| `.bk-toggle` (in `.bk-toggle-group[data-type="single"]` for one-of) | Flips `aria-pressed` |
+| `.bk-slider` + `<output for="id">` | Keeps the fill and the readout in sync (`data-prefix`, `data-suffix`) |
+| `.bk-otp` | Digits only, auto-advance, backspace, paste |
+| `.bk-calendar[data-mode="single\|range"]` | Day selection; fires `bk:change` with `{ start, end }` |
+| `dialog.bk-command[data-bk-hotkey]` | ⌘K / Ctrl+K opens it; typing filters `.bk-command-item`s |
+| `.bk-dropzone` | Drag-over state and selected file names |
+
+Content added later (fetch, htmx swaps, Turbo) is set up automatically through a `MutationObserver`. To control it yourself, load the ES module and call `start({ observe: false })`, then `init(newElement)` after each swap.
+
+### Calling it from your own code
+
+```js
+BentoUI.toast({ title: 'Trip saved', description: 'Lisbon, 12–16 March', variant: 'success' });
+BentoUI.setTheme('dark');
+document.addEventListener('bk:theme', (e) => console.log(e.detail)); // { theme, resolved }
+```
+
+Full API: [javascript-api.md](javascript-api.md).
+
+## Self-hosting the files
+
+Copy from `node_modules/bento-shad-ui/dist/` (or the GitHub release) into your static folder:
+
+- `bento.min.css` (and `bento.css` for readable source)
+- `bento.iife.min.js`
+
+There are no other assets: icons are inline SVG you provide, and fonts come from Google Fonts or your own copy.
+
+## Icons
+
+The kit doesn't ship an icon set. Any 24×24 stroke icon works; Lucide matches best. Give inline SVGs `class="bk-icon"` (16px, `data-size="sm|lg|xl"` for 14/20/24px). SVGs placed directly inside buttons, menu items, sidebar items and similar are sized automatically.
+
+<!-- docs/react.md -->
+
+# Using with React and Next.js
+
+`bento-shad-ui/react` is a set of typed React components that render the kit's classes. It needs no Tailwind. The bundle starts with `"use client"`, works with React 18 and 19, and renders on the server (no `window` access at import time).
+
+## Install
+
+```bash
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
+```
+
+## Next.js App Router
+
+```tsx
+// app/layout.tsx
+import 'bento-shad-ui/bento.css';
+import './globals.css'; // your overrides, after the kit
+import { Red_Hat_Display, Red_Hat_Text } from 'next/font/google';
+import { ThemeScript } from 'bento-shad-ui/react';
+
+const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
+const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" data-theme="system" className={`${text.variable} ${display.variable}`} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body className="bk">{children}</body>
+    </html>
+  );
+}
+```
+
+```css
+/* app/globals.css */
+:root {
+  --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+- `ThemeScript` applies the saved theme before the first paint, so dark mode doesn't flash.
+- `suppressHydrationWarning` is needed because that script changes `<html>` attributes before React hydrates.
+- Server components can render kit components. Event-handler props (`onClick`, `onValueChange`, `onOpenChange`) must come from a component marked `"use client"`, as with any React library.
+
+## Vite / Create React App
+
+```tsx
+// main.tsx
+import 'bento-shad-ui/bento.css';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+document.body.classList.add('bk');
+createRoot(document.getElementById('root')!).render(<App />);
+```
+
+## A page
+
+```tsx
+'use client';
+import { useState } from 'react';
+import {
+  BentoGrid, Tile, TileHeader, TileTitle, TileDescription, Eyebrow,
+  Button, Badge, Stat, Sparkline, BarChart, Field, Input, Switch, Dialog, toast,
+} from 'bento-shad-ui/react';
+
+export function Dashboard() {
+  const [open, setOpen] = useState(false);
+  return (
+    <BentoGrid>
+      <Tile span={2} rows={2} tone="inverse">
+        <Eyebrow>This week</Eyebrow>
+        <BarChart
+          data={[{ label: 'Mon', value: 32 }, { label: 'Tue', value: 45 }, { label: 'Wed', value: 28 }]}
+          formatValue={(v) => `${v} bookings`}
+        />
+      </Tile>
+      <Tile>
+        <Stat label="Revenue" value="€48,210" delta="+8.1% vs February" trend="up" />
+        <Sparkline data={[12, 18, 15, 22, 19, 27, 31]} label="Revenue rose all week" />
+      </Tile>
+      <Tile tone="peach">
+        <TileHeader>
+          <div>
+            <TileTitle>Price alerts</TileTitle>
+            <TileDescription>We tell you when fares drop.</TileDescription>
+          </div>
+          <Badge variant="brand">New</Badge>
+        </TileHeader>
+        <Switch label="Email me" defaultChecked />
+      </Tile>
+      <Tile>
+        <Button onClick={() => setOpen(true)}>Edit profile</Button>
+        <Dialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Edit profile"
+          description="Your name shows on shared trips."
+          footer={
+            <>
+              <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button onClick={() => { setOpen(false); toast({ title: 'Saved', variant: 'success' }); }}>Save</Button>
+            </>
+          }
+        >
+          <Field label="Name"><Input defaultValue="Maya Kim" /></Field>
+        </Dialog>
+      </Tile>
+    </BentoGrid>
+  );
+}
+```
+
+## Patterns
+
+**Router links.** Every link-like component takes `asChild`:
+
+```tsx
+import Link from 'next/link';
+<Button asChild><Link href="/trips">Trips</Link></Button>
+<NavbarLink asChild current><Link href="/">Home</Link></NavbarLink>
+<SidebarItem asChild icon={<Home />}><Link href="/">Home</Link></SidebarItem>
+<Tile asChild interactive><Link href="/trips/lisbon">…</Link></Tile>
+```
+
+**Forms.** `Field` creates the id and wires `htmlFor`, `aria-describedby` and `aria-invalid`:
+
+```tsx
+<Field label="Email" description="We'll send the itinerary here." error={errors.email} required>
+  <Input type="email" name="email" />
+</Field>
+```
+
+It works with react-hook-form (`<Input {...register('email')} />`) and with server actions (plain `name` attributes).
+
+**Controlled or uncontrolled.** Stateful components accept both: `value` + `onValueChange`, or `defaultValue`. The same goes for `pressed`, `checked`, `open` and `month`.
+
+**Toasts.** `toast()` works from anywhere, with no provider:
+
+```tsx
+toast({ title: 'Payment failed', description: 'Your card was declined.', variant: 'destructive', action: { label: 'Retry', onClick: retry } });
+```
+
+**Theme.**
+
+```tsx
+const { theme, resolvedTheme, setTheme } = useTheme();
+<ThemeToggle /> // Light / Dark / System
+```
+
+**Command palette.**
+
+```tsx
+const [open, setOpen] = useState(false); // ⌘K / Ctrl+K toggles it
+<CommandDialog
+  open={open}
+  onOpenChange={setOpen}
+  groups={[{ heading: 'Pages', items: [{ id: 'trips', label: 'Trips', onSelect: () => router.push('/trips') }] }]}
+/>
+```
+
+## Icons
+
+Pass any React icon as children or as an `icon` prop. lucide-react matches the kit:
+
+```tsx
+import { Plus } from 'lucide-react';
+<Button><Plus />Add trip</Button>
+```
+
+SVGs inside buttons, menu items, sidebar items, badges and similar are sized to 16px automatically (20px in the bottom nav).
+
+## Using it with the vanilla core
+
+You don't need `bento-shad-ui` (the core) in a React app. If a page also contains plain-HTML kit markup and you call `start()`, the core leaves React-rendered components alone: they carry `data-bk-react`.
+
+Every component and prop is listed in [components.md](components.md).
+
+<!-- docs/shadcn.md -->
+
+# Using with shadcn/ui and Tailwind v4
+
+If a project already uses shadcn/ui, keep its components and add the bento theme and grid. You get shadcn components in this colour system, the Red Hat fonts and the `BentoGrid` / `BentoTile` layout.
+
+## Option A: registry (recommended)
+
+```bash
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-theme.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json
+```
+
+- `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`), adding `--color-brand`, `--color-tint-peach` and the rest so `bg-brand` or `text-tint-sky-foreground` work.
+- `bento-grid` adds `components/ui/bento-grid.tsx`, the `bento-grid` and `bento-tile` utilities and the `class-variance-authority` dependency. It installs the theme too.
+
+## Option B: theme file
+
+Replace `app/globals.css` (or your Tailwind entry CSS) with `node_modules/bento-shad-ui/dist/shadcn-theme.css`, or copy its `@theme inline`, `:root`, `.dark`, `@layer base` and `@utility` blocks into your file. It needs `tailwindcss` v4 and `tw-animate-css` (both installed by `shadcn init`).
+
+## Fonts
+
+```tsx
+// app/layout.tsx
+import { Red_Hat_Display, Red_Hat_Text } from 'next/font/google';
+const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
+const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
+// <html className={`${text.variable} ${display.variable}`}>
+```
+
+```css
+/* in globals.css, inside @theme inline: point the font tokens at next/font */
+@theme inline {
+  --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+Headings (`h1`–`h4`) use `--font-heading` through the base layer. Use `font-heading` on anything else.
+
+## BentoGrid and BentoTile
+
+```tsx
+import { BentoGrid, BentoTile, BentoTileHeader, BentoTileTitle, BentoTileDescription } from '@/components/ui/bento-grid';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+
+export function Features() {
+  return (
+    <BentoGrid>
+      <BentoTile span={2} rows={2} className="dark bg-background text-foreground border-transparent">
+        <BentoTileTitle className="text-2xl">Plan together</BentoTileTitle>
+        <Button>Invite people</Button>
+      </BentoTile>
+      <BentoTile tone="peach">
+        <BentoTileTitle>Offline maps</BentoTileTitle>
+        <BentoTileDescription>Download a city before you fly.</BentoTileDescription>
+      </BentoTile>
+      <BentoTile tone="sky">
+        <BentoTileHeader>
+          <BentoTileTitle>Price alerts</BentoTileTitle>
+          <Switch defaultChecked />
+        </BentoTileHeader>
+      </BentoTile>
+      <BentoTile span={2}>…</BentoTile>
+    </BentoGrid>
+  );
+}
+```
+
+| Prop | Values | Notes |
+|---|---|---|
+| `span` | `1` `2` `3` `4` `"full"` | Columns from the 2-column breakpoint (`@xl`) up |
+| `rows` | `1` `2` `3` | Rows from `@xl` up |
+| `tone` | `default` `muted` `peach` `sky` `mint` `lilac` `butter` `inverse` `brand` | Background + text colour |
+| `interactive` | `true` | Lift on hover, for clickable tiles |
+
+Breakpoints come from the grid's own width: 1 column, then 2 from `@xl` (36rem), then 4 from `@4xl` (56rem).
+
+**Dark island.** The `inverse` and `brand` tones only change the tile's own colours. shadcn components inside keep the page's tokens. To make a tile, and every component in it, use dark tokens, add the `dark` class: `className="dark bg-background text-foreground"`. Because of `@custom-variant dark (&:is(.dark *))`, everything inside switches.
+
+## Using `bento-shad-ui/react` as well
+
+You can, but you rarely need to: shadcn already covers most components. Useful additions from the React package that shadcn lacks: `Stat`, `Sparkline`, `BarChart`, `Meter`, `Ring`, `Empty`, `BottomNav`, `ChoiceCard`, `InputOTP`. If you import them, also import `bento-shad-ui/bento.css`. The tokens are identical, so both sets match.
+
+<!-- docs/flutter.md -->
+
+# Using with Flutter
+
+`dist/flutter/bento_theme.dart` is generated from the same tokens as the CSS. It gives you:
+
+- `BentoTheme.light()` and `BentoTheme.dark()`: Material 3 `ThemeData` with the colour scheme, pill-shaped buttons, outlined inputs and the heading font on display, headline and title styles.
+- `BentoColors`: all 49 tokens as a `ThemeExtension`, so every colour (including tints, `brand`, `success`, `inverse`) is available in widgets and animates between light and dark.
+- `BentoTheme.tile(...)`: the tile `BoxDecoration`, plus `tileRadius`, `tileGap` and `tilePadding` constants.
+
+It passes `flutter analyze` with no warnings.
+
+## Install
+
+```bash
+curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/dist/flutter/bento_theme.dart
+```
+
+## Fonts
+
+**Option A, bundled (works offline, recommended for apps).** Download Red Hat Text and Red Hat Display from Google Fonts into `assets/fonts/`, then:
+
+```yaml
+# pubspec.yaml
+flutter:
+  fonts:
+    - family: Red Hat Text
+      fonts:
+        - asset: assets/fonts/RedHatText-Regular.ttf
+        - asset: assets/fonts/RedHatText-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/RedHatText-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/RedHatText-Bold.ttf
+          weight: 700
+    - family: Red Hat Display
+      fonts:
+        - asset: assets/fonts/RedHatDisplay-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/RedHatDisplay-ExtraBold.ttf
+          weight: 800
+```
+
+The family names match `BentoTheme.fontFamily` and `BentoTheme.headingFontFamily`, so nothing else is needed.
+
+**Option B, google_fonts package.**
+
+```dart
+ThemeData withFonts(ThemeData base) {
+  final body = GoogleFonts.redHatTextTextTheme(base.textTheme);
+  TextStyle? h(TextStyle? s) => GoogleFonts.redHatDisplay(textStyle: s, fontWeight: FontWeight.w700);
+  return base.copyWith(
+    textTheme: body.copyWith(
+      displayLarge: h(body.displayLarge), displayMedium: h(body.displayMedium), displaySmall: h(body.displaySmall),
+      headlineLarge: h(body.headlineLarge), headlineMedium: h(body.headlineMedium), headlineSmall: h(body.headlineSmall),
+      titleLarge: h(body.titleLarge),
+    ),
+  );
+}
+
+MaterialApp(theme: withFonts(BentoTheme.light()), darkTheme: withFonts(BentoTheme.dark()));
+```
+
+## Use
+
+```dart
+import 'theme/bento_theme.dart';
+
+MaterialApp(
+  theme: BentoTheme.light(),
+  darkTheme: BentoTheme.dark(),
+  themeMode: ThemeMode.system,
+  home: const HomePage(),
+);
+```
+
+A bento grid with two columns on phones:
+
+```dart
+class BentoTile extends StatelessWidget {
+  const BentoTile({super.key, required this.child, this.tint, this.onTint});
+  final Widget child;
+  final Color? tint;
+  final Color? onTint;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).extension<BentoColors>()!;
+    return Container(
+      padding: const EdgeInsets.all(BentoTheme.tilePadding),
+      decoration: BentoTheme.tile(c, color: tint),
+      child: DefaultTextStyle.merge(style: TextStyle(color: onTint ?? c.cardForeground), child: child),
+    );
+  }
+}
+
+// In a page:
+final c = Theme.of(context).extension<BentoColors>()!;
+GridView.count(
+  crossAxisCount: 2,
+  mainAxisSpacing: BentoTheme.tileGap,
+  crossAxisSpacing: BentoTheme.tileGap,
+  padding: const EdgeInsets.all(16),
+  children: [
+    BentoTile(tint: c.tintPeach, onTint: c.tintPeachForeground, child: const Text('Budget')),
+    BentoTile(tint: c.tintSky, onTint: c.tintSkyForeground, child: const Text('18° Lisbon')),
+  ],
+);
+```
+
+For tiles that span two columns or two rows, use the `flutter_staggered_grid_view` package's `StaggeredGrid.count` with `StaggeredGridTile.count(crossAxisCellCount: 2, mainAxisCellCount: 1, child: …)`.
+
+## Token names
+
+CSS `--tint-peach-foreground` becomes Dart `tintPeachForeground`. The full list is in [theming.md](theming.md).
+
+<!-- docs/theming.md -->
+
+# Theming
+
+## Tokens
+
+All tokens are CSS custom properties on `:root`, redefined for dark mode. The names match shadcn/ui; the bento extras are marked ★.
+
+### Colour
+
+| Token | Used for |
+|---|---|
+| `--background` / `--foreground` | Page background and default text |
+| `--card` / `--card-foreground` | Tiles and cards |
+| `--popover` / `--popover-foreground` | Menus, popovers, dialogs, toasts |
+| `--primary` / `--primary-foreground` | Default buttons, checked controls, active nav |
+| `--secondary` / `--secondary-foreground` | Secondary buttons and badges |
+| `--muted` / `--muted-foreground` | Subtle fills (tab list, skeleton) and secondary text |
+| `--accent` / `--accent-foreground` | Hover fills for ghost/outline buttons and menu items |
+| `--destructive` / `--destructive-foreground` ★ | Delete buttons and error states. The foreground token is an extra: white on light red fails contrast in dark mode, so dark mode uses dark text |
+| `--border` | Tile and divider lines |
+| `--input` | Form control borders, at least 3:1 against card and background |
+| `--ring` | Focus ring, at least 3:1 against card and background |
+| `--chart-1` … `--chart-5` | Data series |
+| `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-primary-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring` | Sidebar |
+| `--brand` / `--brand-foreground` ★ | The one accent colour: brand buttons, highlights, rings |
+| `--success`, `--warning`, `--info` ★ | Status text and soft badge/alert fills |
+| `--inverse` / `--inverse-foreground` ★ | The contrast tile (dark in light mode, light in dark mode) |
+| `--tint-peach`, `--tint-sky`, `--tint-mint`, `--tint-lilac`, `--tint-butter` (+ `-foreground`) ★ | Tile tones |
+
+### Size, type, depth
+
+| Token | Default |
+|---|---|
+| `--radius` | `1rem`; `--radius-sm/md/lg/xl/2xl` are 0.6×, 0.8×, 1×, 1.4×, 1.8× |
+| `--radius-pill` | `999px` (buttons, badges, tabs) |
+| `--tile-radius` ★ | `1.625rem` |
+| `--tile-gap` ★ | `12px` |
+| `--tile-pad` ★ | `20px` |
+| `--font-sans` | Red Hat Text |
+| `--font-heading` ★ | Red Hat Display |
+| `--shadow-xs/sm/md/lg` | Shadows; tiles have none, overlays use `lg` |
+
+There is deliberately no `--font-mono`. Code and keyboard keys use the sans font with tabular figures.
+
+## Dark mode
+
+| On `<html>` | Result |
+|---|---|
+| nothing, or `data-theme="light"` | Light |
+| `class="dark"` or `data-theme="dark"` | Dark |
+| `data-theme="system"` | Follows the OS, live |
+
+`setTheme('light' | 'dark' | 'system')` (core or React) sets both `data-theme` and the `dark` class, saves the choice in `localStorage` under `bk-theme`, and fires `bk:theme`. To avoid a flash of the wrong theme, put the theme script in `<head>`: `<ThemeScript />` in React, or the `themeScript` string from the core elsewhere.
+
+## Rebrand without forking
+
+Override tokens in your own CSS, loaded after the kit:
+
+```css
+:root {
+  --brand: oklch(0.62 0.19 255);         /* blue */
+  --brand-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.52 0.19 255);
+  --radius: 0.75rem;
+  --tile-radius: 1.25rem;
+}
+.dark, [data-theme="dark"] {
+  --brand: oklch(0.7 0.16 255);
+  --brand-foreground: oklch(0.15 0 0);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] { --brand: oklch(0.7 0.16 255); --brand-foreground: oklch(0.15 0 0); }
+}
+```
+
+Keep text pairs at 4.5:1 or more and `--ring` / `--input` at 3:1 or more against `--card` and `--background`.
+
+## Rebrand everywhere (fork)
+
+To change the brand for CSS, shadcn and Flutter at once:
+
+1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
+2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
+3. Commit, tag (`v0.1.0-yourbrand.1`) and install your fork's tag.
+
+## Scoped themes
+
+- **Tones** (`data-tone="peach|sky|mint|lilac|butter|muted|inverse|brand"`) recolour a tile and re-point `--foreground`, `--muted-foreground`, `--border`, `--secondary`, `--accent` (and for `inverse`/`brand`, `--primary` and `--card`) inside it, so nested components stay readable.
+- **Dark island**: `class="dark"` on any element switches its subtree to dark tokens, e.g. a dark hero on a light page.
+- **Inverse surface** outside a tile: `class="bk-surface-inverse"`.
+
+## Fonts
+
+Change fonts by overriding the two variables:
+
+```css
+:root {
+  --font-sans: "Your Text Face", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Your Display Face", ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+The defaults were chosen to avoid the faces most AI-generated UIs reach for (Inter, Geist, Plus Jakarta Sans, Space Grotesk, Poppins, DM Sans).
+
+<!-- docs/layout.md -->
+
+# Layout: the bento grid
+
+## Structure
+
+```html
+<div class="bk-bento">          <!-- container: the grid measures this element's width -->
+  <div class="bk-bento-grid">   <!-- the grid -->
+    <article class="bk-tile">…</article>
+  </div>
+</div>
+```
+
+React: `<BentoGrid>` renders both elements. shadcn: `<BentoGrid>` from `bento-grid.tsx`, or `<div class="@container"><div class="bento-grid">`.
+
+## Columns
+
+Columns follow the **container's** width (container queries), not the viewport. A grid inside a 400px sidebar behaves like a phone layout even on a desktop.
+
+| Container width | Columns |
+|---|---|
+| more than 900px | 4 (or `data-cols="3"` / `"6"`) |
+| 561–900px | 2 |
+| 560px or less | 1. Grids with `data-cols="2"` keep 2 down to 300px, for app home screens |
+
+When columns drop, spans reset so a tile never overflows: `span-3` and `span-4` become full width at 2 columns, and every span becomes 1 at 1 column.
+
+## Spans
+
+| HTML class | React prop | Effect |
+|---|---|---|
+| `bk-span-2`, `bk-span-3`, `bk-span-4` | `span={2|3|4}` | Columns |
+| `bk-span-full` | `span="full"` | Full row at every width |
+| `bk-row-2`, `bk-row-3` | `rows={2|3}` | Rows |
+
+The grid uses `grid-auto-flow: dense`, so later small tiles fill gaps left by large ones.
+
+## Tones
+
+`data-tone` (`tone` prop): `muted`, `peach`, `sky`, `mint`, `lilac`, `butter`, `inverse`, `brand`. Each tone also adjusts the tokens inside the tile, so a `Button`, `Input` or `Badge` placed in it stays readable.
+
+## Tile anatomy
+
+```html
+<article class="bk-tile">
+  <header class="bk-tile-header">
+    <div>
+      <h3 class="bk-tile-title">Bookings</h3>
+      <p class="bk-tile-description">This week · 330 total</p>
+    </div>
+    <span class="bk-badge" data-variant="secondary">Week</span>
+  </header>
+  …content…
+  <footer class="bk-tile-footer">…</footer>   <!-- pinned to the bottom -->
+</article>
+```
+
+Other tile options: `data-interactive` (lifts on hover, for links), `data-center` (centres content), `.bk-tile-media` (an image that bleeds to the tile's top edges), `.bk-eyebrow` (small uppercase label).
+
+## Rules
+
+1. **One idea per tile.** If a tile needs a second heading, split it.
+2. **Size by importance.** The main thing gets 2×2; supporting facts get 1×1.
+3. **Fill every row.** At 4 columns, choose spans that add up to 4 per row. Check at 2 columns too.
+4. **Tint sparingly.** At most one toned tile in four, and one `inverse` tile per view.
+5. **Same padding everywhere.** Change a tile's size, not its padding. Adjust `--tile-pad` for the whole grid if needed.
+6. **Flat tiles, floating overlays.** Tiles have borders and no shadow; shadows belong to menus, dialogs and toasts.
+7. **Content sets the height.** Don't give tiles fixed heights; use `rows` for tall tiles.
+
+## Layout recipes
+
+**Dashboard (4 columns, 3 rows).**
+Sidebar `rows=3` · three stat tiles · chart `span=2` · activity `rows=2` · table `span=2`.
+
+**Landing feature section (8 cells).**
+Hero feature `span=2 rows=2 tone=inverse` · two 1×1 toned features · one `span=2` feature.
+
+**Mobile home screen.**
+`<BentoGrid cols={2}>` with `span=2` for the hero and progress tiles and 1×1 for small stats. Stays 2 columns on phones.
+
+**Settings page.**
+Not every page needs a bento grid. Use `Card` (header, content, footer) in a single column for forms longer than a few fields.
+
+## Page container
+
+`.bk-container` gives a centred column, 1240px max (set `--container` to change it), with safe-area-aware 16px side padding.
+
+<!-- docs/components.md -->
+
+# Components
+
+Every component is listed with its HTML markup and its React equivalent (`import { … } from 'bento-shad-ui/react'`). In HTML, variants are `data-*` attributes; in React they are props. The live kit (`index.html`) shows each one with a **Code** button.
+
+Shared conventions:
+
+- Icon slots take any SVG. In HTML give inline SVGs `class="bk-icon"`. In React pass any icon element (lucide-react recommended).
+- Every React component forwards `ref` and passes unknown props (`id`, `aria-*`, `data-*`, handlers) to its root element.
+- Stateful React components work both controlled (`value` + `onValueChange`) and uncontrolled (`defaultValue`).
+
+---
+
+## Layout
+
+### BentoGrid and Tile
+
+```html
+<div class="bk-bento">
+  <div class="bk-bento-grid" data-cols="4">
+    <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">…</article>
+    <article class="bk-tile" data-tone="peach" data-interactive>…</article>
+  </div>
+</div>
+```
+
+```tsx
+<BentoGrid cols={4}>
+  <Tile span={2} rows={2} tone="inverse">…</Tile>
+  <Tile tone="peach" interactive asChild><a href="/maps">…</a></Tile>
+</BentoGrid>
+```
+
+| Tile prop / attribute | Values |
+|---|---|
+| `span` / `bk-span-N` | `1` `2` `3` `4` `"full"` |
+| `rows` / `bk-row-N` | `1` `2` `3` |
+| `tone` / `data-tone` | `default` `muted` `peach` `sky` `mint` `lilac` `butter` `inverse` `brand` |
+| `interactive` / `data-interactive` | Lifts on hover |
+| `center` / `data-center` | Centres content |
+| `as` | `div` (default) `article` `section` `aside` `li` `a` `nav` `form` |
+
+Parts: `TileHeader` (`.bk-tile-header`), `TileTitle` (`.bk-tile-title`, h3), `TileDescription` (`.bk-tile-description`), `TileFooter` (`.bk-tile-footer`, pinned to the bottom), `TileMedia` (`.bk-tile-media`, bleeds to the top edge), `Eyebrow` (`.bk-eyebrow`).
+
+### Card
+
+shadcn anatomy, for content outside a bento grid (forms, settings).
+
+```html
+<div class="bk-card">
+  <div class="bk-card-header">
+    <h3 class="bk-card-title">Profile</h3>
+    <div class="bk-card-action"><span class="bk-badge" data-variant="success">Verified</span></div>
+    <p class="bk-card-description">How other travellers see you.</p>
+  </div>
+  <div class="bk-card-content">…</div>
+  <div class="bk-card-footer">…</div>
+</div>
+```
+
+```tsx
+<Card>
+  <CardHeader><CardTitle>Profile</CardTitle><CardAction><Badge>Verified</Badge></CardAction><CardDescription>…</CardDescription></CardHeader>
+  <CardContent>…</CardContent>
+  <CardFooter>…</CardFooter>
+</Card>
+```
+
+### Stack, Row, Separator, Media, Container
+
+```html
+<div class="bk-stack" style="--gap: 16px">…</div>
+<div class="bk-row bk-between">…</div>
+<hr class="bk-separator">  <hr class="bk-separator" data-orientation="vertical">
+<div class="bk-media" style="--ratio: 4 / 3"><img src="…" alt="…"><span class="bk-media-caption">Alfama</span></div>
+<main class="bk-container">…</main>
+```
+
+```tsx
+<Stack gap={16}>…</Stack>  <Row between gap={8}>…</Row>  <Separator orientation="vertical" />
+<Media ratio="4 / 3" caption="Alfama"><img src="…" alt="…" /></Media>
+```
+
+### Typography
+
+| Class | Use |
+|---|---|
+| `bk-display` | Hero headline (fluid 40–68px, Red Hat Display 800) |
+| `bk-h1` `bk-h2` `bk-h3` `bk-h4` | Headings 40 / 30 / 24 / 20px |
+| `bk-lead` | Intro paragraph, 20px muted |
+| `bk-p` | Body copy, 16px, 1.75 line height, 68ch max |
+| `bk-large` `bk-small` `bk-muted` `bk-caption` | 18px semibold / 14px medium / 14px muted / 12px muted |
+| `bk-eyebrow` | 11px uppercase label |
+| `bk-num` | Big tabular number |
+| `bk-code` | Inline code chip (sans font, tabular figures) |
+| `bk-codeblock` | Preformatted block |
+| `bk-blockquote` | Quote with brand rule |
+| `bk-truncate` `bk-sr-only` | One-line ellipsis / visually hidden |
+
+---
+
+## Actions
+
+### Button
+
+```html
+<button class="bk-button">Book trip</button>
+<button class="bk-button" data-variant="outline" data-size="sm"><svg class="bk-icon">…</svg>Share</button>
+<button class="bk-button" data-size="icon" aria-label="Add"><svg class="bk-icon">…</svg></button>
+<button class="bk-button" data-loading disabled><span class="bk-spinner" data-size="sm"></span>Saving</button>
+<a class="bk-button" data-variant="link" href="/terms">View terms</a>
+```
+
+```tsx
+<Button>Book trip</Button>
+<Button variant="outline" size="sm"><Share2 />Share</Button>
+<Button size="icon" aria-label="Add"><Plus /></Button>
+<Button loading>Saving</Button>
+<Button asChild variant="link"><Link href="/terms">View terms</Link></Button>
+```
+
+| Prop | Values |
+|---|---|
+| `variant` | `default` `brand` `secondary` `outline` `ghost` `destructive` `link` |
+| `size` | `xs` (28px) `sm` (34) `default` (40) `lg` (46) `icon` `icon-sm` `icon-lg` |
+| `loading` | Spinner, `aria-busy`, disabled |
+| `block` / `data-block` | Full width |
+| `asChild` | Style a link or router `Link` as a button |
+
+### ButtonGroup
+
+```html
+<div class="bk-button-group" role="group" aria-label="Range">
+  <button class="bk-button" data-variant="outline" data-size="sm">Day</button>
+  <button class="bk-button" data-variant="outline" data-size="sm">Week</button>
+</div>
+```
+
+```tsx
+<ButtonGroup aria-label="Range"><Button variant="outline" size="sm">Day</Button><Button variant="outline" size="sm">Week</Button></ButtonGroup>
+```
+
+### Toggle and ToggleGroup
+
+```html
+<button class="bk-toggle" data-variant="outline" aria-pressed="true" aria-label="Bold">…</button>
+<div class="bk-toggle-group" data-type="single" role="group" aria-label="Alignment">
+  <button class="bk-toggle" aria-pressed="true" aria-label="Left">…</button>
+  <button class="bk-toggle" aria-pressed="false" aria-label="Center">…</button>
+</div>
+```
+
+```tsx
+<Toggle variant="outline" defaultPressed aria-label="Bold"><Bold /></Toggle>
+<ToggleGroup type="single" defaultValue="left" aria-label="Alignment">
+  <Toggle value="left" aria-label="Left"><AlignLeft /></Toggle>
+  <Toggle value="center" aria-label="Center"><AlignCenter /></Toggle>
+</ToggleGroup>
+<ToggleGroup type="multiple" value={styles} onValueChange={setStyles}>…</ToggleGroup>
+```
+
+### Kbd
+
+```html
+<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+```
+
+```tsx
+<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
+```
+
+### Tooltip
+
+CSS-only; shows on hover and keyboard focus. Plain text only.
+
+```html
+<button class="bk-button" data-variant="outline" data-size="icon" aria-label="Copy link" data-bk-tooltip="Copy link" data-bk-tooltip-side="bottom">…</button>
+```
+
+```tsx
+<Tooltip content="Copy link" side="bottom"><Button variant="outline" size="icon" aria-label="Copy link"><Link2 /></Button></Tooltip>
+```
+
+---
+
+## Forms
+
+### Field, Label, Input, Textarea, Select
+
+```html
+<div class="bk-field">
+  <label class="bk-label" for="email">Email</label>
+  <input class="bk-input" id="email" type="email" aria-describedby="email-d">
+  <p class="bk-field-description" id="email-d">We'll send the itinerary here.</p>
+</div>
+<div class="bk-field">
+  <label class="bk-label" for="code">Promo code</label>
+  <input class="bk-input" id="code" aria-invalid="true" aria-describedby="code-e">
+  <p class="bk-field-error" id="code-e">This code expired on 31 August.</p>
+</div>
+<textarea class="bk-textarea"></textarea>
+<select class="bk-select"><option>Lisbon</option></select>
+```
+
+```tsx
+<Field label="Email" description="We'll send the itinerary here." required>
+  <Input type="email" name="email" />
+</Field>
+<Field label="Promo code" error="This code expired on 31 August."><Input defaultValue="SUMMER" /></Field>
+<Field label="Notes"><Textarea /></Field>
+<Field label="Destination"><Select><option>Lisbon</option></Select></Field>
+```
+
+`Field` generates the id and sets `htmlFor`, `aria-describedby` and `aria-invalid`. `Input`, `Textarea` and `Select` also accept `invalid`.
+
+Layout helpers: `bk-form` (vertical stack, 16px), `bk-form-row` (fields side by side, wraps), `bk-fieldset` with a `legend`.
+
+### InputGroup (icon, shortcut)
+
+```html
+<div class="bk-input-group">
+  <svg class="bk-icon">…</svg>
+  <input class="bk-input" type="search" placeholder="Search trips" aria-label="Search trips">
+  <span class="bk-input-end bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+</div>
+```
+
+```tsx
+<InputGroup icon={<Search />} end={<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>}>
+  <Input type="search" placeholder="Search trips" aria-label="Search trips" />
+</InputGroup>
+```
+
+### Checkbox, Radio, RadioGroup
+
+```html
+<label class="bk-option">
+  <input class="bk-checkbox" type="checkbox" checked>
+  <span class="bk-option-text"><span>Window seat</span><span>Free on flights over 2 hours</span></span>
+</label>
+<input class="bk-checkbox" type="checkbox" data-indeterminate>  <!-- indeterminate via script -->
+<fieldset class="bk-radio-group">
+  <legend class="bk-sr-only">Cabin class</legend>
+  <label class="bk-option"><input class="bk-radio" type="radio" name="cabin" checked><span>Economy</span></label>
+</fieldset>
+```
+
+```tsx
+<Checkbox label="Window seat" description="Free on flights over 2 hours" defaultChecked />
+<Checkbox indeterminate label="All extras" />
+<RadioGroup legend="Cabin class" defaultValue="economy" onValueChange={setCabin}>
+  <Radio value="economy" label="Economy" />
+  <Radio value="business" label="Business" />
+</RadioGroup>
+```
+
+### ChoiceCard
+
+```html
+<label class="bk-choice">
+  <input class="bk-radio" type="radio" name="plan" checked>
+  <span class="bk-option-text"><span>Plus</span><span>Unlimited trips</span></span>
+  <span class="bk-choice-price">€4/mo</span>
+</label>
+```
+
+```tsx
+<RadioGroup legend="Plan" defaultValue="free">
+  <ChoiceCard value="free" label="Free" description="3 trips" aside="€0" />
+  <ChoiceCard value="plus" label="Plus" description="Unlimited trips" aside="€4/mo" />
+</RadioGroup>
+```
+
+### Switch
+
+```html
+<label class="bk-switch-row"><span>Price alerts</span><input class="bk-switch" type="checkbox" role="switch" checked></label>
+<input class="bk-switch" type="checkbox" role="switch" data-tone="brand" aria-label="Offline maps">
+```
+
+```tsx
+<Switch label="Price alerts" description="When a saved fare drops" defaultChecked />
+<Switch tone="brand" aria-label="Offline maps" checked={on} onCheckedChange={setOn} />
+```
+
+### Slider
+
+```html
+<label class="bk-label" for="price">Max price</label> <output for="price">€140</output>
+<input class="bk-slider" id="price" type="range" min="40" max="400" step="10" value="140" data-prefix="€">
+```
+
+```tsx
+<Field label="Max price"><Slider min={40} max={400} step={10} value={price} onValueChange={setPrice} /></Field>
+```
+
+### InputOTP
+
+```html
+<div class="bk-otp" role="group" aria-label="Verification code">
+  <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 1">…</div>
+  <span class="bk-otp-separator" aria-hidden="true"></span>
+  <div class="bk-otp-group">…</div>
+</div>
+```
+
+```tsx
+<InputOTP groups={[3, 3]} aria-label="Verification code" onComplete={(code) => verify(code)} />
+```
+
+### Dropzone
+
+```html
+<label class="bk-dropzone">
+  <input type="file" multiple accept="image/*,.pdf">
+  <svg class="bk-icon" data-size="lg">…</svg>
+  <span class="bk-small">Drop files or click to upload</span>
+  <span class="bk-caption">PNG, JPG or PDF, up to 10 MB</span>
+  <span class="bk-dropzone-files"></span>
+</label>
+```
+
+```tsx
+<Dropzone multiple accept="image/*,.pdf" icon={<Upload />} hint="PNG, JPG or PDF, up to 10 MB" onFiles={(files) => upload(files)} />
+```
+
+### Calendar
+
+```html
+<div class="bk-calendar" data-mode="range">
+  <div class="bk-calendar-head">…prev · <span class="bk-calendar-title">March 2026</span> · next…</div>
+  <div class="bk-calendar-grid">
+    <span class="bk-calendar-weekday">Mo</span>…
+    <button class="bk-calendar-day" data-outside tabindex="-1">23</button>
+    <button class="bk-calendar-day" data-range="start" aria-selected="true">12</button>
+    <button class="bk-calendar-day" data-range="middle">13</button>
+    <button class="bk-calendar-day" data-today>9</button>
+  </div>
+</div>
+```
+
+```tsx
+<Calendar mode="range" value={range} onValueChange={setRange} />
+<Calendar defaultValue={new Date(2026, 2, 12)} isDisabled={(d) => d < today} weekStartsOn={0} locale="pt-PT" />
+```
+
+Helpers: `getMonthGrid(year, month, weekStartsOn)` returns the 42 days of a month view; `toDateKey(date)` gives `YYYY-MM-DD` in local time.
+
+---
+
+## Data display
+
+### Badge
+
+```html
+<span class="bk-badge">Default</span>
+<span class="bk-badge" data-variant="success" data-dot>Paid</span>
+```
+
+```tsx
+<Badge variant="success" dot>Paid</Badge>
+```
+
+Variants: `default` `brand` `secondary` `outline` `destructive` `success` `warning` `info`.
+
+### Avatar and AvatarGroup
+
+```html
+<span class="bk-avatar" data-size="lg" data-status="online"><img src="…" alt="Maya Kim"></span>
+<span class="bk-avatar-group"><span class="bk-avatar">MK</span><span class="bk-avatar">+3</span></span>
+```
+
+```tsx
+<Avatar src={user.photo} alt={user.name} fallback="MK" size="lg" status="online" />
+<AvatarGroup><Avatar fallback="MK" /><Avatar fallback="+3" /></AvatarGroup>
+```
+
+Sizes `sm` (28) `default` (36) `lg` (48) `xl` (64); `shape="square"`; `status` `online` `busy` `offline`. A broken image falls back to `fallback`.
+
+### Table
+
+```html
+<div class="bk-table-wrap">
+  <table class="bk-table">
+    <thead><tr><th>Guest</th><th data-align="end">Amount</th></tr></thead>
+    <tbody><tr><td>Maya Kim</td><td data-align="end">€640.00</td></tr></tbody>
+  </table>
+</div>
+```
+
+```tsx
+<Table>
+  <TableHeader><TableRow><TableHead>Guest</TableHead><TableHead align="end">Amount</TableHead></TableRow></TableHeader>
+  <TableBody><TableRow><TableCell>Maya Kim</TableCell><TableCell align="end">€640.00</TableCell></TableRow></TableBody>
+  <TableCaption>4 bookings</TableCaption>
+</Table>
+```
+
+### List
+
+```html
+<ul class="bk-list">
+  <li class="bk-list-item">
+    <span class="bk-avatar" data-size="sm">MK</span>
+    <div class="bk-list-item-text"><span>Maya booked Lisbon</span><span>Hotel Chiado</span></div>
+    <span class="bk-list-item-meta">2m</span>
+  </li>
+</ul>
+```
+
+```tsx
+<List><ListItem leading={<Avatar size="sm" fallback="MK" />} title="Maya booked Lisbon" description="Hotel Chiado" meta="2m" /></List>
+```
+
+### Stat and Sparkline
+
+```html
+<div class="bk-stat">
+  <span class="bk-stat-label">Bookings</span>
+  <span class="bk-stat-value">1,284</span>
+  <span class="bk-stat-delta" data-trend="up">+12.4% vs February</span>
+</div>
+<svg class="bk-spark" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="…"><polygon points="…"/><polyline points="…"/></svg>
+```
+
+```tsx
+<Stat label="Bookings" value="1,284" delta="+12.4% vs February" trend="up" icon={<Calendar />} />
+<Sparkline data={[12, 18, 15, 22, 19, 27, 31]} label="Bookings rose from 12 to 31 a day" />
+```
+
+`sparklinePoints(data, width, height, padding)` returns the SVG coordinates if you draw your own.
+
+### BarChart, Legend, Meter
+
+```html
+<div class="bk-chart" role="img" aria-label="Mon 32, Tue 45, Sat 74">
+  <div class="bk-bars" style="--h: 160px">
+    <div class="bk-bar" data-muted style="--v: 40%" data-value="32"></div>
+    <div class="bk-bar" style="--v: 92.5%" data-value="74" data-show></div>
+  </div>
+  <div class="bk-bar-labels"><span>Mon</span><span>Sat</span></div>
+</div>
+<div class="bk-meter" role="img" aria-label="Stay 46%, travel 22%"><span style="--v: 46%; --c: var(--chart-1)"></span>…</div>
+<div class="bk-legend"><span style="--c: var(--chart-1)">Stay 46%</span></div>
+```
+
+```tsx
+<BarChart data={[{ label: 'Mon', value: 32 }, { label: 'Sat', value: 74 }]} max={80} formatValue={(v) => `${v}`} />
+<Meter segments={[{ label: 'Stay', value: 46, color: 'var(--chart-1)' }, { label: 'Travel', value: 22, color: 'var(--chart-2)' }]} />
+<Legend items={[{ label: 'Stay 46%', color: 'var(--chart-1)' }]} />
+```
+
+`BarChart` scales bars against `max` (default: the largest value), draws quarter gridlines, emphasises the highest bar (`highlight={index | 'max' | 'none'}`) and builds an `aria-label` from the data. For complex charts use a chart library with the `--chart-1…5` colours.
+
+### Progress, Ring
+
+```html
+<div class="bk-progress" data-tone="brand" role="progressbar" aria-label="Upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span style="--v: 40%"></span></div>
+<div class="bk-ring" style="--p: 71; --size: 64px" role="img" aria-label="71% of budget used"><span>71%</span></div>
+```
+
+```tsx
+<Progress value={40} tone="brand" label="Upload" />
+<Ring value={71} size={64} label="71% of budget used" />
+```
+
+### Accordion
+
+```html
+<div class="bk-accordion">
+  <details class="bk-accordion-item" open>
+    <summary class="bk-accordion-trigger">Can I change my dates?</summary>
+    <div class="bk-accordion-content">Yes, up to 48 hours before check-in.</div>
+  </details>
+</div>
+```
+
+```tsx
+<Accordion><AccordionItem title="Can I change my dates?" defaultOpen>Yes, up to 48 hours before check-in.</AccordionItem></Accordion>
+```
+
+---
+
+## Feedback
+
+### Alert
+
+```html
+<div class="bk-alert" data-variant="warning" role="status">
+  <svg class="bk-icon">…</svg>
+  <div class="bk-alert-title">Passport expires soon</div>
+  <div class="bk-alert-description">Some countries need 6 months of validity.</div>
+  <div class="bk-alert-actions"><button class="bk-button" data-size="xs">Renew</button></div>
+</div>
+```
+
+```tsx
+<Alert variant="warning" icon={<TriangleAlert />} title="Passport expires soon" actions={<Button size="xs">Renew</Button>}>
+  Some countries need 6 months of validity.
+</Alert>
+```
+
+Variants `default` `info` `success` `warning` `destructive` (the last one uses `role="alert"`).
+
+### Toast
+
+```html
+<button class="bk-button" data-bk-toast='{"title":"Trip saved","description":"Lisbon","variant":"success"}'>Save</button>
+```
+
+```ts
+toast('Link copied');
+const dismiss = toast({ title: 'Payment failed', variant: 'destructive', action: { label: 'Retry', onClick: retry }, duration: 8000 });
+```
+
+Toasts stack bottom-right, pause on hover and close after 4.5s (`duration: Infinity` keeps them open).
+
+### Spinner, Skeleton
+
+```html
+<span class="bk-spinner" data-size="sm" role="status" aria-label="Loading"></span>
+<span class="bk-skeleton" style="width: 70%; height: 12px"></span>
+```
+
+```tsx
+<Spinner size="lg" />
+<Skeleton width="70%" />  <Skeleton width={40} height={40} circle />
+```
+
+### Empty
+
+```html
+<div class="bk-empty">
+  <span class="bk-empty-icon"><svg class="bk-icon" data-size="lg">…</svg></span>
+  <h4 class="bk-empty-title">No trips yet</h4>
+  <p class="bk-empty-description">Trips you plan or get invited to show up here.</p>
+  <div class="bk-empty-actions"><button class="bk-button">Plan a trip</button></div>
+</div>
+```
+
+```tsx
+<Empty icon={<Plane />} title="No trips yet" description="Trips you plan or get invited to show up here." actions={<Button>Plan a trip</Button>} />
+```
+
+---
+
+## Overlays
+
+### Dialog and alert dialog
+
+Native `<dialog>`: focus trap, Esc to close, the page behind is inert.
+
+```html
+<button class="bk-button" data-bk-open="edit">Edit profile</button>
+<dialog class="bk-dialog" id="edit" aria-labelledby="edit-t">
+  <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" data-bk-close aria-label="Close">…</button>
+  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="edit-t">Edit profile</h2><p class="bk-dialog-description">…</p></div>
+  <div class="bk-dialog-body">…</div>
+  <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" data-bk-close>Cancel</button><button class="bk-button">Save</button></div>
+</dialog>
+<!-- alert: --><dialog class="bk-dialog" data-variant="alert" role="alertdialog">…<span class="bk-dialog-icon">…</span>…</dialog>
+```
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen} title="Edit profile" description="…" footer={<Button onClick={save}>Save</Button>}>…</Dialog>
+<Dialog variant="alert" icon={<Trash2 />} open={confirm} onOpenChange={setConfirm} title='Delete "Lisbon"?' description="This can't be undone."
+  footer={<><Button variant="outline" onClick={() => setConfirm(false)}>Keep</Button><Button variant="destructive" onClick={remove}>Delete</Button></>} />
+```
+
+Alert dialogs hide the × button and ignore backdrop clicks unless you set `hideClose={false}` or `closeOnBackdrop`.
+
+### Sheet
+
+```html
+<dialog class="bk-sheet" id="filters">…</dialog>
+<dialog class="bk-sheet" data-side="bottom" id="share"><div class="bk-sheet-handle" aria-hidden="true"></div>…</dialog>
+```
+
+```tsx
+<Sheet open={open} onOpenChange={setOpen} title="Filters" footer={<Button>Show 142 stays</Button>}>…</Sheet>
+<Sheet side="bottom" open={share} onOpenChange={setShare} title="Share trip">…</Sheet>
+```
+
+### DropdownMenu
+
+Native popover: Esc and outside clicks close it; arrow keys move between items.
+
+```html
+<button class="bk-button" data-variant="outline" popovertarget="account">Maya Kim</button>
+<div class="bk-menu" id="account" popover role="menu" data-align="end">
+  <div class="bk-menu-label">My account</div>
+  <button class="bk-menu-item" role="menuitem">Profile<span class="bk-menu-shortcut">⇧⌘P</span></button>
+  <button class="bk-menu-item" role="menuitemcheckbox" aria-checked="true">Email updates</button>
+  <hr class="bk-menu-separator">
+  <button class="bk-menu-item" role="menuitem" data-variant="destructive">Log out</button>
+</div>
+```
+
+```tsx
+<DropdownMenu trigger={<Button variant="outline">Maya Kim</Button>} align="end">
+  <DropdownMenuLabel>My account</DropdownMenuLabel>
+  <DropdownMenuItem icon={<User />} shortcut="⇧⌘P" onSelect={openProfile}>Profile</DropdownMenuItem>
+  <DropdownMenuCheckboxItem checked={emails} onCheckedChange={setEmails}>Email updates</DropdownMenuCheckboxItem>
+  <DropdownMenuSeparator />
+  <DropdownMenuItem variant="destructive" onSelect={logout}>Log out</DropdownMenuItem>
+</DropdownMenu>
+```
+
+### Popover
+
+```html
+<button class="bk-button" popovertarget="invite">Invite</button>
+<div class="bk-popover" id="invite" popover>…</div>
+```
+
+```tsx
+<Popover trigger={<Button>Invite</Button>}>
+  <Field label="Email"><Input type="email" /></Field>
+  <Button size="sm" onClick={(e) => { send(); closePopover(e); }}>Send invite</Button>
+</Popover>
+```
+
+### Command palette
+
+```html
+<dialog class="bk-command" id="cmd" data-bk-hotkey aria-label="Search">
+  <div class="bk-command-search"><svg class="bk-icon">…</svg><input class="bk-command-input" placeholder="Search" aria-label="Search"></div>
+  <div class="bk-command-list" role="listbox">
+    <div class="bk-command-group"><div class="bk-command-group-heading">Trips</div>
+      <a class="bk-command-item" role="option" href="/trips/lisbon" data-keywords="portugal">Lisbon</a>
+    </div>
+    <div class="bk-command-empty" hidden>No results.</div>
+  </div>
+</dialog>
+<!-- inline version: <div class="bk-command" data-inline>…</div> -->
+```
+
+```tsx
+<CommandDialog open={open} onOpenChange={setOpen} groups={[
+  { heading: 'Trips', items: [{ id: 'lis', label: 'Lisbon', keywords: ['portugal'], onSelect: () => router.push('/trips/lisbon') }] },
+  { heading: 'Actions', items: [{ id: 'new', label: 'New trip', shortcut: ['N'], onSelect: create }] },
+]} />
+<Command groups={groups} />  {/* inline */}
+```
+
+`filterCommandGroups(groups, query)` is exported for custom UIs.
+
+---
+
+## Navigation
+
+### Tabs
+
+```html
+<div data-bk-tabs>
+  <div class="bk-tabs-list" role="tablist" aria-label="View">
+    <button class="bk-tabs-trigger" role="tab" aria-controls="p-week" aria-selected="true">Week</button>
+    <button class="bk-tabs-trigger" role="tab" aria-controls="p-month">Month</button>
+  </div>
+  <div class="bk-tabs-content" role="tabpanel" id="p-week">…</div>
+  <div class="bk-tabs-content" role="tabpanel" id="p-month" hidden>…</div>
+</div>
+<!-- underline style: <div class="bk-tabs-list" data-variant="line">; full width: data-full -->
+```
+
+```tsx
+<Tabs defaultValue="week">
+  <TabsList variant="pill" aria-label="View">
+    <TabsTrigger value="week">Week</TabsTrigger>
+    <TabsTrigger value="month">Month</TabsTrigger>
+  </TabsList>
+  <TabsContent value="week">…</TabsContent>
+  <TabsContent value="month">…</TabsContent>
+</Tabs>
+```
+
+### Breadcrumb
+
+```html
+<nav aria-label="Breadcrumb"><ol class="bk-breadcrumb"><li><a href="/trips">Trips</a></li><li><span aria-current="page">Day 2</span></li></ol></nav>
+```
+
+```tsx
+<Breadcrumb items={[{ label: 'Trips', href: '/trips' }, { label: 'Lisbon', href: '/trips/lisbon' }, { label: 'Day 2' }]} linkAs={Link} />
+```
+
+### Pagination
+
+```html
+<nav class="bk-pagination" aria-label="Pagination">
+  <a class="bk-pagination-link" href="?page=1">1</a>
+  <a class="bk-pagination-link" href="?page=2" aria-current="page">2</a>
+  <span class="bk-pagination-ellipsis">…</span>
+</nav>
+```
+
+```tsx
+<Pagination page={page} pageCount={20} onPageChange={setPage} />
+<Pagination page={page} pageCount={20} getHref={(p) => `?page=${p}`} />  {/* links, for server-rendered lists */}
+```
+
+`getPaginationRange(page, pageCount, siblingCount)` returns e.g. `[1, 'ellipsis', 5, 6, 7, 'ellipsis', 20]`.
+
+### Navbar
+
+```html
+<nav class="bk-navbar" aria-label="Main">
+  <a class="bk-navbar-brand" href="/">Tripline</a>
+  <div class="bk-navbar-links"><a class="bk-navbar-link" href="/trips" aria-current="page">Trips</a></div>
+  <div class="bk-navbar-actions">…</div>
+</nav>
+```
+
+```tsx
+<Navbar aria-label="Main">
+  <NavbarBrand href="/">Tripline</NavbarBrand>
+  <NavbarLinks><NavbarLink asChild current><Link href="/trips">Trips</Link></NavbarLink></NavbarLinks>
+  <NavbarActions><Button size="sm">New trip</Button></NavbarActions>
+</Navbar>
+```
+
+### Sidebar
+
+```html
+<nav class="bk-sidebar" aria-label="App">
+  <div class="bk-sidebar-brand">Tripline</div>
+  <a class="bk-sidebar-item" href="/" aria-current="page"><svg class="bk-icon">…</svg>Home</a>
+  <a class="bk-sidebar-item" href="/inbox"><svg class="bk-icon">…</svg>Inbox<span class="bk-badge" data-variant="brand">2</span></a>
+  <div class="bk-sidebar-label">Workspace</div>
+  <div class="bk-sidebar-footer">…</div>
+</nav>
+```
+
+```tsx
+<Sidebar aria-label="App">
+  <SidebarBrand>Tripline</SidebarBrand>
+  <SidebarItem href="/" icon={<Home />} current>Home</SidebarItem>
+  <SidebarItem href="/inbox" icon={<Inbox />} badge={<Badge variant="brand">2</Badge>}>Inbox</SidebarItem>
+  <SidebarLabel>Workspace</SidebarLabel>
+  <SidebarFooter>…</SidebarFooter>
+</Sidebar>
+```
+
+### BottomNav
+
+```html
+<nav class="bk-bottom-nav" aria-label="Tabs">
+  <a class="bk-bottom-nav-item" href="/" aria-current="page"><svg class="bk-icon">…</svg>Home</a>
+  <a class="bk-bottom-nav-item" href="/trips"><svg class="bk-icon">…</svg>Trips</a>
+</nav>
+```
+
+```tsx
+<BottomNav aria-label="Tabs">
+  <BottomNavItem href="/" icon={<Home />} current>Home</BottomNavItem>
+  <BottomNavItem href="/trips" icon={<Plane />}>Trips</BottomNavItem>
+</BottomNav>
+```
+
+---
+
+## Theme
+
+```html
+<div class="bk-toggle-group" role="group" aria-label="Theme">
+  <button class="bk-toggle" data-bk-theme-set="light" aria-label="Light theme">…</button>
+  <button class="bk-toggle" data-bk-theme-set="dark" aria-label="Dark theme">…</button>
+  <button class="bk-toggle" data-bk-theme-set="system" aria-label="System theme">…</button>
+</div>
+```
+
+```tsx
+<ThemeToggle />
+const { theme, resolvedTheme, setTheme } = useTheme();
+<ThemeScript />  {/* in <head> */}
+```
+
+<!-- docs/javascript-api.md -->
+
+# JavaScript API (core)
+
+`import { … } from 'bento-shad-ui'` (ESM), or `window.BentoUI` from the script-tag build. Written in TypeScript; types ship in `dist/types`. Every function is safe to import during server rendering and does nothing there.
+
+## Starting
+
+```ts
+start(options?: { observe?: boolean; restoreTheme?: boolean }): void
+```
+
+Attaches the delegated listeners (once), restores the saved theme, runs `init(document)` when the DOM is ready, and by default watches for added nodes. `import 'bento-shad-ui/auto'` and the script-tag build call it for you.
+
+```ts
+init(root?: ParentNode): void
+```
+
+Sets up widgets that need per-element work (tabs, command palettes, calendars, slider fills, `data-indeterminate` checkboxes) inside `root`. Safe to call repeatedly; each element is set up once. Call it after inserting HTML if you started with `observe: false`.
+
+## Theme
+
+```ts
+type Theme = 'light' | 'dark' | 'system';
+type ResolvedTheme = 'light' | 'dark';
+
+setTheme(theme: Theme, options?: { persist?: boolean }): void   // sets data-theme + .dark, saves, fires bk:theme
+getTheme(): Theme                                                // from <html data-theme>
+resolveTheme(theme?: Theme): ResolvedTheme                       // 'system' → OS setting
+getStoredTheme(): Theme | null                                   // localStorage 'bk-theme'
+onThemeChange(listener: (d: { theme: Theme; resolved: ResolvedTheme }) => void): () => void
+isTheme(value: unknown): value is Theme
+themeScript: string          // inline <head> script that prevents a dark-mode flash
+THEME_STORAGE_KEY = 'bk-theme'
+THEME_EVENT = 'bk:theme'
+```
+
+## Toast
+
+```ts
+interface ToastOptions {
+  title: string;
+  description?: string;
+  variant?: 'default' | 'success' | 'destructive';
+  duration?: number;            // ms, default 4500; Infinity keeps it open
+  action?: { label: string; onClick?: () => void };
+}
+toast(input: string | ToastOptions): () => void   // returns dismiss()
+```
+
+## Popovers
+
+```ts
+enablePopoverPlacement(): void                              // idempotent; start() calls it
+placePopover(popover: HTMLElement, anchor?: HTMLElement): void
+```
+
+Kit popovers (`.bk-menu[popover]`, `.bk-popover[popover]`) are placed under the button whose `popovertarget` points at them, aligned by `data-align="start|center|end"`, flipped above when there's no room, and kept in place on scroll and resize.
+
+## Other
+
+```ts
+openCommand(dialog?: HTMLDialogElement | null): void   // toggles a command dialog (default: dialog.bk-command[data-bk-hotkey])
+fillSlider(range: HTMLInputElement): void              // updates --val and <output for>
+version: string
+```
+
+## Events
+
+| Event | Target | `detail` |
+|---|---|---|
+| `bk:theme` | `document` | `{ theme, resolved }` |
+| `bk:change` | `[data-bk-tabs]` | `{ tab }`: the selected tab element |
+| `bk:change` | `.bk-calendar` | `{ start, end }`: day-of-month numbers |
+
+All events bubble.
+
+## Data attributes
+
+| Attribute | On | Effect |
+|---|---|---|
+| `data-bk-theme-set` | button | `light` / `dark` / `system` |
+| `data-bk-open` | button | id of a `<dialog>` to open |
+| `data-bk-close` | inside a dialog | closes it; the value becomes `returnValue` |
+| `data-bk-toast` | button | JSON `ToastOptions` or plain title text |
+| `data-bk-copy` / `data-bk-copy-target` | button | text, or a selector whose text is copied |
+| `data-bk-tabs` | wrapper | enables tabs |
+| `data-bk-hotkey` | `dialog.bk-command` | ⌘K / Ctrl+K toggles it |
+| `data-keep-open` | `.bk-menu-item` | don't close the menu on click |
+| `data-indeterminate` | `.bk-checkbox` | sets `indeterminate` on init |
+| `data-prefix` / `data-suffix` | `.bk-slider` | text around the `<output>` value |
+| `data-bk-react` | any | marks React-managed elements; the core ignores them |
+
+## Script-tag build
+
+`dist/bento.iife.min.js` defines `window.BentoUI` with every export above and calls `start()` immediately.
+
+```html
+<script src="…/bento.iife.min.js" defer></script>
+<script>
+  addEventListener('DOMContentLoaded', () => BentoUI.toast('Ready'));
+</script>
+```
+
+<!-- docs/accessibility.md -->
+
+# Accessibility
+
+The target is WCAG 2.2 AA. This page lists what the library does for you and what you still have to do.
+
+## Built in
+
+**Contrast, checked by tests.** `npm test` computes WCAG contrast for every text/background token pair in light and dark mode and fails the build below the limits:
+
+- text pairs (`foreground`/`background`, `primary-foreground`/`primary`, `muted-foreground` on `background`, `card` and `muted`, every tint and its foreground, status colours on cards…): at least 4.5:1
+- `--input` (form control borders) and `--ring` (focus ring) against `--card` and `--background`: at least 3:1
+
+That's why `--destructive-foreground` exists: white text on dark mode's light red fails, so dark mode uses dark text.
+
+**Focus.** Every interactive element shows a 3px ring in `--ring` on `:focus-visible`. Nothing removes outlines without a replacement.
+
+**Keyboard.**
+
+| Component | Keys |
+|---|---|
+| Tabs | ←/→ move and select, Home/End |
+| Dropdown menu | opens with focus on the first item; ↑/↓, Home/End; Esc closes and returns focus |
+| Popover | Esc closes; focus moves into it on open |
+| Dialog / Sheet | focus trapped by the native `<dialog>`; Esc closes |
+| Command palette | ⌘K/Ctrl+K; ↑/↓ and Enter; `aria-activedescendant` keeps the screen reader on the active option |
+| Calendar | ←/→ day, ↑/↓ week; Enter or Space picks |
+| Input OTP | digits only; Backspace goes back; ←/→; paste fills all slots |
+| Toggle / Switch / Checkbox / Radio | native Space / arrow behaviour |
+| Accordion | native `<details>`: Enter/Space |
+
+**Semantics.** Native elements first (`<button>`, `<dialog>`, `<details>`, `<select>`, `<input type="range">`, `popover`). ARIA is added where native HTML has none: `aria-pressed` on toggles, `aria-current` on nav, `role="tab"`/`tabpanel` wiring, `role="alert"` on destructive alerts and toasts, `aria-busy` on loading buttons, `role="progressbar"` with values.
+
+**Motion.** `prefers-reduced-motion: reduce` removes animations and transitions.
+
+**Forms.** The React `Field` connects label, help text and error (`htmlFor`, `aria-describedby`, `aria-invalid`).
+
+## Your part
+
+- **Name icon-only buttons**: `aria-label="Delete"`. A tooltip alone is not a name.
+- **Describe charts**: `Sparkline` and `Ring` require `label`; give HTML charts an `aria-label` that states the values.
+- **Image alt text** on `Avatar` and `Media` images.
+- **Label every input.** Use `Field` or `<label for>`, and `aria-label` only when a visible label is impossible.
+- **Don't rely on colour alone.** Badges and alerts carry text; keep it meaningful ("Paid", not just a green dot).
+- **Keep the tone rules.** Custom token values must still meet the contrast limits above. Run `npm test` if you fork the tokens.
+- **Language**: set `<html lang>`.
+- **Toasts** disappear: don't put the only copy of important information or the only way to undo something in a toast.
+
+<!-- docs/ai-agents.md -->
+
+# Using bento-shad-ui with AI coding agents
+
+The library ships documentation written for language models, so an agent (Claude Code, Cursor, Copilot, Codex…) can build UIs with it correctly in any project.
+
+## Files for agents
+
+| File | Use |
+|---|---|
+| `llms.txt` | Short index in the llmstxt.org format: what the library is, with links to every guide |
+| `llms-full.txt` | Every guide in one file (about 60 KB). Give this to an agent that has to write UI code |
+
+Where to find them:
+
+- installed: `node_modules/bento-shad-ui/llms.txt` and `node_modules/bento-shad-ui/llms-full.txt`
+- online: `https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/llms-full.txt`
+- site: `https://saadniazidev.github.io/bento-shad-ui/llms-full.txt`
+
+## Add this to the project's CLAUDE.md / AGENTS.md / .cursorrules
+
+```markdown
+## UI: bento-shad-ui
+
+This project's UI uses bento-shad-ui (https://github.com/SaadNiaziDev/bento-shad-ui).
+Before writing UI code, read node_modules/bento-shad-ui/llms-full.txt.
+
+- Layout pages as bento grids: BentoGrid + Tile (React) or .bk-bento > .bk-bento-grid > .bk-tile (HTML).
+  One idea per tile; spans in a row add up to 4; at most one toned tile in four; one inverse tile per view.
+- Use library components before writing new ones. React: import from 'bento-shad-ui/react'.
+- Colours come only from tokens (var(--primary), var(--muted-foreground), var(--tint-peach)…). Never hard-code hex or Tailwind palette colours.
+- Fonts: Red Hat Text (body) and Red Hat Display (headings). No monospace font anywhere, not even for code.
+- Variants are props in React (variant, size, tone) and data attributes in HTML (data-variant, data-size, data-tone).
+- Dark mode is automatic through tokens. Don't write dark: overrides for colours.
+- Icon-only buttons need aria-label; charts need a label; inputs go inside <Field>.
+- Use the styles ending in -foreground for text on a coloured surface.
+```
+
+## Prompts that work well
+
+- "Build the settings page as a single `Card` with `Field`s and `Switch` rows, using bento-shad-ui/react."
+- "Make the dashboard a 4-column `BentoGrid`: sidebar `rows={3}`, three `Stat` tiles, a `BarChart` tile `span={2}`, an activity `List` tile `rows={2}`, a `Table` tile `span={2}`."
+- "Convert this page to bento-shad-ui HTML classes and the CDN script. Keep the copy."
+
+## Check an agent's output
+
+- No `#hex`, `rgb()` or Tailwind colour utilities (`bg-blue-500`) in new code; only tokens or `bg-tint-*`/`bg-brand` in shadcn projects.
+- No `font-mono`, monospace font stacks, Inter, Geist or other fonts.
+- Spans add up per row at 4 columns, and the page still reads at 2 and 1 columns.
+- Every icon-only button has `aria-label`.

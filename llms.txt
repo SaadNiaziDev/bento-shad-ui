@@ -1,0 +1,34 @@
+# bento-shad-ui
+
+> Bento-grid UI library with shadcn/ui anatomy and token names. One token file produces framework-free CSS (classes prefixed `bk-`), a typed vanilla JavaScript core, React components (`bento-shad-ui/react`), a shadcn/Tailwind v4 theme with registry items, and a Flutter theme, all with light and dark modes.
+
+Key facts for generating code with this library:
+
+- Install: `npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0`. CSS: `import 'bento-shad-ui/bento.css'`. React: `import { … } from 'bento-shad-ui/react'`. HTML pages also need `class="bk"` on `<body>`.
+- Layout: `.bk-bento > .bk-bento-grid > .bk-tile` (React: `<BentoGrid><Tile span={2} rows={2} tone="peach">`). The grid has 4 columns above 900px of container width, 2 down to 560px, then 1.
+- Variants are `data-variant` / `data-size` / `data-tone` attributes in HTML and `variant` / `size` / `tone` props in React.
+- Colours only through tokens: shadcn names (`--background`, `--primary`, `--muted-foreground`…) plus `--brand`, `--success`, `--warning`, `--info`, `--destructive-foreground`, `--inverse`, `--tint-{peach,sky,mint,lilac,butter}`.
+- Fonts: Red Hat Text (body) and Red Hat Display (headings). There is no monospace font. Never add one.
+- Dark mode: `class="dark"` or `data-theme="dark|system"` on `<html>`; `setTheme()`; `<ThemeScript />` in `<head>`.
+
+## Docs
+
+- [Getting started](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/getting-started.md): what the library is, the five layers, quick starts
+- [Installation](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/installation.md): npm from GitHub, CDN, shadcn registry, Flutter, fonts, troubleshooting
+- [Components](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components.md): every component with HTML markup and React props
+- [Layout](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/layout.md): bento grid, spans, rows, tones, layout rules and recipes
+- [Theming](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/theming.md): full token list, dark mode, rebranding, scoped themes
+- [React](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/react.md): Next.js App Router and Vite setup, asChild, forms, toasts, theme hook
+- [HTML](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/html.md): plain pages, data attributes, script behaviours, htmx/SPAs
+- [shadcn/ui](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/shadcn.md): registry install, BentoGrid/BentoTile, dark islands
+- [Flutter](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/flutter.md): ThemeData, BentoColors extension, fonts, tiles
+- [JavaScript API](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/javascript-api.md): start, init, setTheme, toast, events, data attributes
+- [Accessibility](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/accessibility.md): built-in guarantees and the author's responsibilities
+- [AI agents](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/ai-agents.md): rules to paste into a project's CLAUDE.md or AGENTS.md
+
+## Optional
+
+- [Full documentation in one file](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/llms-full.txt): every guide concatenated
+- [Tokens](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/src/tokens.json): source colours (hex), fonts, sizes, shadows
+- [Live kit](https://saadniazidev.github.io/bento-shad-ui/): every component rendered, with copyable markup
+- [Changelog](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/CHANGELOG.md)
