@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.1.0 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.1.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 
 // src/core/dom.ts
 var isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
@@ -360,7 +360,7 @@ function fillSlider(range) {
 }
 
 // src/core/index.ts
-var version = "0.1.0";
+var version = "0.1.1";
 function init(root = isBrowser ? document : void 0) {
   if (!isBrowser || !root) return;
   initTabs(root);

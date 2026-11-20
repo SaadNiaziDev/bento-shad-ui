@@ -7,9 +7,9 @@ Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). Fo
 The package is installed straight from the GitHub repository. Always pin a tag.
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
-# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.0
-# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.0
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
+# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.1
+# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.1
 ```
 
 What you can import:
@@ -33,8 +33,8 @@ The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it 
 jsDelivr serves files from the GitHub tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.iife.min.js" defer></script>
 ```
 
 The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
@@ -43,7 +43,7 @@ As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/index.js';
+  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/index.js';
   start();
 </script>
 ```
@@ -53,11 +53,13 @@ As an ES module without a bundler:
 In a project that already ran `npx shadcn@latest init`:
 
 ```bash
-# theme: colours, fonts, radius, tile sizes, light + dark
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-theme.json
-# BentoGrid + BentoTile component (installs the theme too)
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json
+# 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-theme.json --overwrite
+# 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-grid.json
 ```
+
+Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
 
 Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.md).
 
@@ -66,7 +68,7 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
 
 ```bash
-curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).

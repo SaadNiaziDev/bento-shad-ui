@@ -7,7 +7,7 @@ The library ships documentation written for language models, so an agent (Claude
 | File | Use |
 |---|---|
 | `llms.txt` | Short index in the llmstxt.org format: what the library is, with links to every guide |
-| `llms-full.txt` | Every guide in one file (about 60 KB). Give this to an agent that has to write UI code |
+| `llms-full.txt` | Every guide in one file (about 75 KB). Give this to an agent that has to write UI code |
 
 Where to find them:
 

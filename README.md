@@ -15,21 +15,21 @@ A bento-grid UI library with shadcn/ui anatomy. One token file produces framewor
 ## Install
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
 ```
 
 | Stack | Use |
 |---|---|
 | Any HTML page | `bento-shad-ui/bento.css` + `bento-shad-ui/auto`, or the CDN files below |
 | React / Next.js / Vite | `import 'bento-shad-ui/bento.css'` and `import { … } from 'bento-shad-ui/react'` |
-| shadcn/ui + Tailwind v4 | `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json` |
+| shadcn/ui + Tailwind v4 | `npx shadcn@latest add …/r/bento-theme.json --overwrite`, then `…/r/bento-grid.json` (full URLs in [shadcn.md](docs/shadcn.md)) |
 | Flutter | copy `dist/flutter/bento_theme.dart` |
 
 CDN, no build step:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.0/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.iife.min.js" defer></script>
 ```
 
 Fonts: [Red Hat Display and Red Hat Text](https://fonts.google.com/?query=red+hat) (SIL OFL). See [installation.md](docs/installation.md) for `next/font` and Flutter.

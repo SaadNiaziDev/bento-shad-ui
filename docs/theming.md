@@ -80,7 +80,7 @@ To change the brand for CSS, shadcn and Flutter at once:
 
 1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
 2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
-3. Commit, tag (`v0.1.0-yourbrand.1`) and install your fork's tag.
+3. Commit, tag (`v0.1.1-yourbrand.1`) and install your fork's tag.
 
 ## Scoped themes
 

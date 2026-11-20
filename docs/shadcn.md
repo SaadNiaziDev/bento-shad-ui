@@ -5,12 +5,14 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-theme.json
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.0/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-grid.json
 ```
 
-- `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`), adding `--color-brand`, `--color-tint-peach` and the rest so `bg-brand` or `text-tint-sky-foreground` work.
-- `bento-grid` adds `components/ui/bento-grid.tsx`, the `bento-grid` and `bento-tile` utilities and the `class-variance-authority` dependency. It installs the theme too.
+- `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.
+- `bento-grid` adds `components/ui/bento-grid.tsx`, the `bento-grid` and `bento-tile` utilities and the `class-variance-authority` dependency.
+
+Both commands were tested on a fresh Next.js 15 + Tailwind v4 app, followed by a production build.
 
 ## Option B: theme file
 
@@ -25,6 +27,8 @@ const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
 const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
 // <html className={`${text.variable} ${display.variable}`}>
 ```
+
+The theme sets `--font-sans` and `--font-heading` to the Red Hat family names, which works with a Google Fonts `<link>`. With `next/font`, point them at its variables instead:
 
 ```css
 /* in globals.css, inside @theme inline: point the font tokens at next/font */

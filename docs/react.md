@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
 ```
 
 ## Next.js App Router

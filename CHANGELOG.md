@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [0.1.1] - 2026-11-21
+
+### Fixed
+
+- Docs: the shadcn theme must be installed with `npx shadcn@latest add …/bento-theme.json --overwrite`. Without the flag, shadcn keeps its own `--primary`, `--radius` and `--font-sans`, leaving a half-applied theme. Verified on a fresh Next.js 15 + Tailwind v4 app.
+- Docs: `llms-full.txt` is about 75 KB, not 60 KB.
+
 ## [0.1.0] - 2026-11-21
 
 First public release.
@@ -18,4 +25,5 @@ First public release.
 - Docs for HTML, React, shadcn, Flutter, theming, layout, components, JS API, accessibility and AI agents; `llms.txt` and `llms-full.txt`.
 - Tests: token parity, WCAG contrast, build output, React rendering and pure helpers. CI and GitHub Pages workflows.
 
+[0.1.1]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.0

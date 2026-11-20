@@ -4,12 +4,13 @@
 
 Key facts for generating code with this library:
 
-- Install: `npm install github:SaadNiaziDev/bento-shad-ui#v0.1.0`. CSS: `import 'bento-shad-ui/bento.css'`. React: `import { … } from 'bento-shad-ui/react'`. HTML pages also need `class="bk"` on `<body>`.
+- Install: `npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1`. CSS: `import 'bento-shad-ui/bento.css'`. React: `import { … } from 'bento-shad-ui/react'`. HTML pages also need `class="bk"` on `<body>`.
 - Layout: `.bk-bento > .bk-bento-grid > .bk-tile` (React: `<BentoGrid><Tile span={2} rows={2} tone="peach">`). The grid has 4 columns above 900px of container width, 2 down to 560px, then 1.
 - Variants are `data-variant` / `data-size` / `data-tone` attributes in HTML and `variant` / `size` / `tone` props in React.
 - Colours only through tokens: shadcn names (`--background`, `--primary`, `--muted-foreground`…) plus `--brand`, `--success`, `--warning`, `--info`, `--destructive-foreground`, `--inverse`, `--tint-{peach,sky,mint,lilac,butter}`.
 - Fonts: Red Hat Text (body) and Red Hat Display (headings). There is no monospace font. Never add one.
 - Dark mode: `class="dark"` or `data-theme="dark|system"` on `<html>`; `setTheme()`; `<ThemeScript />` in `<head>`.
+- shadcn/ui projects: `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-theme.json --overwrite`, then the same URL with `bento-grid.json`; use `BentoGrid`/`BentoTile` from `@/components/ui/bento-grid`.
 
 ## Docs
 

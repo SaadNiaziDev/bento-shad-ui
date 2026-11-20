@@ -1,5 +1,5 @@
 "use client";
-/*! bento-shad-ui v0.1.0 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.1.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 
 // src/react/layout.tsx
 import * as React2 from "react";
