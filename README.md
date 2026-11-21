@@ -189,7 +189,7 @@ Current Chrome, Edge, Safari and Firefox. The library uses container queries, `c
 
 Semantic versioning. The public API is the class names, data attributes, token names, exported functions and React props. Until 1.0, minor releases (0.x.0) may contain breaking changes, which are listed in the [changelog](https://github.com/SaadNiaziDev/bento-shad-ui/blob/main/CHANGELOG.md). The `^0.x.y` range that `npm install` writes only accepts patch releases while the version is below 1.0, so updates never surprise you.
 
-Releases are published to npm from GitHub Actions with [provenance](https://docs.npmjs.com/generating-provenance-statements), so each version on npm links back to the commit and workflow that built it.
+From 0.2.2 on, releases are published to npm from GitHub Actions with [provenance](https://docs.npmjs.com/generating-provenance-statements), so each version links back to the commit and workflow that built it. 0.2.1, the first npm release, was published by hand.
 
 ## Contributing
 
