@@ -1,6 +1,6 @@
-# bento-shad-ui v0.1.1: full documentation for LLMs
+# bento-shad-ui v0.1.2: full documentation for LLMs
 
-> Every guide in one file. Source: https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs. Index: llms.txt.
+> Every guide and every component page in one file. Source: https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs. Website: https://saadniazidev.github.io/bento-shad-ui/. Index: llms.txt.
 
 <!-- docs/getting-started.md -->
 
@@ -30,8 +30,8 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.iife.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
 </head>
 <body class="bk">
   <main class="bk-container">
@@ -53,7 +53,7 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 ## Quick start: React / Next.js
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
 ```
 
 ```tsx
@@ -87,7 +87,7 @@ Add `className="bk"` to `<body>` (or wrap your app in an element with it) so bas
 
 ## Versioning
 
-The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.1.1`, `@v0.1.1`).
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.1.2`, `@v0.1.2`).
 
 ## Next
 
@@ -107,9 +107,9 @@ Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). Fo
 The package is installed straight from the GitHub repository. Always pin a tag.
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
-# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.1
-# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.1
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
+# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.2
+# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.2
 ```
 
 What you can import:
@@ -133,8 +133,8 @@ The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it 
 jsDelivr serves files from the GitHub tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
 ```
 
 The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
@@ -143,7 +143,7 @@ As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.1/dist/index.js';
+  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/index.js';
   start();
 </script>
 ```
@@ -154,9 +154,9 @@ In a project that already ran `npx shadcn@latest init`:
 
 ```bash
 # 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-theme.json --overwrite
 # 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-grid.json
 ```
 
 Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
@@ -168,7 +168,7 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
 
 ```bash
-curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).
@@ -337,7 +337,7 @@ The kit doesn't ship an icon set. Any 24×24 stroke icon works; Lucide matches b
 ## Install
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.1
+npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
 ```
 
 ## Next.js App Router
@@ -518,8 +518,8 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-theme.json --overwrite
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-grid.json
 ```
 
 - `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.
@@ -613,7 +613,7 @@ It passes `flutter analyze` with no warnings.
 ## Install
 
 ```bash
-curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.1/dist/flutter/bento_theme.dart
+curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/dist/flutter/bento_theme.dart
 ```
 
 ## Fonts
@@ -798,7 +798,7 @@ To change the brand for CSS, shadcn and Flutter at once:
 
 1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
 2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
-3. Commit, tag (`v0.1.1-yourbrand.1`) and install your fork's tag.
+3. Commit, tag (`v0.1.2-yourbrand.1`) and install your fork's tag.
 
 ## Scoped themes
 
@@ -818,6 +818,69 @@ Change fonts by overriding the two variables:
 ```
 
 The defaults were chosen to avoid the faces most AI-generated UIs reach for (Inter, Geist, Plus Jakarta Sans, Space Grotesk, Poppins, DM Sans).
+
+<!-- docs/typography.md -->
+
+# Typography
+
+Two faces from one family: **Red Hat Display** for headings and display text, **Red Hat Text** for everything else. Both are free under the SIL Open Font License. The library has no monospace font, by design: code, numbers and keyboard keys use Red Hat Text with tabular figures.
+
+## Scale
+
+```html
+<div class="bk-stack" style="--gap: 14px">
+  <div class="bk-display" style="font-size: 3rem">Plan less, go more</div>
+  <div class="bk-h1">Four nights in Lisbon</div>
+  <div class="bk-h2">Day two: Alfama</div>
+  <div class="bk-h3">Getting around</div>
+  <div class="bk-h4">Tram 28 timetable</div>
+  <p class="bk-lead">Everything for the trip, in one place.</p>
+  <p class="bk-p">Tram 28 leaves Martim Moniz every 12 minutes. Buy a transit card at the kiosk first, because drivers don't sell tickets.</p>
+  <div class="bk-large">Total €640 for 2 travellers</div>
+  <div class="bk-small">Updated 2 hours ago</div>
+  <div class="bk-muted">Prices include taxes and fees.</div>
+  <div class="bk-eyebrow">Itinerary · Day 2</div>
+  <div><code class="bk-code">TP 1351 · 08:40 → 10:05</code></div>
+</div>
+```
+
+| Class | Size / weight | Font | Use |
+|---|---|---|---|
+| `bk-display` | 40–68px fluid / 800 | Display | Hero headline, once per page |
+| `bk-h1` | 40px / 800 | Display | Page title |
+| `bk-h2` | 30px / 700 | Display | Section title |
+| `bk-h3` | 24px / 700 | Display | Sub-section, big tile title |
+| `bk-h4` | 20px / 600 | Display | Small heading |
+| `bk-lead` | 20px / 400, muted | Text | Intro paragraph |
+| `bk-p` | 16px / 400, 1.75 line height | Text | Body copy, 68 characters max |
+| `bk-large` | 18px / 600 | Text | Emphasised value |
+| `bk-small` | 14px / 500 | Text | Labels, short notes |
+| `bk-muted` | 14px, muted colour | Text | Secondary text |
+| `bk-caption` | 12px, muted colour | Text | Captions, footnotes |
+| `bk-eyebrow` | 11px / 700, uppercase, tracked | Text | Label above a title |
+| `bk-num` | 32px / 700, tabular | Text | Big numbers |
+| `bk-code` | 0.9em / 600, tabular, chip | Text | Inline code |
+| `bk-codeblock` | 13px, tabular, block | Text | Preformatted code |
+
+Headings tighten their letter spacing as they grow (−0.015em at h4 to −0.045em at display) and use `text-wrap: balance`, so short titles don't leave a single word on the last line.
+
+## Loading the fonts
+
+See [Installation](installation.md#fonts) for Google Fonts, `next/font` and Flutter. To change faces, override two tokens:
+
+```css
+:root {
+  --font-sans: "Your Text Face", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Your Display Face", ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+## Guidelines
+
+- One `bk-display` per page, at most. Most pages start at `bk-h1`.
+- Keep body text at 16px and lines under about 70 characters.
+- Use `bk-num` and tabular figures wherever numbers line up in columns.
+- Don't fake headings with bold body text; screen readers navigate by real `h1`–`h4` elements.
 
 <!-- docs/layout.md -->
 
@@ -911,779 +974,56 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 
 # Components
 
-Every component is listed with its HTML markup and its React equivalent (`import { … } from 'bento-shad-ui/react'`). In HTML, variants are `data-*` attributes; in React they are props. The live kit (`index.html`) shows each one with a **Code** button.
-
-Shared conventions:
-
-- Icon slots take any SVG. In HTML give inline SVGs `class="bk-icon"`. In React pass any icon element (lucide-react recommended).
-- Every React component forwards `ref` and passes unknown props (`id`, `aria-*`, `data-*`, handlers) to its root element.
-- Stateful React components work both controlled (`value` + `onValueChange`) and uncontrolled (`defaultValue`).
-
----
+47 components, each with a live preview, HTML markup, React usage, a props table generated from the TypeScript source, and accessibility notes.
 
 ## Layout
 
-### BentoGrid and Tile
-
-```html
-<div class="bk-bento">
-  <div class="bk-bento-grid" data-cols="4">
-    <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">…</article>
-    <article class="bk-tile" data-tone="peach" data-interactive>…</article>
-  </div>
-</div>
-```
-
-```tsx
-<BentoGrid cols={4}>
-  <Tile span={2} rows={2} tone="inverse">…</Tile>
-  <Tile tone="peach" interactive asChild><a href="/maps">…</a></Tile>
-</BentoGrid>
-```
-
-| Tile prop / attribute | Values |
-|---|---|
-| `span` / `bk-span-N` | `1` `2` `3` `4` `"full"` |
-| `rows` / `bk-row-N` | `1` `2` `3` |
-| `tone` / `data-tone` | `default` `muted` `peach` `sky` `mint` `lilac` `butter` `inverse` `brand` |
-| `interactive` / `data-interactive` | Lifts on hover |
-| `center` / `data-center` | Centres content |
-| `as` | `div` (default) `article` `section` `aside` `li` `a` `nav` `form` |
-
-Parts: `TileHeader` (`.bk-tile-header`), `TileTitle` (`.bk-tile-title`, h3), `TileDescription` (`.bk-tile-description`), `TileFooter` (`.bk-tile-footer`, pinned to the bottom), `TileMedia` (`.bk-tile-media`, bleeds to the top edge), `Eyebrow` (`.bk-eyebrow`).
-
-### Card
-
-shadcn anatomy, for content outside a bento grid (forms, settings).
-
-```html
-<div class="bk-card">
-  <div class="bk-card-header">
-    <h3 class="bk-card-title">Profile</h3>
-    <div class="bk-card-action"><span class="bk-badge" data-variant="success">Verified</span></div>
-    <p class="bk-card-description">How other travellers see you.</p>
-  </div>
-  <div class="bk-card-content">…</div>
-  <div class="bk-card-footer">…</div>
-</div>
-```
-
-```tsx
-<Card>
-  <CardHeader><CardTitle>Profile</CardTitle><CardAction><Badge>Verified</Badge></CardAction><CardDescription>…</CardDescription></CardHeader>
-  <CardContent>…</CardContent>
-  <CardFooter>…</CardFooter>
-</Card>
-```
-
-### Stack, Row, Separator, Media, Container
-
-```html
-<div class="bk-stack" style="--gap: 16px">…</div>
-<div class="bk-row bk-between">…</div>
-<hr class="bk-separator">  <hr class="bk-separator" data-orientation="vertical">
-<div class="bk-media" style="--ratio: 4 / 3"><img src="…" alt="…"><span class="bk-media-caption">Alfama</span></div>
-<main class="bk-container">…</main>
-```
-
-```tsx
-<Stack gap={16}>…</Stack>  <Row between gap={8}>…</Row>  <Separator orientation="vertical" />
-<Media ratio="4 / 3" caption="Alfama"><img src="…" alt="…" /></Media>
-```
-
-### Typography
-
-| Class | Use |
-|---|---|
-| `bk-display` | Hero headline (fluid 40–68px, Red Hat Display 800) |
-| `bk-h1` `bk-h2` `bk-h3` `bk-h4` | Headings 40 / 30 / 24 / 20px |
-| `bk-lead` | Intro paragraph, 20px muted |
-| `bk-p` | Body copy, 16px, 1.75 line height, 68ch max |
-| `bk-large` `bk-small` `bk-muted` `bk-caption` | 18px semibold / 14px medium / 14px muted / 12px muted |
-| `bk-eyebrow` | 11px uppercase label |
-| `bk-num` | Big tabular number |
-| `bk-code` | Inline code chip (sans font, tabular figures) |
-| `bk-codeblock` | Preformatted block |
-| `bk-blockquote` | Quote with brand rule |
-| `bk-truncate` `bk-sr-only` | One-line ellipsis / visually hidden |
-
----
+- [Bento grid](components/bento-grid.md): the grid, tiles, spans, rows and tones
+- [Card](components/card.md): header, action, content and footer for standalone content
+- [Stack and Row](components/stack.md): spacing helpers
+- [Separator](components/separator.md): horizontal and vertical rules
+- [Media](components/media.md): aspect-ratio box for images and video
 
 ## Actions
 
-### Button
-
-```html
-<button class="bk-button">Book trip</button>
-<button class="bk-button" data-variant="outline" data-size="sm"><svg class="bk-icon">…</svg>Share</button>
-<button class="bk-button" data-size="icon" aria-label="Add"><svg class="bk-icon">…</svg></button>
-<button class="bk-button" data-loading disabled><span class="bk-spinner" data-size="sm"></span>Saving</button>
-<a class="bk-button" data-variant="link" href="/terms">View terms</a>
-```
-
-```tsx
-<Button>Book trip</Button>
-<Button variant="outline" size="sm"><Share2 />Share</Button>
-<Button size="icon" aria-label="Add"><Plus /></Button>
-<Button loading>Saving</Button>
-<Button asChild variant="link"><Link href="/terms">View terms</Link></Button>
-```
-
-| Prop | Values |
-|---|---|
-| `variant` | `default` `brand` `secondary` `outline` `ghost` `destructive` `link` |
-| `size` | `xs` (28px) `sm` (34) `default` (40) `lg` (46) `icon` `icon-sm` `icon-lg` |
-| `loading` | Spinner, `aria-busy`, disabled |
-| `block` / `data-block` | Full width |
-| `asChild` | Style a link or router `Link` as a button |
-
-### ButtonGroup
-
-```html
-<div class="bk-button-group" role="group" aria-label="Range">
-  <button class="bk-button" data-variant="outline" data-size="sm">Day</button>
-  <button class="bk-button" data-variant="outline" data-size="sm">Week</button>
-</div>
-```
-
-```tsx
-<ButtonGroup aria-label="Range"><Button variant="outline" size="sm">Day</Button><Button variant="outline" size="sm">Week</Button></ButtonGroup>
-```
-
-### Toggle and ToggleGroup
-
-```html
-<button class="bk-toggle" data-variant="outline" aria-pressed="true" aria-label="Bold">…</button>
-<div class="bk-toggle-group" data-type="single" role="group" aria-label="Alignment">
-  <button class="bk-toggle" aria-pressed="true" aria-label="Left">…</button>
-  <button class="bk-toggle" aria-pressed="false" aria-label="Center">…</button>
-</div>
-```
-
-```tsx
-<Toggle variant="outline" defaultPressed aria-label="Bold"><Bold /></Toggle>
-<ToggleGroup type="single" defaultValue="left" aria-label="Alignment">
-  <Toggle value="left" aria-label="Left"><AlignLeft /></Toggle>
-  <Toggle value="center" aria-label="Center"><AlignCenter /></Toggle>
-</ToggleGroup>
-<ToggleGroup type="multiple" value={styles} onValueChange={setStyles}>…</ToggleGroup>
-```
-
-### Kbd
-
-```html
-<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
-```
-
-```tsx
-<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
-```
-
-### Tooltip
-
-CSS-only; shows on hover and keyboard focus. Plain text only.
-
-```html
-<button class="bk-button" data-variant="outline" data-size="icon" aria-label="Copy link" data-bk-tooltip="Copy link" data-bk-tooltip-side="bottom">…</button>
-```
-
-```tsx
-<Tooltip content="Copy link" side="bottom"><Button variant="outline" size="icon" aria-label="Copy link"><Link2 /></Button></Tooltip>
-```
-
----
+- [Button](components/button.md): seven variants, seven sizes, loading, `asChild`
+- [Button group](components/button-group.md): joined buttons and split buttons
+- [Toggle](components/toggle.md): pressed buttons and segmented controls
+- [Kbd](components/kbd.md): keyboard keys
+- [Tooltip](components/tooltip.md): CSS-only labels on hover and focus
 
 ## Forms
 
-### Field, Label, Input, Textarea, Select
-
-```html
-<div class="bk-field">
-  <label class="bk-label" for="email">Email</label>
-  <input class="bk-input" id="email" type="email" aria-describedby="email-d">
-  <p class="bk-field-description" id="email-d">We'll send the itinerary here.</p>
-</div>
-<div class="bk-field">
-  <label class="bk-label" for="code">Promo code</label>
-  <input class="bk-input" id="code" aria-invalid="true" aria-describedby="code-e">
-  <p class="bk-field-error" id="code-e">This code expired on 31 August.</p>
-</div>
-<textarea class="bk-textarea"></textarea>
-<select class="bk-select"><option>Lisbon</option></select>
-```
-
-```tsx
-<Field label="Email" description="We'll send the itinerary here." required>
-  <Input type="email" name="email" />
-</Field>
-<Field label="Promo code" error="This code expired on 31 August."><Input defaultValue="SUMMER" /></Field>
-<Field label="Notes"><Textarea /></Field>
-<Field label="Destination"><Select><option>Lisbon</option></Select></Field>
-```
-
-`Field` generates the id and sets `htmlFor`, `aria-describedby` and `aria-invalid`. `Input`, `Textarea` and `Select` also accept `invalid`.
-
-Layout helpers: `bk-form` (vertical stack, 16px), `bk-form-row` (fields side by side, wraps), `bk-fieldset` with a `legend`.
-
-### InputGroup (icon, shortcut)
-
-```html
-<div class="bk-input-group">
-  <svg class="bk-icon">…</svg>
-  <input class="bk-input" type="search" placeholder="Search trips" aria-label="Search trips">
-  <span class="bk-input-end bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
-</div>
-```
-
-```tsx
-<InputGroup icon={<Search />} end={<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>}>
-  <Input type="search" placeholder="Search trips" aria-label="Search trips" />
-</InputGroup>
-```
-
-### Checkbox, Radio, RadioGroup
-
-```html
-<label class="bk-option">
-  <input class="bk-checkbox" type="checkbox" checked>
-  <span class="bk-option-text"><span>Window seat</span><span>Free on flights over 2 hours</span></span>
-</label>
-<input class="bk-checkbox" type="checkbox" data-indeterminate>  <!-- indeterminate via script -->
-<fieldset class="bk-radio-group">
-  <legend class="bk-sr-only">Cabin class</legend>
-  <label class="bk-option"><input class="bk-radio" type="radio" name="cabin" checked><span>Economy</span></label>
-</fieldset>
-```
-
-```tsx
-<Checkbox label="Window seat" description="Free on flights over 2 hours" defaultChecked />
-<Checkbox indeterminate label="All extras" />
-<RadioGroup legend="Cabin class" defaultValue="economy" onValueChange={setCabin}>
-  <Radio value="economy" label="Economy" />
-  <Radio value="business" label="Business" />
-</RadioGroup>
-```
-
-### ChoiceCard
-
-```html
-<label class="bk-choice">
-  <input class="bk-radio" type="radio" name="plan" checked>
-  <span class="bk-option-text"><span>Plus</span><span>Unlimited trips</span></span>
-  <span class="bk-choice-price">€4/mo</span>
-</label>
-```
-
-```tsx
-<RadioGroup legend="Plan" defaultValue="free">
-  <ChoiceCard value="free" label="Free" description="3 trips" aside="€0" />
-  <ChoiceCard value="plus" label="Plus" description="Unlimited trips" aside="€4/mo" />
-</RadioGroup>
-```
-
-### Switch
-
-```html
-<label class="bk-switch-row"><span>Price alerts</span><input class="bk-switch" type="checkbox" role="switch" checked></label>
-<input class="bk-switch" type="checkbox" role="switch" data-tone="brand" aria-label="Offline maps">
-```
-
-```tsx
-<Switch label="Price alerts" description="When a saved fare drops" defaultChecked />
-<Switch tone="brand" aria-label="Offline maps" checked={on} onCheckedChange={setOn} />
-```
-
-### Slider
-
-```html
-<label class="bk-label" for="price">Max price</label> <output for="price">€140</output>
-<input class="bk-slider" id="price" type="range" min="40" max="400" step="10" value="140" data-prefix="€">
-```
-
-```tsx
-<Field label="Max price"><Slider min={40} max={400} step={10} value={price} onValueChange={setPrice} /></Field>
-```
-
-### InputOTP
-
-```html
-<div class="bk-otp" role="group" aria-label="Verification code">
-  <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 1">…</div>
-  <span class="bk-otp-separator" aria-hidden="true"></span>
-  <div class="bk-otp-group">…</div>
-</div>
-```
-
-```tsx
-<InputOTP groups={[3, 3]} aria-label="Verification code" onComplete={(code) => verify(code)} />
-```
-
-### Dropzone
-
-```html
-<label class="bk-dropzone">
-  <input type="file" multiple accept="image/*,.pdf">
-  <svg class="bk-icon" data-size="lg">…</svg>
-  <span class="bk-small">Drop files or click to upload</span>
-  <span class="bk-caption">PNG, JPG or PDF, up to 10 MB</span>
-  <span class="bk-dropzone-files"></span>
-</label>
-```
-
-```tsx
-<Dropzone multiple accept="image/*,.pdf" icon={<Upload />} hint="PNG, JPG or PDF, up to 10 MB" onFiles={(files) => upload(files)} />
-```
-
-### Calendar
-
-```html
-<div class="bk-calendar" data-mode="range">
-  <div class="bk-calendar-head">…prev · <span class="bk-calendar-title">March 2026</span> · next…</div>
-  <div class="bk-calendar-grid">
-    <span class="bk-calendar-weekday">Mo</span>…
-    <button class="bk-calendar-day" data-outside tabindex="-1">23</button>
-    <button class="bk-calendar-day" data-range="start" aria-selected="true">12</button>
-    <button class="bk-calendar-day" data-range="middle">13</button>
-    <button class="bk-calendar-day" data-today>9</button>
-  </div>
-</div>
-```
-
-```tsx
-<Calendar mode="range" value={range} onValueChange={setRange} />
-<Calendar defaultValue={new Date(2026, 2, 12)} isDisabled={(d) => d < today} weekStartsOn={0} locale="pt-PT" />
-```
-
-Helpers: `getMonthGrid(year, month, weekStartsOn)` returns the 42 days of a month view; `toDateKey(date)` gives `YYYY-MM-DD` in local time.
-
----
+- [Field](components/field.md): label, help text and error, wired automatically
+- [Input](components/input.md), [Textarea](components/textarea.md), [Select](components/select.md)
+- [Input group](components/input-group.md): icons and hints inside an input
+- [Checkbox](components/checkbox.md), [Radio group](components/radio-group.md), [Choice card](components/choice-card.md), [Switch](components/switch.md)
+- [Slider](components/slider.md), [Input OTP](components/input-otp.md), [Dropzone](components/dropzone.md), [Calendar](components/calendar.md)
 
 ## Data display
 
-### Badge
-
-```html
-<span class="bk-badge">Default</span>
-<span class="bk-badge" data-variant="success" data-dot>Paid</span>
-```
-
-```tsx
-<Badge variant="success" dot>Paid</Badge>
-```
-
-Variants: `default` `brand` `secondary` `outline` `destructive` `success` `warning` `info`.
-
-### Avatar and AvatarGroup
-
-```html
-<span class="bk-avatar" data-size="lg" data-status="online"><img src="…" alt="Maya Kim"></span>
-<span class="bk-avatar-group"><span class="bk-avatar">MK</span><span class="bk-avatar">+3</span></span>
-```
-
-```tsx
-<Avatar src={user.photo} alt={user.name} fallback="MK" size="lg" status="online" />
-<AvatarGroup><Avatar fallback="MK" /><Avatar fallback="+3" /></AvatarGroup>
-```
-
-Sizes `sm` (28) `default` (36) `lg` (48) `xl` (64); `shape="square"`; `status` `online` `busy` `offline`. A broken image falls back to `fallback`.
-
-### Table
-
-```html
-<div class="bk-table-wrap">
-  <table class="bk-table">
-    <thead><tr><th>Guest</th><th data-align="end">Amount</th></tr></thead>
-    <tbody><tr><td>Maya Kim</td><td data-align="end">€640.00</td></tr></tbody>
-  </table>
-</div>
-```
-
-```tsx
-<Table>
-  <TableHeader><TableRow><TableHead>Guest</TableHead><TableHead align="end">Amount</TableHead></TableRow></TableHeader>
-  <TableBody><TableRow><TableCell>Maya Kim</TableCell><TableCell align="end">€640.00</TableCell></TableRow></TableBody>
-  <TableCaption>4 bookings</TableCaption>
-</Table>
-```
-
-### List
-
-```html
-<ul class="bk-list">
-  <li class="bk-list-item">
-    <span class="bk-avatar" data-size="sm">MK</span>
-    <div class="bk-list-item-text"><span>Maya booked Lisbon</span><span>Hotel Chiado</span></div>
-    <span class="bk-list-item-meta">2m</span>
-  </li>
-</ul>
-```
-
-```tsx
-<List><ListItem leading={<Avatar size="sm" fallback="MK" />} title="Maya booked Lisbon" description="Hotel Chiado" meta="2m" /></List>
-```
-
-### Stat and Sparkline
-
-```html
-<div class="bk-stat">
-  <span class="bk-stat-label">Bookings</span>
-  <span class="bk-stat-value">1,284</span>
-  <span class="bk-stat-delta" data-trend="up">+12.4% vs February</span>
-</div>
-<svg class="bk-spark" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="…"><polygon points="…"/><polyline points="…"/></svg>
-```
-
-```tsx
-<Stat label="Bookings" value="1,284" delta="+12.4% vs February" trend="up" icon={<Calendar />} />
-<Sparkline data={[12, 18, 15, 22, 19, 27, 31]} label="Bookings rose from 12 to 31 a day" />
-```
-
-`sparklinePoints(data, width, height, padding)` returns the SVG coordinates if you draw your own.
-
-### BarChart, Legend, Meter
-
-```html
-<div class="bk-chart" role="img" aria-label="Mon 32, Tue 45, Sat 74">
-  <div class="bk-bars" style="--h: 160px">
-    <div class="bk-bar" data-muted style="--v: 40%" data-value="32"></div>
-    <div class="bk-bar" style="--v: 92.5%" data-value="74" data-show></div>
-  </div>
-  <div class="bk-bar-labels"><span>Mon</span><span>Sat</span></div>
-</div>
-<div class="bk-meter" role="img" aria-label="Stay 46%, travel 22%"><span style="--v: 46%; --c: var(--chart-1)"></span>…</div>
-<div class="bk-legend"><span style="--c: var(--chart-1)">Stay 46%</span></div>
-```
-
-```tsx
-<BarChart data={[{ label: 'Mon', value: 32 }, { label: 'Sat', value: 74 }]} max={80} formatValue={(v) => `${v}`} />
-<Meter segments={[{ label: 'Stay', value: 46, color: 'var(--chart-1)' }, { label: 'Travel', value: 22, color: 'var(--chart-2)' }]} />
-<Legend items={[{ label: 'Stay 46%', color: 'var(--chart-1)' }]} />
-```
-
-`BarChart` scales bars against `max` (default: the largest value), draws quarter gridlines, emphasises the highest bar (`highlight={index | 'max' | 'none'}`) and builds an `aria-label` from the data. For complex charts use a chart library with the `--chart-1…5` colours.
-
-### Progress, Ring
-
-```html
-<div class="bk-progress" data-tone="brand" role="progressbar" aria-label="Upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span style="--v: 40%"></span></div>
-<div class="bk-ring" style="--p: 71; --size: 64px" role="img" aria-label="71% of budget used"><span>71%</span></div>
-```
-
-```tsx
-<Progress value={40} tone="brand" label="Upload" />
-<Ring value={71} size={64} label="71% of budget used" />
-```
-
-### Accordion
-
-```html
-<div class="bk-accordion">
-  <details class="bk-accordion-item" open>
-    <summary class="bk-accordion-trigger">Can I change my dates?</summary>
-    <div class="bk-accordion-content">Yes, up to 48 hours before check-in.</div>
-  </details>
-</div>
-```
-
-```tsx
-<Accordion><AccordionItem title="Can I change my dates?" defaultOpen>Yes, up to 48 hours before check-in.</AccordionItem></Accordion>
-```
-
----
+- [Badge](components/badge.md), [Avatar](components/avatar.md)
+- [Table](components/table.md), [List](components/list.md)
+- [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Progress](components/progress.md) with ring
+- [Accordion](components/accordion.md)
 
 ## Feedback
 
-### Alert
-
-```html
-<div class="bk-alert" data-variant="warning" role="status">
-  <svg class="bk-icon">…</svg>
-  <div class="bk-alert-title">Passport expires soon</div>
-  <div class="bk-alert-description">Some countries need 6 months of validity.</div>
-  <div class="bk-alert-actions"><button class="bk-button" data-size="xs">Renew</button></div>
-</div>
-```
-
-```tsx
-<Alert variant="warning" icon={<TriangleAlert />} title="Passport expires soon" actions={<Button size="xs">Renew</Button>}>
-  Some countries need 6 months of validity.
-</Alert>
-```
-
-Variants `default` `info` `success` `warning` `destructive` (the last one uses `role="alert"`).
-
-### Toast
-
-```html
-<button class="bk-button" data-bk-toast='{"title":"Trip saved","description":"Lisbon","variant":"success"}'>Save</button>
-```
-
-```ts
-toast('Link copied');
-const dismiss = toast({ title: 'Payment failed', variant: 'destructive', action: { label: 'Retry', onClick: retry }, duration: 8000 });
-```
-
-Toasts stack bottom-right, pause on hover and close after 4.5s (`duration: Infinity` keeps them open).
-
-### Spinner, Skeleton
-
-```html
-<span class="bk-spinner" data-size="sm" role="status" aria-label="Loading"></span>
-<span class="bk-skeleton" style="width: 70%; height: 12px"></span>
-```
-
-```tsx
-<Spinner size="lg" />
-<Skeleton width="70%" />  <Skeleton width={40} height={40} circle />
-```
-
-### Empty
-
-```html
-<div class="bk-empty">
-  <span class="bk-empty-icon"><svg class="bk-icon" data-size="lg">…</svg></span>
-  <h4 class="bk-empty-title">No trips yet</h4>
-  <p class="bk-empty-description">Trips you plan or get invited to show up here.</p>
-  <div class="bk-empty-actions"><button class="bk-button">Plan a trip</button></div>
-</div>
-```
-
-```tsx
-<Empty icon={<Plane />} title="No trips yet" description="Trips you plan or get invited to show up here." actions={<Button>Plan a trip</Button>} />
-```
-
----
+- [Alert](components/alert.md), [Toast](components/toast.md), [Empty state](components/empty.md), [Skeleton](components/skeleton.md), [Spinner](components/spinner.md)
 
 ## Overlays
 
-### Dialog and alert dialog
-
-Native `<dialog>`: focus trap, Esc to close, the page behind is inert.
-
-```html
-<button class="bk-button" data-bk-open="edit">Edit profile</button>
-<dialog class="bk-dialog" id="edit" aria-labelledby="edit-t">
-  <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" data-bk-close aria-label="Close">…</button>
-  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="edit-t">Edit profile</h2><p class="bk-dialog-description">…</p></div>
-  <div class="bk-dialog-body">…</div>
-  <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" data-bk-close>Cancel</button><button class="bk-button">Save</button></div>
-</dialog>
-<!-- alert: --><dialog class="bk-dialog" data-variant="alert" role="alertdialog">…<span class="bk-dialog-icon">…</span>…</dialog>
-```
-
-```tsx
-<Dialog open={open} onOpenChange={setOpen} title="Edit profile" description="…" footer={<Button onClick={save}>Save</Button>}>…</Dialog>
-<Dialog variant="alert" icon={<Trash2 />} open={confirm} onOpenChange={setConfirm} title='Delete "Lisbon"?' description="This can't be undone."
-  footer={<><Button variant="outline" onClick={() => setConfirm(false)}>Keep</Button><Button variant="destructive" onClick={remove}>Delete</Button></>} />
-```
-
-Alert dialogs hide the × button and ignore backdrop clicks unless you set `hideClose={false}` or `closeOnBackdrop`.
-
-### Sheet
-
-```html
-<dialog class="bk-sheet" id="filters">…</dialog>
-<dialog class="bk-sheet" data-side="bottom" id="share"><div class="bk-sheet-handle" aria-hidden="true"></div>…</dialog>
-```
-
-```tsx
-<Sheet open={open} onOpenChange={setOpen} title="Filters" footer={<Button>Show 142 stays</Button>}>…</Sheet>
-<Sheet side="bottom" open={share} onOpenChange={setShare} title="Share trip">…</Sheet>
-```
-
-### DropdownMenu
-
-Native popover: Esc and outside clicks close it; arrow keys move between items.
-
-```html
-<button class="bk-button" data-variant="outline" popovertarget="account">Maya Kim</button>
-<div class="bk-menu" id="account" popover role="menu" data-align="end">
-  <div class="bk-menu-label">My account</div>
-  <button class="bk-menu-item" role="menuitem">Profile<span class="bk-menu-shortcut">⇧⌘P</span></button>
-  <button class="bk-menu-item" role="menuitemcheckbox" aria-checked="true">Email updates</button>
-  <hr class="bk-menu-separator">
-  <button class="bk-menu-item" role="menuitem" data-variant="destructive">Log out</button>
-</div>
-```
-
-```tsx
-<DropdownMenu trigger={<Button variant="outline">Maya Kim</Button>} align="end">
-  <DropdownMenuLabel>My account</DropdownMenuLabel>
-  <DropdownMenuItem icon={<User />} shortcut="⇧⌘P" onSelect={openProfile}>Profile</DropdownMenuItem>
-  <DropdownMenuCheckboxItem checked={emails} onCheckedChange={setEmails}>Email updates</DropdownMenuCheckboxItem>
-  <DropdownMenuSeparator />
-  <DropdownMenuItem variant="destructive" onSelect={logout}>Log out</DropdownMenuItem>
-</DropdownMenu>
-```
-
-### Popover
-
-```html
-<button class="bk-button" popovertarget="invite">Invite</button>
-<div class="bk-popover" id="invite" popover>…</div>
-```
-
-```tsx
-<Popover trigger={<Button>Invite</Button>}>
-  <Field label="Email"><Input type="email" /></Field>
-  <Button size="sm" onClick={(e) => { send(); closePopover(e); }}>Send invite</Button>
-</Popover>
-```
-
-### Command palette
-
-```html
-<dialog class="bk-command" id="cmd" data-bk-hotkey aria-label="Search">
-  <div class="bk-command-search"><svg class="bk-icon">…</svg><input class="bk-command-input" placeholder="Search" aria-label="Search"></div>
-  <div class="bk-command-list" role="listbox">
-    <div class="bk-command-group"><div class="bk-command-group-heading">Trips</div>
-      <a class="bk-command-item" role="option" href="/trips/lisbon" data-keywords="portugal">Lisbon</a>
-    </div>
-    <div class="bk-command-empty" hidden>No results.</div>
-  </div>
-</dialog>
-<!-- inline version: <div class="bk-command" data-inline>…</div> -->
-```
-
-```tsx
-<CommandDialog open={open} onOpenChange={setOpen} groups={[
-  { heading: 'Trips', items: [{ id: 'lis', label: 'Lisbon', keywords: ['portugal'], onSelect: () => router.push('/trips/lisbon') }] },
-  { heading: 'Actions', items: [{ id: 'new', label: 'New trip', shortcut: ['N'], onSelect: create }] },
-]} />
-<Command groups={groups} />  {/* inline */}
-```
-
-`filterCommandGroups(groups, query)` is exported for custom UIs.
-
----
+- [Dialog](components/dialog.md), [Sheet](components/sheet.md), [Dropdown menu](components/dropdown-menu.md), [Popover](components/popover.md), [Command](components/command.md)
 
 ## Navigation
 
-### Tabs
+- [Tabs](components/tabs.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
 
-```html
-<div data-bk-tabs>
-  <div class="bk-tabs-list" role="tablist" aria-label="View">
-    <button class="bk-tabs-trigger" role="tab" aria-controls="p-week" aria-selected="true">Week</button>
-    <button class="bk-tabs-trigger" role="tab" aria-controls="p-month">Month</button>
-  </div>
-  <div class="bk-tabs-content" role="tabpanel" id="p-week">…</div>
-  <div class="bk-tabs-content" role="tabpanel" id="p-month" hidden>…</div>
-</div>
-<!-- underline style: <div class="bk-tabs-list" data-variant="line">; full width: data-full -->
-```
+## Conventions
 
-```tsx
-<Tabs defaultValue="week">
-  <TabsList variant="pill" aria-label="View">
-    <TabsTrigger value="week">Week</TabsTrigger>
-    <TabsTrigger value="month">Month</TabsTrigger>
-  </TabsList>
-  <TabsContent value="week">…</TabsContent>
-  <TabsContent value="month">…</TabsContent>
-</Tabs>
-```
-
-### Breadcrumb
-
-```html
-<nav aria-label="Breadcrumb"><ol class="bk-breadcrumb"><li><a href="/trips">Trips</a></li><li><span aria-current="page">Day 2</span></li></ol></nav>
-```
-
-```tsx
-<Breadcrumb items={[{ label: 'Trips', href: '/trips' }, { label: 'Lisbon', href: '/trips/lisbon' }, { label: 'Day 2' }]} linkAs={Link} />
-```
-
-### Pagination
-
-```html
-<nav class="bk-pagination" aria-label="Pagination">
-  <a class="bk-pagination-link" href="?page=1">1</a>
-  <a class="bk-pagination-link" href="?page=2" aria-current="page">2</a>
-  <span class="bk-pagination-ellipsis">…</span>
-</nav>
-```
-
-```tsx
-<Pagination page={page} pageCount={20} onPageChange={setPage} />
-<Pagination page={page} pageCount={20} getHref={(p) => `?page=${p}`} />  {/* links, for server-rendered lists */}
-```
-
-`getPaginationRange(page, pageCount, siblingCount)` returns e.g. `[1, 'ellipsis', 5, 6, 7, 'ellipsis', 20]`.
-
-### Navbar
-
-```html
-<nav class="bk-navbar" aria-label="Main">
-  <a class="bk-navbar-brand" href="/">Tripline</a>
-  <div class="bk-navbar-links"><a class="bk-navbar-link" href="/trips" aria-current="page">Trips</a></div>
-  <div class="bk-navbar-actions">…</div>
-</nav>
-```
-
-```tsx
-<Navbar aria-label="Main">
-  <NavbarBrand href="/">Tripline</NavbarBrand>
-  <NavbarLinks><NavbarLink asChild current><Link href="/trips">Trips</Link></NavbarLink></NavbarLinks>
-  <NavbarActions><Button size="sm">New trip</Button></NavbarActions>
-</Navbar>
-```
-
-### Sidebar
-
-```html
-<nav class="bk-sidebar" aria-label="App">
-  <div class="bk-sidebar-brand">Tripline</div>
-  <a class="bk-sidebar-item" href="/" aria-current="page"><svg class="bk-icon">…</svg>Home</a>
-  <a class="bk-sidebar-item" href="/inbox"><svg class="bk-icon">…</svg>Inbox<span class="bk-badge" data-variant="brand">2</span></a>
-  <div class="bk-sidebar-label">Workspace</div>
-  <div class="bk-sidebar-footer">…</div>
-</nav>
-```
-
-```tsx
-<Sidebar aria-label="App">
-  <SidebarBrand>Tripline</SidebarBrand>
-  <SidebarItem href="/" icon={<Home />} current>Home</SidebarItem>
-  <SidebarItem href="/inbox" icon={<Inbox />} badge={<Badge variant="brand">2</Badge>}>Inbox</SidebarItem>
-  <SidebarLabel>Workspace</SidebarLabel>
-  <SidebarFooter>…</SidebarFooter>
-</Sidebar>
-```
-
-### BottomNav
-
-```html
-<nav class="bk-bottom-nav" aria-label="Tabs">
-  <a class="bk-bottom-nav-item" href="/" aria-current="page"><svg class="bk-icon">…</svg>Home</a>
-  <a class="bk-bottom-nav-item" href="/trips"><svg class="bk-icon">…</svg>Trips</a>
-</nav>
-```
-
-```tsx
-<BottomNav aria-label="Tabs">
-  <BottomNavItem href="/" icon={<Home />} current>Home</BottomNavItem>
-  <BottomNavItem href="/trips" icon={<Plane />}>Trips</BottomNavItem>
-</BottomNav>
-```
-
----
-
-## Theme
-
-```html
-<div class="bk-toggle-group" role="group" aria-label="Theme">
-  <button class="bk-toggle" data-bk-theme-set="light" aria-label="Light theme">…</button>
-  <button class="bk-toggle" data-bk-theme-set="dark" aria-label="Dark theme">…</button>
-  <button class="bk-toggle" data-bk-theme-set="system" aria-label="System theme">…</button>
-</div>
-```
-
-```tsx
-<ThemeToggle />
-const { theme, resolvedTheme, setTheme } = useTheme();
-<ThemeScript />  {/* in <head> */}
-```
+- **HTML**: every component is markup plus `bk-` classes. Variants are `data-variant`, `data-size` and `data-tone` attributes. The optional script ([JavaScript API](javascript-api.md)) adds behaviour through `data-bk-*` attributes.
+- **React**: `import { … } from 'bento-shad-ui/react'`. Every component forwards `ref` and passes unknown props (`id`, `aria-*`, `data-*`, event handlers) to its root element. Stateful components work controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue`). Link-like components take `asChild` for router links.
+- **Icons**: the library ships none. Any 24px stroke icon works; lucide-react matches best. In HTML, give inline SVGs `class="bk-icon"`; in React, pass the icon element, and SVGs inside buttons, menu items and similar are sized for you.
 
 <!-- docs/javascript-api.md -->
 
@@ -1887,3 +1227,2258 @@ Before writing UI code, read node_modules/bento-shad-ui/llms-full.txt.
 - No `font-mono`, monospace font stacks, Inter, Geist or other fonts.
 - Spans add up per row at 4 columns, and the page still reads at 2 and 1 columns.
 - Every icon-only button has `aria-label`.
+
+<!-- docs/components/bento-grid.md -->
+
+# Bento grid
+
+> The layout at the heart of the library. Tiles span columns and rows; the grid follows its container's width, not the viewport.
+
+```html
+<div class="bk-bento">
+  <div class="bk-bento-grid">
+    <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">
+      <span class="bk-eyebrow">Next trip</span>
+      <h3 class="bk-h3">Lisbon in 12 days</h3>
+      <p class="bk-muted" style="margin:0">4 nights · 2 travellers · Chiado</p>
+    </article>
+    <article class="bk-tile" data-tone="peach"><span class="bk-eyebrow">Budget</span><span class="bk-num">€640</span></article>
+    <article class="bk-tile"><span class="bk-eyebrow">Weather</span><span class="bk-num">18°</span></article>
+    <article class="bk-tile bk-span-2" data-tone="sky"><span class="bk-eyebrow">Packing list</span><div class="bk-progress" role="progressbar" aria-label="Packing list" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"><span style="--v: 68%"></span></div></article>
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { BentoGrid, Tile, TileHeader, TileTitle, TileDescription, TileFooter, Eyebrow } from 'bento-shad-ui/react';
+
+<BentoGrid>
+  <Tile span={2} rows={2} tone="inverse">
+    <Eyebrow>Next trip</Eyebrow>
+    <TileTitle>Lisbon in 12 days</TileTitle>
+  </Tile>
+  <Tile tone="peach">…</Tile>
+  <Tile>…</Tile>
+  <Tile span={2}>…</Tile>
+</BentoGrid>
+```
+
+```html
+<div class="bk-bento">
+  <div class="bk-bento-grid">
+    <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">…</article>
+    <article class="bk-tile" data-tone="peach">…</article>
+  </div>
+</div>
+```
+
+The outer `.bk-bento` is the box the grid measures (a container query container). `BentoGrid` renders both elements for you.
+
+## Examples
+
+### Tile anatomy
+
+```html
+<div class="bk-bento"><div class="bk-bento-grid" data-cols="2">
+  <article class="bk-tile">
+    <header class="bk-tile-header">
+      <div><h3 class="bk-tile-title">Bookings</h3><p class="bk-tile-description">This week · 330 total</p></div>
+      <span class="bk-badge" data-variant="secondary">Week</span>
+    </header>
+    <p class="bk-muted" style="margin:0">Content goes here.</p>
+    <footer class="bk-tile-footer"><span class="bk-muted">Updated 2m ago</span><button class="bk-button" data-size="xs" type="button">Open</button></footer>
+  </article>
+  <a class="bk-tile" data-interactive data-tone="mint" href="#tile-anatomy"><h3 class="bk-tile-title">Clickable tile</h3><p class="bk-tile-description" style="margin:0">data-interactive lifts it on hover.</p></a>
+</div></div>
+```
+
+### Tones
+
+```html
+<div class="bk-bento"><div class="bk-bento-grid">
+  <div class="bk-tile" data-tone="muted">muted</div>
+  <div class="bk-tile" data-tone="peach">peach</div>
+  <div class="bk-tile" data-tone="sky">sky</div>
+  <div class="bk-tile" data-tone="mint">mint</div>
+  <div class="bk-tile" data-tone="lilac">lilac</div>
+  <div class="bk-tile" data-tone="butter">butter</div>
+  <div class="bk-tile" data-tone="inverse">inverse</div>
+  <div class="bk-tile" data-tone="brand">brand</div>
+</div></div>
+```
+
+Components placed inside a toned tile pick up matching colours, so buttons, inputs and badges stay readable.
+
+## API
+
+### BentoGrid
+
+<!-- props: BentoGridProps -->
+
+### Tile
+
+<!-- props: TileProps -->
+
+Parts: `TileHeader`, `TileTitle` (h3), `TileDescription`, `TileFooter` (pinned to the bottom), `TileMedia` (bleeds to the top edge), `Eyebrow`. Each renders one element with its class and accepts that element's attributes.
+
+### HTML
+
+| Class or attribute | Effect |
+|---|---|
+| `bk-bento` | Container the grid measures |
+| `bk-bento-grid` | The grid. `data-cols="2"`, `"3"`, `"6"` change the full-width column count |
+| `bk-tile` | A tile |
+| `bk-span-2`, `bk-span-3`, `bk-span-4`, `bk-span-full` | Column span |
+| `bk-row-2`, `bk-row-3` | Row span |
+| `data-tone` | `muted` `peach` `sky` `mint` `lilac` `butter` `inverse` `brand` |
+| `data-interactive`, `data-center` | Hover lift; centred content |
+
+Columns: 4 above 900px of container width, 2 down to 560px, 1 below. `data-cols="2"` keeps 2 columns down to 300px. See [Layout](../layout.md) for the rules.
+
+## Accessibility
+
+- Tiles are layout only. Use real headings inside (`TileTitle` is an `h3`) so screen-reader users can jump between them.
+- Visual order follows source order except where dense packing fills gaps. Keep the reading order sensible in the markup.
+- A clickable tile should be one link (`asChild` with an `<a>`), not a `div` with a click handler.
+
+<!-- docs/components/card.md -->
+
+# Card
+
+> shadcn/ui card anatomy (header, action, content, footer) for content outside a bento grid, such as forms and settings.
+
+```html
+<div class="bk-card" style="width: 340px">
+  <div class="bk-card-header">
+    <h3 class="bk-card-title">Lisbon, 4 nights</h3>
+    <div class="bk-card-action"><span class="bk-badge" data-variant="success" data-dot>Booked</span></div>
+    <p class="bk-card-description">12–16 March · 2 travellers</p>
+  </div>
+  <div class="bk-card-content"><p class="bk-muted" style="margin:0">Hotel Chiado, breakfast included, free cancellation until 10 March.</p></div>
+  <div class="bk-card-footer"><span class="bk-large">€640</span><button class="bk-button" data-size="sm" type="button">View plan</button></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter, Badge, Button } from 'bento-shad-ui/react';
+
+<Card>
+  <CardHeader>
+    <CardTitle>Lisbon, 4 nights</CardTitle>
+    <CardAction><Badge variant="success" dot>Booked</Badge></CardAction>
+    <CardDescription>12–16 March · 2 travellers</CardDescription>
+  </CardHeader>
+  <CardContent>…</CardContent>
+  <CardFooter><span>€640</span><Button size="sm">View plan</Button></CardFooter>
+</Card>
+```
+
+## When to use Card or Tile
+
+- **Tile** is a cell of a bento grid: large radius, no shadow, sized by the grid.
+- **Card** stands on its own: forms, settings sections, a detail panel next to a list. It has a light shadow and inner padding per section.
+
+## API
+
+Every part renders one element and accepts that element's attributes:
+
+| Part | Element | Class |
+|---|---|---|
+| `Card` | `div` | `bk-card` |
+| `CardHeader` | `div` | `bk-card-header` |
+| `CardTitle` | `h3` | `bk-card-title` |
+| `CardDescription` | `p` | `bk-card-description` |
+| `CardAction` | `div` | `bk-card-action` (top right of the header) |
+| `CardContent` | `div` | `bk-card-content` |
+| `CardFooter` | `div` | `bk-card-footer` |
+
+## Accessibility
+
+- `CardTitle` is an `h3`. If the page outline needs another level, use a heading with the class instead: `<h2 className="bk-card-title">`.
+
+<!-- docs/components/media.md -->
+
+# Media
+
+> An aspect-ratio box for images and video, with an optional caption chip.
+
+```html
+<div class="bk-media" style="--ratio: 16 / 10; width: 340px; background: linear-gradient(var(--tint-sky), var(--card))">
+  <span class="bk-media-caption">Alfama, Lisbon</span>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Media } from 'bento-shad-ui/react';
+
+<Media ratio="4 / 3" caption="Alfama, Lisbon">
+  <img src="/alfama.jpg" alt="Rooftops of Alfama at sunset" />
+</Media>
+```
+
+```html
+<div class="bk-media" style="--ratio: 4 / 3">
+  <img src="/alfama.jpg" alt="Rooftops of Alfama at sunset">
+  <span class="bk-media-caption">Alfama, Lisbon</span>
+</div>
+```
+
+The image or video fills the box with `object-fit: cover`. Inside a tile, `TileMedia` (`.bk-tile-media`) makes it bleed to the tile's top edges.
+
+## API
+
+<!-- props: MediaProps -->
+
+## Accessibility
+
+- Write `alt` text that says what the image shows. Use `alt=""` for decorative images.
+
+<!-- docs/components/separator.md -->
+
+# Separator
+
+> A thin horizontal or vertical rule between groups of content.
+
+```html
+<div class="bk-stack" style="width: 300px">
+  <span class="bk-small">Itinerary</span>
+  <hr class="bk-separator">
+  <div class="bk-row" style="--gap: 12px; height: 20px"><span class="bk-muted">Day 1</span><hr class="bk-separator" data-orientation="vertical"><span class="bk-muted">Day 2</span><hr class="bk-separator" data-orientation="vertical"><span class="bk-muted">Day 3</span></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Separator } from 'bento-shad-ui/react';
+
+<Separator />
+<Separator orientation="vertical" />
+```
+
+## API
+
+<!-- props: SeparatorProps -->
+
+| HTML | Effect |
+|---|---|
+| `<hr class="bk-separator">` | Horizontal |
+| `<hr class="bk-separator" data-orientation="vertical">` | Vertical, stretches to the row height |
+
+<!-- docs/components/stack.md -->
+
+# Stack and Row
+
+> Small flex helpers for vertical and horizontal spacing inside tiles and cards.
+
+```html
+<div class="bk-stack" style="--gap: 10px; width: 280px">
+  <div class="bk-row bk-between"><span class="bk-label">Total</span><span class="bk-large">€640</span></div>
+  <div class="bk-row" style="--gap: 6px"><span class="bk-badge">Booked</span><span class="bk-badge" data-variant="outline">4 nights</span></div>
+  <button class="bk-button" data-block type="button">View plan</button>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Stack, Row } from 'bento-shad-ui/react';
+
+<Stack gap={10}>
+  <Row between><span>Total</span><span>€640</span></Row>
+  <Row gap={6}>…</Row>
+</Stack>
+```
+
+## API
+
+### Stack
+
+<!-- props: StackProps -->
+
+### Row
+
+<!-- props: RowProps -->
+
+### HTML
+
+| Class | Effect |
+|---|---|
+| `bk-stack` | Column, gap `var(--gap, 12px)` |
+| `bk-row` | Wrapping row, centred, gap `var(--gap, 8px)` |
+| `bk-between` | Push children to both ends |
+| `bk-grow` | Take the remaining space (`flex: 1`, `min-width: 0`) |
+| `bk-container` | Centred page column, 1240px max (`--container`), safe-area padding |
+| `bk-truncate` | One line with an ellipsis |
+| `bk-sr-only` | Hidden visually, read by screen readers |
+
+<!-- docs/components/button.md -->
+
+# Button
+
+> Triggers an action. Seven variants, seven sizes, icon, loading and disabled states, and asChild for links.
+
+```html
+<div class="bk-row">
+  <button class="bk-button" type="button">Book trip</button>
+  <button class="bk-button" data-variant="brand" type="button">Upgrade</button>
+  <button class="bk-button" data-variant="outline" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-plus"/></svg>Add trip</button>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Button } from 'bento-shad-ui/react';
+import Link from 'next/link';
+
+<Button onClick={book}>Book trip</Button>
+<Button variant="outline" size="sm"><Plus />Add trip</Button>
+<Button asChild variant="link"><Link href="/terms">View terms</Link></Button>
+```
+
+```html
+<button class="bk-button" type="button">Book trip</button>
+<button class="bk-button" data-variant="outline" data-size="sm">…</button>
+<a class="bk-button" data-variant="link" href="/terms">View terms</a>
+```
+
+## Examples
+
+### Variants
+
+```html
+<div class="bk-row">
+  <button class="bk-button" type="button">Default</button>
+  <button class="bk-button" data-variant="brand" type="button">Brand</button>
+  <button class="bk-button" data-variant="secondary" type="button">Secondary</button>
+  <button class="bk-button" data-variant="outline" type="button">Outline</button>
+  <button class="bk-button" data-variant="ghost" type="button">Ghost</button>
+  <button class="bk-button" data-variant="destructive" type="button">Delete</button>
+  <button class="bk-button" data-variant="link" type="button">Link</button>
+</div>
+```
+
+### Sizes
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-size="xs" type="button">Extra small</button>
+  <button class="bk-button" data-size="sm" type="button">Small</button>
+  <button class="bk-button" type="button">Default</button>
+  <button class="bk-button" data-size="lg" type="button">Large</button>
+  <button class="bk-button" data-variant="outline" data-size="icon-sm" type="button" aria-label="Edit"><svg class="bk-icon" aria-hidden="true"><use href="#i-pencil"/></svg></button>
+  <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Download"><svg class="bk-icon" aria-hidden="true"><use href="#i-download"/></svg></button>
+  <button class="bk-button" data-size="icon-lg" type="button" aria-label="Add"><svg class="bk-icon" data-size="lg" aria-hidden="true"><use href="#i-plus"/></svg></button>
+</div>
+```
+
+### Loading and disabled
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-loading disabled aria-busy="true" type="button"><span class="bk-spinner" data-size="sm" aria-hidden="true"></span>Saving</button>
+  <button class="bk-button" data-variant="outline" disabled type="button">Disabled</button>
+</div>
+```
+
+```tsx
+<Button loading>Saving</Button>
+```
+
+### Full width
+
+```html
+<button class="bk-button" data-block data-size="lg" type="button">Create account</button>
+```
+
+## API
+
+<!-- props: ButtonProps -->
+
+### HTML
+
+| Attribute | Values |
+|---|---|
+| `data-variant` | `brand` `secondary` `outline` `ghost` `destructive` `link` (omit for default) |
+| `data-size` | `xs` `sm` `lg` `icon` `icon-sm` `icon-lg` (omit for default) |
+| `data-loading` | Dims the button and blocks clicks. Add a `.bk-spinner` and `disabled` |
+| `data-block` | Full width |
+
+## Accessibility
+
+- Icon-only buttons need `aria-label`. A tooltip doesn't count as a name.
+- `loading` sets `disabled` and `aria-busy`. Keep the label (for example "Saving") so the state is announced.
+- Use `asChild` with a link for navigation. Buttons perform actions; links go places.
+- The default `type` is `button`, so a button inside a form doesn't submit it by accident. Set `type="submit"` when it should.
+
+<!-- docs/components/button-group.md -->
+
+# Button group
+
+> Buttons joined into one control, including the split-button pattern.
+
+```html
+<div class="bk-row" style="--gap: 16px">
+  <div class="bk-button-group" role="group" aria-label="Range">
+    <button class="bk-button" data-variant="outline" data-size="sm" type="button">Day</button>
+    <button class="bk-button" data-variant="outline" data-size="sm" type="button">Week</button>
+    <button class="bk-button" data-variant="outline" data-size="sm" type="button">Month</button>
+  </div>
+  <div class="bk-button-group">
+    <button class="bk-button" data-size="sm" type="button">Save draft</button>
+    <button class="bk-button" data-size="icon-sm" type="button" aria-label="More save options"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { ButtonGroup, Button } from 'bento-shad-ui/react';
+
+<ButtonGroup aria-label="Range">
+  <Button variant="outline" size="sm">Day</Button>
+  <Button variant="outline" size="sm">Week</Button>
+  <Button variant="outline" size="sm">Month</Button>
+</ButtonGroup>
+```
+
+For a split button, put a `DropdownMenu` trigger in the second slot. For a choice that stays selected, use a [Toggle group](toggle.md) instead.
+
+## API
+
+`ButtonGroup` renders `<div role="group" class="bk-button-group">` and accepts all `div` attributes. Give it an `aria-label`.
+
+## Accessibility
+
+- `role="group"` plus `aria-label` tells screen readers the buttons belong together.
+- Each button still needs its own visible text or `aria-label`.
+
+<!-- docs/components/kbd.md -->
+
+# Kbd
+
+> Keyboard keys and shortcuts, shown inline in text, menus and inputs.
+
+```html
+<p class="bk-muted" style="margin:0">Press <span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span> to search, or <span class="bk-kbd-group"><kbd class="bk-kbd">Ctrl</kbd>+<kbd class="bk-kbd">K</kbd></span> on Windows.</p>
+```
+
+## Usage
+
+```tsx
+import { Kbd, KbdGroup } from 'bento-shad-ui/react';
+
+<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
+```
+
+```html
+<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+```
+
+## API
+
+`Kbd` renders `<kbd class="bk-kbd">`; `KbdGroup` renders `<span class="bk-kbd-group">`. Both accept their element's attributes. Keys use the sans font: the library has no monospace face.
+
+<!-- docs/components/toggle.md -->
+
+# Toggle
+
+> A button that stays pressed. Toggle groups make segmented controls with one or many choices.
+
+```html
+<div class="bk-row" style="--gap: 16px">
+  <div class="bk-row" style="--gap: 4px">
+    <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="true" aria-label="Bold"><svg class="bk-icon" aria-hidden="true"><use href="#i-bold"/></svg></button>
+    <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="false" aria-label="Italic"><svg class="bk-icon" aria-hidden="true"><use href="#i-italic"/></svg></button>
+    <button class="bk-toggle" data-variant="outline" type="button" aria-pressed="false" aria-label="Underline"><svg class="bk-icon" aria-hidden="true"><use href="#i-underline"/></svg></button>
+  </div>
+  <div class="bk-toggle-group" data-type="single" role="group" aria-label="Alignment">
+    <button class="bk-toggle" type="button" aria-pressed="true" aria-label="Align left"><svg class="bk-icon" aria-hidden="true"><use href="#i-align-left"/></svg></button>
+    <button class="bk-toggle" type="button" aria-pressed="false" aria-label="Align center"><svg class="bk-icon" aria-hidden="true"><use href="#i-align-center"/></svg></button>
+    <button class="bk-toggle" type="button" aria-pressed="false" aria-label="Align right"><svg class="bk-icon" aria-hidden="true"><use href="#i-align-right"/></svg></button>
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Toggle, ToggleGroup } from 'bento-shad-ui/react';
+
+<Toggle variant="outline" aria-label="Bold" pressed={bold} onPressedChange={setBold}><Bold /></Toggle>
+
+<ToggleGroup type="single" defaultValue="left" aria-label="Alignment">
+  <Toggle value="left" aria-label="Align left"><AlignLeft /></Toggle>
+  <Toggle value="center" aria-label="Align center"><AlignCenter /></Toggle>
+</ToggleGroup>
+
+<ToggleGroup type="multiple" value={styles} onValueChange={setStyles} aria-label="Text style">…</ToggleGroup>
+```
+
+In HTML, the script flips `aria-pressed` on click. `data-type="single"` keeps exactly one pressed.
+
+## API
+
+### Toggle
+
+<!-- props: ToggleProps -->
+
+### ToggleGroup
+
+<!-- props: ToggleGroupProps -->
+
+## Accessibility
+
+- State is exposed with `aria-pressed`, which screen readers announce as "pressed" or "not pressed".
+- Icon-only toggles need `aria-label`; the group needs `aria-label` too.
+
+<!-- docs/components/tooltip.md -->
+
+# Tooltip
+
+> A short text label shown on hover and keyboard focus. Pure CSS, no script needed.
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Copy link" data-bk-tooltip="Copy link"><svg class="bk-icon" aria-hidden="true"><use href="#i-link"/></svg></button>
+  <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Add to favourites" data-bk-tooltip="Add to favourites"><svg class="bk-icon" aria-hidden="true"><use href="#i-heart"/></svg></button>
+  <button class="bk-button" data-variant="outline" data-size="icon" type="button" aria-label="Delete" data-bk-tooltip="Delete" data-bk-tooltip-side="bottom"><svg class="bk-icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Tooltip, Button } from 'bento-shad-ui/react';
+
+<Tooltip content="Copy link">
+  <Button variant="outline" size="icon" aria-label="Copy link"><Link2 /></Button>
+</Tooltip>
+```
+
+```html
+<button class="bk-button" aria-label="Copy link" data-bk-tooltip="Copy link" data-bk-tooltip-side="bottom">…</button>
+```
+
+## API
+
+<!-- props: TooltipProps -->
+
+## Accessibility
+
+- The tooltip is drawn by CSS from the attribute, so screen readers don't read it. Always give the element an accessible name (`aria-label` or visible text).
+- It appears on keyboard focus (`:focus-visible`) as well as hover.
+- Plain text only. For links or buttons inside a floating panel, use a [Popover](popover.md).
+
+<!-- docs/components/calendar.md -->
+
+# Calendar
+
+> Month calendar for picking one day or a range, with keyboard navigation and localised names.
+
+```html
+<div class="bk-calendar" data-mode="range" aria-label="March 2026">
+  <div class="bk-calendar-head">
+    <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Previous month"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+    <span class="bk-calendar-title">March 2026</span>
+    <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Next month"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+  </div>
+  <div class="bk-calendar-grid">
+    <span class="bk-calendar-weekday">Mo</span><span class="bk-calendar-weekday">Tu</span><span class="bk-calendar-weekday">We</span><span class="bk-calendar-weekday">Th</span><span class="bk-calendar-weekday">Fr</span><span class="bk-calendar-weekday">Sa</span><span class="bk-calendar-weekday">Su</span>
+    <button class="bk-calendar-day" data-outside tabindex="-1">23</button><button class="bk-calendar-day" data-outside tabindex="-1">24</button><button class="bk-calendar-day" data-outside tabindex="-1">25</button><button class="bk-calendar-day" data-outside tabindex="-1">26</button><button class="bk-calendar-day" data-outside tabindex="-1">27</button><button class="bk-calendar-day" data-outside tabindex="-1">28</button><button class="bk-calendar-day">1</button>
+    <button class="bk-calendar-day">2</button><button class="bk-calendar-day">3</button><button class="bk-calendar-day">4</button><button class="bk-calendar-day">5</button><button class="bk-calendar-day">6</button><button class="bk-calendar-day">7</button><button class="bk-calendar-day">8</button>
+    <button class="bk-calendar-day" data-today>9</button><button class="bk-calendar-day">10</button><button class="bk-calendar-day">11</button><button class="bk-calendar-day" data-range="start" aria-selected="true">12</button><button class="bk-calendar-day" data-range="middle">13</button><button class="bk-calendar-day" data-range="middle">14</button><button class="bk-calendar-day" data-range="middle">15</button>
+    <button class="bk-calendar-day" data-range="end" aria-selected="true">16</button><button class="bk-calendar-day">17</button><button class="bk-calendar-day">18</button><button class="bk-calendar-day">19</button><button class="bk-calendar-day">20</button><button class="bk-calendar-day">21</button><button class="bk-calendar-day">22</button>
+    <button class="bk-calendar-day">23</button><button class="bk-calendar-day">24</button><button class="bk-calendar-day">25</button><button class="bk-calendar-day">26</button><button class="bk-calendar-day">27</button><button class="bk-calendar-day">28</button><button class="bk-calendar-day">29</button>
+    <button class="bk-calendar-day">30</button><button class="bk-calendar-day">31</button><button class="bk-calendar-day" data-outside tabindex="-1">1</button><button class="bk-calendar-day" data-outside tabindex="-1">2</button><button class="bk-calendar-day" data-outside tabindex="-1">3</button><button class="bk-calendar-day" data-outside tabindex="-1">4</button><button class="bk-calendar-day" data-outside tabindex="-1">5</button>
+  </div>
+</div>
+```
+
+Click two days to pick a range. The HTML version is static markup that the script makes selectable; the React component also builds the month and moves between months.
+
+## Usage
+
+```tsx
+import { Calendar, type DateRange } from 'bento-shad-ui/react';
+
+const [range, setRange] = useState<DateRange | null>(null);
+<Calendar mode="range" value={range} onValueChange={setRange} />
+
+<Calendar
+  defaultValue={new Date()}
+  isDisabled={(d) => d < startOfToday}
+  weekStartsOn={0}
+  locale="pt-PT"
+/>
+```
+
+Helpers for building your own views: `getMonthGrid(year, month, weekStartsOn)` returns the 42 days of a month (6 weeks, with outside days), `toDateKey(date)` gives `YYYY-MM-DD` in local time, and `isSameDay(a, b)` compares dates.
+
+## API
+
+<!-- props: CalendarProps -->
+
+In HTML, `data-mode="range"` enables range picking and the calendar fires `bk:change` with `{ start, end }` day numbers.
+
+## Accessibility
+
+- Arrow keys move by day (←/→) and week (↑/↓); Enter or Space picks.
+- Each day has a full label ("Thursday 12 March 2026") and `aria-pressed` when selected.
+- The month title is a live region, so month changes are announced.
+
+<!-- docs/components/checkbox.md -->
+
+# Checkbox
+
+> Native checkbox with checked, unchecked and indeterminate states, with optional label and description.
+
+```html
+<div class="bk-stack" style="width: 300px">
+  <label class="bk-option"><input class="bk-checkbox" type="checkbox" data-indeterminate><span class="bk-option-text"><span>All extras</span></span></label>
+  <label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span class="bk-option-text"><span>Window seat</span><span>Free on flights over 2 hours</span></span></label>
+  <label class="bk-option"><input class="bk-checkbox" type="checkbox"><span class="bk-option-text"><span>Extra checked bag</span><span>€35 each way</span></span></label>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Checkbox } from 'bento-shad-ui/react';
+
+<Checkbox label="Window seat" description="Free on flights over 2 hours" defaultChecked />
+<Checkbox label="All extras" indeterminate={some && !all} checked={all} onCheckedChange={setAll} />
+<Checkbox aria-label="Select row" />
+```
+
+With `label`, the checkbox is wrapped in a clickable `<label class="bk-option">` row. Without it, you get the bare input.
+
+## API
+
+<!-- props: CheckboxProps -->
+
+### HTML
+
+| Class or attribute | Use |
+|---|---|
+| `bk-checkbox` | The input |
+| `bk-option` / `bk-option-text` | Label row; first span is the label, second the description |
+| `data-indeterminate` | The script sets `indeterminate` on load |
+
+## Accessibility
+
+- Space toggles. The whole label row is clickable.
+- `indeterminate` is announced as "mixed".
+
+<!-- docs/components/choice-card.md -->
+
+# Choice card
+
+> A selectable card holding a radio or checkbox, for plans, shipping options and similar choices.
+
+```html
+<fieldset class="bk-fieldset">
+  <legend>Plan</legend>
+  <div class="bk-form-row">
+    <label class="bk-choice"><input class="bk-radio" type="radio" name="cc-plan" checked><span class="bk-option-text"><span>Free</span><span>3 trips, 1 traveller</span></span><span class="bk-choice-price">€0</span></label>
+    <label class="bk-choice"><input class="bk-radio" type="radio" name="cc-plan"><span class="bk-option-text"><span>Plus</span><span>Unlimited trips, 6 travellers</span></span><span class="bk-choice-price">€4/mo</span></label>
+  </div>
+</fieldset>
+```
+
+## Usage
+
+```tsx
+import { RadioGroup, ChoiceCard } from 'bento-shad-ui/react';
+
+<RadioGroup legend="Plan" defaultValue="free">
+  <ChoiceCard value="free" label="Free" description="3 trips, 1 traveller" aside="€0" />
+  <ChoiceCard value="plus" label="Plus" description="Unlimited trips, 6 travellers" aside="€4/mo" />
+</RadioGroup>
+
+<ChoiceCard type="checkbox" label="Travel insurance" aside="€12" />
+```
+
+## API
+
+<!-- props: ChoiceCardProps -->
+
+The selected card gets a 2px outline in `--foreground` through `:has(:checked)`.
+
+## Accessibility
+
+- The whole card is the label, so clicking anywhere selects it. Keyboard behaviour is the native radio or checkbox behaviour.
+
+<!-- docs/components/dropzone.md -->
+
+# Dropzone
+
+> Drag-and-drop file area backed by a real file input, so click and keyboard work too.
+
+```html
+<label class="bk-dropzone" style="width: 340px">
+  <input type="file" multiple accept="image/*,.pdf">
+  <svg class="bk-icon" data-size="lg" aria-hidden="true"><use href="#i-upload"/></svg>
+  <span class="bk-small">Drop files or click to upload</span>
+  <span class="bk-caption">PNG, JPG or PDF, up to 10 MB</span>
+  <span class="bk-dropzone-files"></span>
+</label>
+```
+
+## Usage
+
+```tsx
+import { Dropzone } from 'bento-shad-ui/react';
+import { Upload } from 'lucide-react';
+
+<Dropzone multiple accept="image/*,.pdf" icon={<Upload />} hint="PNG, JPG or PDF, up to 10 MB" onFiles={(files) => upload(files)} />
+```
+
+The component shows the drag-over state and the chosen file names. Size and type limits are up to your upload code: `accept` is only a hint to the file picker.
+
+## API
+
+<!-- props: DropzoneProps -->
+
+## Accessibility
+
+- The real `<input type="file">` covers the zone, so it's reachable with Tab and opens with Enter or Space.
+- Announce upload results (success or errors) with a [Toast](toast.md) or an [Alert](alert.md).
+
+<!-- docs/components/field.md -->
+
+# Field
+
+> Label, control, help text and error message, with ids and ARIA wired for you.
+
+```html
+<div class="bk-form" style="width: 320px">
+  <div class="bk-field">
+    <label class="bk-label" for="fd-email">Email</label>
+    <input class="bk-input" id="fd-email" type="email" placeholder="you@example.com" aria-describedby="fd-email-d">
+    <p class="bk-field-description" id="fd-email-d">We'll send the itinerary here.</p>
+  </div>
+  <div class="bk-field">
+    <label class="bk-label" for="fd-code">Promo code</label>
+    <input class="bk-input" id="fd-code" value="SUMMER" aria-invalid="true" aria-describedby="fd-code-e">
+    <p class="bk-field-error" id="fd-code-e">This code expired on 31 August.</p>
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Field, Input } from 'bento-shad-ui/react';
+
+<Field label="Email" description="We'll send the itinerary here." error={errors.email} required>
+  <Input type="email" name="email" />
+</Field>
+```
+
+`Field` generates an id (or uses yours), connects `<label for>`, points `aria-describedby` at the description and error, sets `aria-invalid` when there's an error, and passes `required` to the control. It works with any single control: `Input`, `Textarea`, `Select`, `Slider`.
+
+### With react-hook-form
+
+```tsx
+<Field label="Email" error={formState.errors.email?.message}>
+  <Input type="email" {...register('email', { required: 'Enter your email' })} />
+</Field>
+```
+
+## Examples
+
+### Form layout
+
+```html
+<form class="bk-form" onsubmit="event.preventDefault()">
+  <div class="bk-form-row">
+    <div class="bk-field"><label class="bk-label" for="fl-first">First name</label><input class="bk-input" id="fl-first" autocomplete="given-name"></div>
+    <div class="bk-field"><label class="bk-label" for="fl-last">Last name</label><input class="bk-input" id="fl-last" autocomplete="family-name"></div>
+  </div>
+  <div class="bk-field"><label class="bk-label" for="fl-mail">Email</label><input class="bk-input" id="fl-mail" type="email" autocomplete="email"></div>
+  <button class="bk-button" type="submit">Create account</button>
+</form>
+```
+
+## API
+
+<!-- props: FieldProps -->
+
+### HTML
+
+| Class | Use |
+|---|---|
+| `bk-field` | Wrapper: label, control, help, error (8px gap) |
+| `bk-label` | Label text |
+| `bk-field-description` | Help text, linked with `aria-describedby` |
+| `bk-field-error` | Error text, linked with `aria-describedby`; set `aria-invalid="true"` on the control |
+| `bk-form` | Vertical stack of fields (16px gap) |
+| `bk-form-row` | Fields side by side, wrapping below 160px each |
+| `bk-fieldset` | Unstyled `<fieldset>` with a styled `<legend>` |
+
+## Accessibility
+
+- Every control needs a label. Use `aria-label` only when a visible label is impossible.
+- Show errors after the user leaves the field or submits, not on every keystroke.
+- Errors say what's wrong and how to fix it ("This code expired on 31 August"), not just "Invalid".
+
+<!-- docs/components/input.md -->
+
+# Input
+
+> Single-line text input. Supports every native type, with focus, invalid and disabled states.
+
+```html
+<div class="bk-stack" style="width: 300px">
+  <input class="bk-input" type="email" placeholder="you@example.com" aria-label="Email">
+  <input class="bk-input" value="SUMMER" aria-invalid="true" aria-label="Promo code">
+  <input class="bk-input" value="Read only, disabled" disabled aria-label="Disabled example">
+</div>
+```
+
+## Usage
+
+```tsx
+import { Input, Field } from 'bento-shad-ui/react';
+
+<Field label="Email"><Input type="email" name="email" /></Field>
+<Input invalid aria-label="Promo code" />
+```
+
+```html
+<input class="bk-input" type="email" aria-label="Email">
+```
+
+## API
+
+<!-- props: InputProps -->
+
+The input is 40px tall with a 3px focus ring in `--ring`. Its border uses `--input`, which is tested to reach 3:1 contrast against the card and the page.
+
+## Accessibility
+
+- Pair it with a label: `Field`, `<label for>`, or `aria-label`.
+- Use the right `type` and `autocomplete` (`email`, `tel`, `one-time-code`…) so phones show the right keyboard and autofill works.
+- Use `aria-invalid` (or `invalid`) together with a visible error message, never colour alone.
+
+<!-- docs/components/input-group.md -->
+
+# Input group
+
+> An input with an icon at the start and a hint or button at the end, such as a search field.
+
+```html
+<div class="bk-stack" style="width: 320px">
+  <div class="bk-input-group">
+    <svg class="bk-icon" aria-hidden="true"><use href="#i-search"/></svg>
+    <input class="bk-input" type="search" placeholder="Search trips" aria-label="Search trips">
+    <span class="bk-input-end bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+  </div>
+  <div class="bk-input-group">
+    <svg class="bk-icon" aria-hidden="true"><use href="#i-map-pin"/></svg>
+    <input class="bk-input" value="Lisbon, Portugal" aria-label="Location">
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { InputGroup, Input, KbdGroup, Kbd } from 'bento-shad-ui/react';
+import { Search } from 'lucide-react';
+
+<InputGroup icon={<Search />} end={<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>}>
+  <Input type="search" placeholder="Search trips" aria-label="Search trips" />
+</InputGroup>
+```
+
+## API
+
+<!-- props: InputGroupProps -->
+
+| HTML | Use |
+|---|---|
+| `bk-input-group` | Wrapper |
+| `.bk-icon` or `bk-input-start` | Leading icon; the input gets extra left padding |
+| `bk-input-end` | Trailing content, for example a `bk-kbd-group` or an icon button |
+
+## Accessibility
+
+- The icon is decorative (`aria-hidden`). The input still needs a label or `aria-label`.
+
+<!-- docs/components/input-otp.md -->
+
+# Input OTP
+
+> One-time code entry: digits only, auto-advance, backspace to go back, and paste to fill every slot.
+
+```html
+<div class="bk-stack" style="width: 320px">
+  <div class="bk-otp" role="group" aria-label="Verification code">
+    <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"></div>
+    <span class="bk-otp-separator" aria-hidden="true"></span>
+    <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
+  </div>
+  <p class="bk-field-description">Type or paste the 6-digit code sent to m•••@example.com.</p>
+</div>
+```
+
+## Usage
+
+```tsx
+import { InputOTP } from 'bento-shad-ui/react';
+
+<InputOTP groups={[3, 3]} aria-label="Verification code" onComplete={(code) => verify(code)} />
+<InputOTP groups={[4]} value={pin} onValueChange={setPin} aria-label="PIN" />
+```
+
+## API
+
+<!-- props: InputOTPProps -->
+
+## Accessibility
+
+- Each slot has a label ("Digit 2 of 6"); the group has `aria-label`.
+- The first slot uses `autocomplete="one-time-code"`, so phones can fill codes from SMS.
+- ←/→ move between slots; Backspace on an empty slot goes back.
+
+<!-- docs/components/radio-group.md -->
+
+# Radio group
+
+> One choice from a short list, as a native fieldset of radios.
+
+```html
+<fieldset class="bk-radio-group" style="width: 260px">
+  <legend class="bk-label" style="margin-bottom: 4px">Cabin class</legend>
+  <label class="bk-option"><input class="bk-radio" type="radio" name="rg-cabin" checked><span>Economy</span></label>
+  <label class="bk-option"><input class="bk-radio" type="radio" name="rg-cabin"><span>Premium economy</span></label>
+  <label class="bk-option"><input class="bk-radio" type="radio" name="rg-cabin"><span>Business</span></label>
+</fieldset>
+```
+
+## Usage
+
+```tsx
+import { RadioGroup, Radio } from 'bento-shad-ui/react';
+
+<RadioGroup legend="Cabin class" value={cabin} onValueChange={setCabin}>
+  <Radio value="economy" label="Economy" />
+  <Radio value="premium" label="Premium economy" />
+  <Radio value="business" label="Business" description="Lie-flat seats" />
+</RadioGroup>
+```
+
+`RadioGroup` gives every `Radio` the same `name` and keeps the value. For radios that look like cards, use [Choice card](choice-card.md) inside the same group.
+
+## API
+
+### RadioGroup
+
+<!-- props: RadioGroupProps -->
+
+### Radio
+
+<!-- props: RadioProps -->
+
+## Accessibility
+
+- Arrow keys move between radios in a group; Tab moves in and out of the group (native behaviour).
+- The `legend` names the group. Use `aria-label` on `RadioGroup` if you hide it.
+
+<!-- docs/components/select.md -->
+
+# Select
+
+> A styled native select. The most reliable choice on phones, with screen readers and in forms.
+
+```html
+<div class="bk-field" style="width: 280px">
+  <label class="bk-label" for="sl-dest">Destination</label>
+  <select class="bk-select" id="sl-dest">
+    <optgroup label="Portugal"><option>Lisbon</option><option>Porto</option></optgroup>
+    <optgroup label="Spain"><option>Madrid</option><option>Seville</option></optgroup>
+  </select>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Field, Select } from 'bento-shad-ui/react';
+
+<Field label="Destination">
+  <Select value={city} onChange={(e) => setCity(e.target.value)}>
+    <optgroup label="Portugal"><option>Lisbon</option><option>Porto</option></optgroup>
+  </Select>
+</Field>
+```
+
+The open list is the operating system's own picker, so it works with touch, keyboard and screen readers everywhere. For a searchable list, use a [Command](command.md) inside a [Popover](popover.md).
+
+## API
+
+<!-- props: SelectProps -->
+
+<!-- docs/components/slider.md -->
+
+# Slider
+
+> Pick a number in a range. A native range input with a filled track and a live value.
+
+```html
+<div class="bk-field" style="width: 300px">
+  <div class="bk-row bk-between"><label class="bk-label" for="sd-price">Max nightly price</label><output class="bk-small" for="sd-price">€140</output></div>
+  <input class="bk-slider" id="sd-price" type="range" min="40" max="400" step="10" value="140" data-prefix="€">
+</div>
+```
+
+## Usage
+
+```tsx
+import { Field, Slider } from 'bento-shad-ui/react';
+
+const [price, setPrice] = useState(140);
+<Field label={`Max nightly price: €${price}`}>
+  <Slider min={40} max={400} step={10} value={price} onValueChange={setPrice} />
+</Field>
+```
+
+In HTML, the script keeps the filled part of the track (`--val`) and any `<output for="id">` in sync. `data-prefix` and `data-suffix` add text around the value.
+
+## API
+
+<!-- props: SliderProps -->
+
+## Accessibility
+
+- Native range input: arrow keys step, Page Up/Down jump, Home/End go to the ends.
+- Show the current value as text (an `<output>` or the label) so it isn't conveyed by position alone.
+
+<!-- docs/components/switch.md -->
+
+# Switch
+
+> An on/off control for settings that apply immediately.
+
+```html
+<div class="bk-stack" style="width: 300px">
+  <label class="bk-switch-row"><span class="bk-option-text"><span>Price alerts</span><span>When a saved fare drops</span></span><input class="bk-switch" type="checkbox" role="switch" checked></label>
+  <label class="bk-switch-row"><span>Offline maps</span><input class="bk-switch" type="checkbox" role="switch" data-tone="brand" checked></label>
+  <label class="bk-switch-row"><span>Share location</span><input class="bk-switch" type="checkbox" role="switch"></label>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Switch } from 'bento-shad-ui/react';
+
+<Switch label="Price alerts" description="When a saved fare drops" checked={alerts} onCheckedChange={setAlerts} />
+<Switch tone="brand" aria-label="Offline maps" />
+```
+
+With `label`, the switch sits at the end of a full-width clickable row.
+
+## API
+
+<!-- props: SwitchProps -->
+
+## Accessibility
+
+- It's a native checkbox with `role="switch"`, so screen readers announce "on" or "off". Space toggles it.
+- Use a switch only for changes that take effect at once. Inside a form that needs saving, use a checkbox.
+
+<!-- docs/components/textarea.md -->
+
+# Textarea
+
+> Multi-line text input that resizes vertically.
+
+```html
+<div class="bk-field" style="width: 320px">
+  <label class="bk-label" for="ta-notes">Notes for the host</label>
+  <textarea class="bk-textarea" id="ta-notes" placeholder="Arrival time, allergies, anything else"></textarea>
+  <p class="bk-field-description">Up to 500 characters.</p>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Field, Textarea } from 'bento-shad-ui/react';
+
+<Field label="Notes for the host" description="Up to 500 characters.">
+  <Textarea maxLength={500} />
+</Field>
+```
+
+## API
+
+<!-- props: TextareaProps -->
+
+Minimum height 96px; `resize: vertical`.
+
+<!-- docs/components/accordion.md -->
+
+# Accordion
+
+> Collapsible sections built on native details and summary, so they work before JavaScript loads.
+
+```html
+<div class="bk-accordion">
+  <details class="bk-accordion-item" open><summary class="bk-accordion-trigger">Can I change my dates?</summary><div class="bk-accordion-content">Yes. Change them up to 48 hours before check-in at no cost.</div></details>
+  <details class="bk-accordion-item"><summary class="bk-accordion-trigger">How do shared payments work?</summary><div class="bk-accordion-content">Each traveller pays their share by card. The booking is confirmed when the last share is paid.</div></details>
+  <details class="bk-accordion-item"><summary class="bk-accordion-trigger">Do the maps work offline?</summary><div class="bk-accordion-content">On Plus, yes. Download a city from the trip page before you leave.</div></details>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Accordion, AccordionItem } from 'bento-shad-ui/react';
+
+<Accordion>
+  <AccordionItem title="Can I change my dates?" defaultOpen>Yes, up to 48 hours before check-in.</AccordionItem>
+  <AccordionItem title="How do shared payments work?" onOpenChange={(open) => track(open)}>…</AccordionItem>
+</Accordion>
+```
+
+To allow only one open item at a time, give the items the same `name` attribute (supported by current browsers for `<details>`).
+
+## API
+
+<!-- props: AccordionItemProps -->
+
+## Accessibility
+
+- Native `<details>`: Enter or Space toggles, and screen readers announce expanded or collapsed.
+- Browser find-in-page opens closed sections that contain the match.
+
+<!-- docs/components/avatar.md -->
+
+# Avatar
+
+> A person's photo or initials, with sizes, a status dot and overlapping groups.
+
+```html
+<div class="bk-row" style="--gap: 16px">
+  <span class="bk-avatar" data-size="sm">MK</span>
+  <span class="bk-avatar" data-status="online">JR</span>
+  <span class="bk-avatar" data-size="lg" data-status="busy">AS</span>
+  <span class="bk-avatar" data-size="xl" data-shape="square">LT</span>
+  <span class="bk-avatar-group">
+    <span class="bk-avatar" style="background: var(--tint-peach); color: var(--tint-peach-foreground)">MK</span>
+    <span class="bk-avatar" style="background: var(--tint-sky); color: var(--tint-sky-foreground)">JR</span>
+    <span class="bk-avatar" style="background: var(--tint-mint); color: var(--tint-mint-foreground)">AS</span>
+    <span class="bk-avatar">+3</span>
+  </span>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Avatar, AvatarGroup } from 'bento-shad-ui/react';
+
+<Avatar src={user.photo} alt={user.name} fallback="MK" size="lg" status="online" />
+<AvatarGroup>
+  <Avatar fallback="MK" />
+  <Avatar fallback="JR" />
+  <Avatar fallback="+3" />
+</AvatarGroup>
+```
+
+If the image fails to load, `fallback` is shown instead.
+
+## API
+
+<!-- props: AvatarProps -->
+
+## Accessibility
+
+- Give photos `alt` text with the person's name, unless the name is already written next to the avatar (then use `alt=""`).
+- The status dot is visual only. Say the status in text nearby if it matters.
+
+<!-- docs/components/badge.md -->
+
+# Badge
+
+> A small label for status, counts and categories. Eight variants and an optional dot.
+
+```html
+<div class="bk-row" style="--gap: 6px">
+  <span class="bk-badge">Default</span>
+  <span class="bk-badge" data-variant="brand">New</span>
+  <span class="bk-badge" data-variant="secondary">Draft</span>
+  <span class="bk-badge" data-variant="outline">3 nights</span>
+  <span class="bk-badge" data-variant="success" data-dot>Paid</span>
+  <span class="bk-badge" data-variant="warning" data-dot>Pending</span>
+  <span class="bk-badge" data-variant="info">Info</span>
+  <span class="bk-badge" data-variant="destructive">Overdue</span>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Badge } from 'bento-shad-ui/react';
+
+<Badge variant="success" dot>Paid</Badge>
+```
+
+```html
+<span class="bk-badge" data-variant="success" data-dot>Paid</span>
+```
+
+## API
+
+<!-- props: BadgeProps -->
+
+## Accessibility
+
+- The text carries the meaning; colour only reinforces it. Write "Paid", not just a green dot.
+- Success, warning and info text are tested at 4.5:1 or more on cards in both themes.
+
+<!-- docs/components/bar-chart.md -->
+
+# Bar chart
+
+> A to-scale bar chart drawn with CSS, plus a meter for parts of a whole and a legend.
+
+```html
+<div class="bk-chart" role="img" aria-label="Bookings per day: Mon 32, Tue 45, Wed 28, Thu 52, Fri 61, Sat 74, Sun 38">
+  <div class="bk-bars">
+    <div class="bk-bar" data-muted style="--v: 40%" data-value="32"></div>
+    <div class="bk-bar" data-muted style="--v: 56.25%" data-value="45"></div>
+    <div class="bk-bar" data-muted style="--v: 35%" data-value="28"></div>
+    <div class="bk-bar" data-muted style="--v: 65%" data-value="52"></div>
+    <div class="bk-bar" data-muted style="--v: 76.25%" data-value="61"></div>
+    <div class="bk-bar" style="--v: 92.5%" data-value="74" data-show></div>
+    <div class="bk-bar" data-muted style="--v: 47.5%" data-value="38"></div>
+  </div>
+  <div class="bk-bar-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+</div>
+```
+
+The scale tops out at 80, and gridlines mark 20, 40 and 60. Hover a bar to see its value.
+
+## Usage
+
+```tsx
+import { BarChart } from 'bento-shad-ui/react';
+
+<BarChart
+  data={[{ label: 'Mon', value: 32 }, { label: 'Tue', value: 45 }, { label: 'Sat', value: 74 }]}
+  max={80}
+  formatValue={(v) => `${v} bookings`}
+/>
+```
+
+`BarChart` computes each bar's height from `max` (or the largest value), emphasises the highest bar and writes an `aria-label` listing every value. `barHeights(data, max)` returns the percentages if you need them.
+
+## Meter and legend
+
+```html
+<div class="bk-stack" style="width: 320px">
+  <div class="bk-meter" role="img" aria-label="Stay 46%, travel 22%, food 12%, unspent 20%">
+    <span style="--v: 46%; --c: var(--chart-1)"></span><span style="--v: 22%; --c: var(--chart-2)"></span><span style="--v: 12%; --c: var(--chart-3)"></span>
+  </div>
+  <div class="bk-legend"><span style="--c: var(--chart-1)">Stay 46%</span><span style="--c: var(--chart-2)">Travel 22%</span><span style="--c: var(--chart-3)">Food 12%</span><span style="--c: var(--muted)">Unspent 20%</span></div>
+</div>
+```
+
+```tsx
+import { Meter, Legend } from 'bento-shad-ui/react';
+
+const parts = [
+  { label: 'Stay', value: 46, color: 'var(--chart-1)' },
+  { label: 'Travel', value: 22, color: 'var(--chart-2)' },
+];
+<Meter segments={parts} />
+<Legend items={parts.map((p) => ({ label: `${p.label} ${p.value}%`, color: p.color }))} />
+```
+
+## API
+
+### BarChart
+
+<!-- props: BarChartProps -->
+
+### Meter
+
+<!-- props: MeterProps -->
+
+For line, area or stacked charts, use a chart library (Recharts, Chart.js) with the `--chart-1` to `--chart-5` tokens so colours match both themes.
+
+## Accessibility
+
+- Charts render as `role="img"` with a text summary. Keep the summary specific: the values, not "a chart".
+- Don't rely on colour alone to tell series apart; label them in a legend or in text.
+
+<!-- docs/components/list.md -->
+
+# List
+
+> Rows with a leading avatar or icon, a title, a description and a trailing meta, for activity feeds and settings.
+
+```html
+<ul class="bk-list" style="width: 340px">
+  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">MK</span><div class="bk-list-item-text"><span>Maya booked Lisbon</span><span>Hotel Chiado, 4 nights</span></div><span class="bk-list-item-meta">2m</span></li>
+  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">JR</span><div class="bk-list-item-text"><span>Jonas added a day trip</span><span>Sintra, Wed 14</span></div><span class="bk-list-item-meta">1h</span></li>
+  <li class="bk-list-item"><span class="bk-avatar" data-size="sm">AS</span><div class="bk-list-item-text"><span>Amira left a note</span><span>"Book the tram early"</span></div><span class="bk-list-item-meta">3h</span></li>
+</ul>
+```
+
+## Usage
+
+```tsx
+import { List, ListItem, Avatar } from 'bento-shad-ui/react';
+
+<List>
+  <ListItem leading={<Avatar size="sm" fallback="MK" />} title="Maya booked Lisbon" description="Hotel Chiado, 4 nights" meta="2m" />
+</List>
+```
+
+## API
+
+<!-- props: ListItemProps -->
+
+`List` renders `<ul class="bk-list">`. Long titles are cut with an ellipsis.
+
+<!-- docs/components/progress.md -->
+
+# Progress
+
+> Linear progress bars in three tones, and a ring for a single percentage.
+
+```html
+<div class="bk-row" style="--gap: 28px">
+  <div class="bk-stack" style="width: 260px; --gap: 14px">
+    <div class="bk-progress" role="progressbar" aria-label="Packing list" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"><span style="--v: 68%"></span></div>
+    <div class="bk-progress" data-tone="brand" role="progressbar" aria-label="Upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span style="--v: 40%"></span></div>
+    <div class="bk-progress" data-tone="success" role="progressbar" aria-label="Done" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><span style="--v: 100%"></span></div>
+  </div>
+  <div class="bk-ring" style="--p: 71" role="img" aria-label="71% of budget used"><span aria-hidden="true">71%</span></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Progress, Ring } from 'bento-shad-ui/react';
+
+<Progress value={17} max={25} label="Packing list" />
+<Progress value={uploaded} tone="brand" label="Upload" />
+<Ring value={71} size={64} label="71% of budget used" />
+```
+
+## API
+
+### Progress
+
+<!-- props: ProgressProps -->
+
+### Ring
+
+<!-- props: RingProps -->
+
+## Accessibility
+
+- `Progress` sets `role="progressbar"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; `label` names it.
+- `Ring` is a picture of one number: its `label` should state that number and what it means.
+
+<!-- docs/components/stat.md -->
+
+# Stat
+
+> A key number with its label, a change versus a previous period, and an optional sparkline.
+
+```html
+<div class="bk-tile" style="width: 300px">
+  <div class="bk-stat">
+    <span class="bk-stat-label">Bookings this month</span>
+    <span class="bk-stat-value">1,284</span>
+    <span class="bk-stat-delta" data-trend="up">+12.4% vs February</span>
+  </div>
+  <svg class="bk-spark" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="Bookings rose from 12 to 31 a day over the week">
+    <polygon points="0,30 16.67,21.16 33.33,25.58 50,15.26 66.67,19.68 83.33,7.89 100,2 100,32 0,32"/>
+    <polyline points="0,30 16.67,21.16 33.33,25.58 50,15.26 66.67,19.68 83.33,7.89 100,2"/>
+    <circle cx="100" cy="2" r="2.5"/>
+  </svg>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Stat, Sparkline } from 'bento-shad-ui/react';
+
+<Stat label="Bookings this month" value="1,284" delta="+12.4% vs February" trend="up" icon={<Calendar />} />
+<Sparkline data={[12, 18, 15, 22, 19, 27, 31]} label="Bookings rose from 12 to 31 a day over the week" />
+```
+
+`Sparkline` scales the line to the data's own minimum and maximum. `sparklinePoints(data, width, height, padding)` returns the coordinates if you draw your own.
+
+## API
+
+### Stat
+
+<!-- props: StatProps -->
+
+### Sparkline
+
+<!-- props: SparklineProps -->
+
+## Accessibility
+
+- `trend` only changes colour; write the direction in `delta` ("+12.4%", "−3 pts").
+- `Sparkline` requires `label`: describe what the line shows, because the shape alone is invisible to screen readers.
+
+<!-- docs/components/table.md -->
+
+# Table
+
+> A data table that scrolls sideways inside its wrapper on narrow screens, with tabular numbers.
+
+```html
+<div class="bk-table-wrap">
+  <table class="bk-table">
+    <thead><tr><th>Guest</th><th>Trip</th><th>Status</th><th data-align="end">Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Maya Kim</td><td>Lisbon</td><td><span class="bk-badge" data-variant="success">Paid</span></td><td data-align="end">€640.00</td></tr>
+      <tr><td>Jonas Ruiz</td><td>Porto</td><td><span class="bk-badge" data-variant="warning">Pending</span></td><td data-align="end">€410.00</td></tr>
+      <tr><td>Amira Saleh</td><td>Seville</td><td><span class="bk-badge" data-variant="outline">Draft</span></td><td data-align="end">€385.50</td></tr>
+    </tbody>
+    <caption>3 bookings this week</caption>
+  </table>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from 'bento-shad-ui/react';
+
+<Table>
+  <TableHeader>
+    <TableRow><TableHead>Guest</TableHead><TableHead align="end">Amount</TableHead></TableRow>
+  </TableHeader>
+  <TableBody>
+    {rows.map((r) => (
+      <TableRow key={r.id}><TableCell>{r.guest}</TableCell><TableCell align="end">{r.amount}</TableCell></TableRow>
+    ))}
+  </TableBody>
+  <TableCaption>3 bookings this week</TableCaption>
+</Table>
+```
+
+For sorting, filtering and paging, drive these parts from a headless table library such as TanStack Table, and add [Pagination](pagination.md).
+
+## API
+
+### Table
+
+<!-- props: TableProps -->
+
+### TableHead and TableCell
+
+<!-- props: TableCellProps -->
+
+`TableHeader`, `TableBody`, `TableFooter`, `TableRow` and `TableCaption` render their elements unchanged.
+
+## Accessibility
+
+- Use `TableHead` (`<th scope="col">`) for column headers and a `TableCaption` that says what the table shows.
+- Right-align numbers with `align="end"` so digits line up.
+
+<!-- docs/components/alert.md -->
+
+# Alert
+
+> An inline message about the current page, in five variants, with optional actions.
+
+```html
+<div class="bk-stack">
+  <div class="bk-alert" role="status"><svg class="bk-icon" aria-hidden="true"><use href="#i-info"/></svg><div class="bk-alert-title">Flight time changed</div><div class="bk-alert-description">TP 1351 now leaves at 09:15, 35 minutes later.</div></div>
+  <div class="bk-alert" data-variant="success" role="status"><svg class="bk-icon" aria-hidden="true"><use href="#i-check-circle"/></svg><div class="bk-alert-title">Booking confirmed</div><div class="bk-alert-description">Everyone has paid their share.</div></div>
+  <div class="bk-alert" data-variant="warning" role="status"><svg class="bk-icon" aria-hidden="true"><use href="#i-triangle"/></svg><div class="bk-alert-title">Passport expires soon</div><div class="bk-alert-description">Some countries need 6 months of validity.</div></div>
+  <div class="bk-alert" data-variant="destructive" role="alert"><svg class="bk-icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="bk-alert-title">Payment failed</div><div class="bk-alert-description">Your card was declined. Update it to keep the booking.</div><div class="bk-alert-actions"><button class="bk-button" data-variant="destructive" data-size="xs" type="button">Update card</button></div></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Alert, Button } from 'bento-shad-ui/react';
+import { TriangleAlert } from 'lucide-react';
+
+<Alert variant="warning" icon={<TriangleAlert />} title="Passport expires soon" actions={<Button size="xs">Renew</Button>}>
+  Some countries need 6 months of validity.
+</Alert>
+```
+
+Variants: `default`, `info`, `success`, `warning`, `destructive`.
+
+## API
+
+<!-- props: AlertProps -->
+
+## Accessibility
+
+- `destructive` uses `role="alert"`, so screen readers announce it right away; the others use `role="status"`, which is announced politely.
+- Use an alert for information about the page that stays until it's resolved. For short confirmations, use a [Toast](toast.md).
+
+<!-- docs/components/empty.md -->
+
+# Empty state
+
+> What to show when there's nothing yet. Say what will appear here and how to add the first item.
+
+```html
+<div class="bk-empty">
+  <span class="bk-empty-icon"><svg class="bk-icon" data-size="lg" aria-hidden="true"><use href="#i-plane"/></svg></span>
+  <h4 class="bk-empty-title">No trips yet</h4>
+  <p class="bk-empty-description">Trips you plan or get invited to show up here. Start with a city and dates.</p>
+  <div class="bk-empty-actions"><button class="bk-button" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-plus"/></svg>Plan a trip</button><button class="bk-button" data-variant="outline" type="button">Import booking</button></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Empty, Button } from 'bento-shad-ui/react';
+import { Plane, Plus } from 'lucide-react';
+
+<Empty
+  icon={<Plane />}
+  title="No trips yet"
+  description="Trips you plan or get invited to show up here. Start with a city and dates."
+  actions={<Button><Plus />Plan a trip</Button>}
+/>
+```
+
+## API
+
+<!-- props: EmptyProps -->
+
+## Writing it
+
+- Title: what's missing ("No trips yet"), not "Nothing here".
+- Description: what will show up here and how to get there.
+- One primary action. Use a second outline button only for a real alternative.
+
+<!-- docs/components/skeleton.md -->
+
+# Skeleton
+
+> A pulsing placeholder that holds the layout while content loads.
+
+```html
+<div class="bk-stack" style="width: 300px" aria-busy="true" aria-label="Loading booking">
+  <div class="bk-row" style="flex-wrap: nowrap; --gap: 10px"><span class="bk-skeleton" style="width: 40px; height: 40px; border-radius: 50%"></span><div class="bk-stack bk-grow" style="--gap: 6px"><span class="bk-skeleton" style="height: 12px; width: 70%"></span><span class="bk-skeleton" style="height: 12px; width: 45%"></span></div></div>
+  <span class="bk-skeleton" style="height: 72px; border-radius: var(--radius-xl)"></span>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Skeleton } from 'bento-shad-ui/react';
+
+<div aria-busy="true" aria-label="Loading booking">
+  <Skeleton width={40} height={40} circle />
+  <Skeleton width="70%" />
+  <Skeleton height={72} />
+</div>
+```
+
+## API
+
+<!-- props: SkeletonProps -->
+
+## Accessibility
+
+- Skeletons are `aria-hidden`. Put `aria-busy="true"` and a label on the region that's loading.
+- Shape skeletons like the real content, so the page doesn't jump when it arrives.
+- The pulse stops when the user prefers reduced motion.
+
+<!-- docs/components/spinner.md -->
+
+# Spinner
+
+> A small loading indicator that takes the current text colour.
+
+```html
+<div class="bk-row" style="--gap: 20px">
+  <span class="bk-spinner" data-size="sm" role="status" aria-label="Loading"></span>
+  <span class="bk-spinner" role="status" aria-label="Loading"></span>
+  <span class="bk-spinner" data-size="lg" role="status" aria-label="Loading" style="color: var(--brand)"></span>
+  <span class="bk-row bk-muted"><span class="bk-spinner" data-size="sm" aria-hidden="true"></span>Checking availability</span>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Spinner } from 'bento-shad-ui/react';
+
+<Spinner />
+<Spinner size="lg" label="Loading trips" />
+<span><Spinner size="sm" label="" /> Checking availability</span>
+```
+
+Inside a button, use `<Button loading>` instead.
+
+## API
+
+<!-- props: SpinnerProps -->
+
+## Accessibility
+
+- With a `label`, the spinner is a `status` that screen readers announce. Next to visible text, pass `label=""` to hide it from them.
+
+<!-- docs/components/toast.md -->
+
+# Toast
+
+> A short, temporary message in the corner of the screen, called from code with no provider needed.
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-variant="outline" type="button" data-bk-toast='{"title":"Trip saved","description":"Lisbon, 12–16 March","variant":"success"}'>Success</button>
+  <button class="bk-button" data-variant="outline" type="button" data-bk-toast='{"title":"Payment failed","description":"Your card was declined.","variant":"destructive"}'>Error</button>
+  <button class="bk-button" data-variant="ghost" type="button" data-bk-toast='{"title":"Link copied"}'>Default</button>
+</div>
+```
+
+## Usage
+
+```ts
+import { toast } from 'bento-shad-ui/react'; // or 'bento-shad-ui', or window.BentoUI.toast
+
+toast('Link copied');
+
+toast({ title: 'Trip saved', description: 'Lisbon, 12–16 March', variant: 'success' });
+
+const dismiss = toast({
+  title: 'Payment failed',
+  variant: 'destructive',
+  action: { label: 'Retry', onClick: retry },
+  duration: 8000,
+});
+dismiss(); // close early
+```
+
+```html
+<button class="bk-button" data-bk-toast='{"title":"Saved","variant":"success"}'>Save</button>
+```
+
+Toasts stack in the bottom-right corner, pause while hovered and close after 4.5 seconds. `duration: Infinity` keeps one open until it's dismissed.
+
+## API
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `title` | `string` | required | The message |
+| `description` | `string` | – | Second line |
+| `variant` | `'default' \| 'success' \| 'destructive'` | `'default'` | Icon and colour |
+| `duration` | `number` | `4500` | Milliseconds; `Infinity` keeps it open |
+| `action` | `{ label: string; onClick?: () => void }` | – | One button; clicking it also closes the toast |
+
+`toast()` returns a function that closes the toast. On the server it does nothing.
+
+## Accessibility
+
+- The container is a polite live region; destructive toasts use `role="alert"`.
+- Toasts disappear. Don't make a toast the only place for important information or the only way to undo something.
+
+<!-- docs/components/command.md -->
+
+# Command
+
+> A searchable list of actions and pages with keyboard navigation, inline or as a ⌘K palette.
+
+```html
+<div class="bk-command" data-inline>
+  <div class="bk-command-search"><svg class="bk-icon" aria-hidden="true"><use href="#i-search"/></svg><input class="bk-command-input" placeholder="Type a command or search" aria-label="Command"></div>
+  <div class="bk-command-list" role="listbox">
+    <div class="bk-command-group"><div class="bk-command-group-heading">Trips</div>
+      <div class="bk-command-item" role="option"><svg class="bk-icon" aria-hidden="true"><use href="#i-plane"/></svg>Lisbon, 12–16 March</div>
+      <div class="bk-command-item" role="option"><svg class="bk-icon" aria-hidden="true"><use href="#i-plane"/></svg>Porto, 2–5 April</div>
+    </div>
+    <div class="bk-command-group"><div class="bk-command-group-heading">Actions</div>
+      <div class="bk-command-item" role="option" data-keywords="new create"><svg class="bk-icon" aria-hidden="true"><use href="#i-plus"/></svg>New trip<span class="bk-kbd-group"><kbd class="bk-kbd">N</kbd></span></div>
+      <div class="bk-command-item" role="option" data-keywords="preferences"><svg class="bk-icon" aria-hidden="true"><use href="#i-sliders"/></svg>Settings</div>
+    </div>
+    <div class="bk-command-empty" hidden>No results.</div>
+  </div>
+</div>
+```
+
+Type to filter. This site's own search (⌘K) is the same component.
+
+## Usage
+
+```tsx
+import { Command, CommandDialog } from 'bento-shad-ui/react';
+
+const groups = [
+  { heading: 'Trips', items: [{ id: 'lis', label: 'Lisbon, 12–16 March', keywords: ['portugal'], onSelect: () => router.push('/trips/lis') }] },
+  { heading: 'Actions', items: [{ id: 'new', label: 'New trip', shortcut: ['N'], onSelect: createTrip }] },
+];
+
+<Command groups={groups} />
+
+const [open, setOpen] = useState(false); // ⌘K / Ctrl+K toggles it
+<CommandDialog open={open} onOpenChange={setOpen} groups={groups} />
+```
+
+`filterCommandGroups(groups, query)` is exported if you build your own list.
+
+### HTML
+
+```html
+<button class="bk-button" data-bk-open="cmd">Search</button>
+<dialog class="bk-command" id="cmd" data-bk-hotkey aria-label="Search">
+  <div class="bk-command-search"><input class="bk-command-input" aria-label="Search"></div>
+  <div class="bk-command-list" role="listbox">
+    <div class="bk-command-group"><div class="bk-command-group-heading">Trips</div>
+      <a class="bk-command-item" role="option" href="/trips/lisbon" data-keywords="portugal">Lisbon</a>
+    </div>
+    <div class="bk-command-empty" hidden>No results.</div>
+  </div>
+</dialog>
+```
+
+`data-bk-hotkey` makes ⌘K / Ctrl+K open it. Items can be links or have click handlers; `data-keywords` adds hidden search terms.
+
+## API
+
+### Command
+
+<!-- props: CommandProps -->
+
+### CommandDialog
+
+<!-- props: CommandDialogProps -->
+
+## Accessibility
+
+- The input is a combobox that controls the list. `aria-activedescendant` points at the highlighted option, so screen readers follow it while focus stays in the input.
+- ↑/↓ move, Enter runs the highlighted item, Esc closes the dialog.
+
+<!-- docs/components/dialog.md -->
+
+# Dialog
+
+> A modal window on the native dialog element, with focus trapping, Esc to close and an alert variant for confirmations.
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-variant="outline" type="button" data-bk-open="dg-edit">Edit profile</button>
+  <button class="bk-button" data-variant="destructive" type="button" data-bk-open="dg-delete">Delete trip</button>
+</div>
+<dialog class="bk-dialog" id="dg-edit" aria-labelledby="dg-edit-t">
+  <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" type="button" data-bk-close aria-label="Close"><svg class="bk-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="dg-edit-t">Edit profile</h2><p class="bk-dialog-description">Your name shows on shared trips.</p></div>
+  <div class="bk-dialog-body"><div class="bk-field"><label class="bk-label" for="dg-name">Name</label><input class="bk-input" id="dg-name" value="Maya Kim" autofocus></div></div>
+  <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" type="button" data-bk-close>Cancel</button><button class="bk-button" type="button" data-bk-close data-bk-toast='{"title":"Profile saved","variant":"success"}'>Save</button></div>
+</dialog>
+<dialog class="bk-dialog" data-variant="alert" id="dg-delete" role="alertdialog" aria-labelledby="dg-delete-t" aria-describedby="dg-delete-d">
+  <span class="bk-dialog-icon"><svg class="bk-icon" data-size="lg" aria-hidden="true"><use href="#i-trash"/></svg></span>
+  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="dg-delete-t">Delete "Lisbon, 4 nights"?</h2><p class="bk-dialog-description" id="dg-delete-d">The plan and notes are removed for all 6 travellers. This can't be undone.</p></div>
+  <div class="bk-dialog-footer"><button class="bk-button" data-variant="outline" type="button" data-bk-close autofocus>Keep trip</button><button class="bk-button" data-variant="destructive" type="button" data-bk-close="delete">Delete trip</button></div>
+</dialog>
+```
+
+## Usage
+
+```tsx
+import { Dialog, Button, Field, Input } from 'bento-shad-ui/react';
+
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Edit profile</Button>
+<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Edit profile"
+  description="Your name shows on shared trips."
+  footer={<><Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={save}>Save</Button></>}
+>
+  <Field label="Name"><Input defaultValue="Maya Kim" autoFocus /></Field>
+</Dialog>
+```
+
+### Confirmation
+
+```tsx
+<Dialog
+  variant="alert"
+  icon={<Trash2 />}
+  open={confirming}
+  onOpenChange={setConfirming}
+  title={`Delete "${trip.name}"?`}
+  description="The plan and notes are removed for all travellers. This can't be undone."
+  footer={<><Button variant="outline" onClick={() => setConfirming(false)}>Keep trip</Button><Button variant="destructive" onClick={remove}>Delete trip</Button></>}
+/>
+```
+
+Alert dialogs are narrower, hide the × button and ignore backdrop clicks, so the choice is deliberate.
+
+### HTML
+
+Any button with `data-bk-open="id"` opens `<dialog id="id">`. `data-bk-close` inside closes it, and `data-bk-close="value"` sets the dialog's `returnValue`. Clicking the backdrop closes default dialogs.
+
+## API
+
+<!-- props: DialogProps -->
+
+## Accessibility
+
+- The native `<dialog>` traps focus, makes the page behind inert and closes with Esc. Focus returns to the button that opened it.
+- `title` and `description` are wired to `aria-labelledby` and `aria-describedby`.
+- Put `autoFocus` on the first field, or on the safe button in a confirmation.
+
+<!-- docs/components/dropdown-menu.md -->
+
+# Dropdown menu
+
+> A menu of actions under a button, on the native popover API, with checkbox items, shortcuts and keyboard navigation.
+
+```html
+<button class="bk-button" data-variant="outline" type="button" popovertarget="dm-account">Maya Kim<svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+<div class="bk-menu" id="dm-account" popover role="menu">
+  <div class="bk-menu-label">My account</div>
+  <button class="bk-menu-item" role="menuitem" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-user"/></svg>Profile<span class="bk-menu-shortcut">⇧⌘P</span></button>
+  <button class="bk-menu-item" role="menuitem" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-wallet"/></svg>Billing</button>
+  <hr class="bk-menu-separator">
+  <button class="bk-menu-item" role="menuitemcheckbox" aria-checked="true" type="button">Email updates</button>
+  <hr class="bk-menu-separator">
+  <button class="bk-menu-item" role="menuitem" data-variant="destructive" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-logout"/></svg>Log out</button>
+</div>
+```
+
+## Usage
+
+```tsx
+import { DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuLabel, DropdownMenuSeparator, Button } from 'bento-shad-ui/react';
+
+<DropdownMenu trigger={<Button variant="outline">Maya Kim</Button>} align="end">
+  <DropdownMenuLabel>My account</DropdownMenuLabel>
+  <DropdownMenuItem icon={<User />} shortcut="⇧⌘P" onSelect={openProfile}>Profile</DropdownMenuItem>
+  <DropdownMenuCheckboxItem checked={emails} onCheckedChange={setEmails}>Email updates</DropdownMenuCheckboxItem>
+  <DropdownMenuSeparator />
+  <DropdownMenuItem variant="destructive" onSelect={logout}>Log out</DropdownMenuItem>
+</DropdownMenu>
+```
+
+The menu opens under its trigger, lines up with `align` (`start`, `center`, `end`) and flips above when there's no room below. Choosing an item closes it unless the item has `keepOpen`.
+
+## API
+
+### DropdownMenu
+
+<!-- props: DropdownMenuProps -->
+
+### DropdownMenuItem
+
+<!-- props: DropdownMenuItemProps -->
+
+### DropdownMenuCheckboxItem
+
+<!-- props: DropdownMenuCheckboxItemProps -->
+
+`DropdownMenuLabel` and `DropdownMenuSeparator` render a label and a divider.
+
+## Accessibility
+
+- Focus moves to the first item when the menu opens. ↑/↓, Home and End move between items; Esc and outside clicks close it.
+- Items use `role="menuitem"` or `menuitemcheckbox` with `aria-checked`. The trigger gets `aria-haspopup="menu"`.
+
+<!-- docs/components/popover.md -->
+
+# Popover
+
+> A floating panel anchored to a button, for a small form or extra details.
+
+```html
+<button class="bk-button" data-variant="outline" type="button" popovertarget="pv-invite"><svg class="bk-icon" aria-hidden="true"><use href="#i-plus"/></svg>Invite</button>
+<div class="bk-popover" id="pv-invite" popover role="dialog" aria-label="Invite to trip">
+  <div class="bk-stack">
+    <div><div class="bk-tile-title">Invite to trip</div><p class="bk-tile-description">They can view and edit the plan.</p></div>
+    <input class="bk-input" type="email" placeholder="friend@example.com" aria-label="Email address">
+    <button class="bk-button" data-size="sm" type="button" popovertarget="pv-invite" popovertargetaction="hide" data-bk-toast='{"title":"Invite sent","variant":"success"}'>Send invite</button>
+  </div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Popover, closePopover, Field, Input, Button } from 'bento-shad-ui/react';
+
+<Popover trigger={<Button variant="outline">Invite</Button>} aria-label="Invite to trip">
+  <Field label="Email"><Input type="email" /></Field>
+  <Button size="sm" onClick={(e) => { send(); closePopover(e); }}>Send invite</Button>
+</Popover>
+```
+
+## API
+
+<!-- props: PopoverProps -->
+
+`closePopover(event)` closes the popover that contains the element the event came from.
+
+## Accessibility
+
+- Esc and clicks outside close it. Focus moves to the first field when it opens.
+- Give it an `aria-label` that says what the panel is for.
+- For text-only hints, use a [Tooltip](tooltip.md). For a blocking choice, use a [Dialog](dialog.md).
+
+<!-- docs/components/sheet.md -->
+
+# Sheet
+
+> A panel that slides in from the side, or from the bottom on phones, for filters, details and share menus.
+
+```html
+<div class="bk-row">
+  <button class="bk-button" data-variant="outline" type="button" data-bk-open="sh-filters"><svg class="bk-icon" aria-hidden="true"><use href="#i-filter"/></svg>Filters</button>
+  <button class="bk-button" data-variant="outline" type="button" data-bk-open="sh-share"><svg class="bk-icon" aria-hidden="true"><use href="#i-users"/></svg>Share (bottom)</button>
+</div>
+<dialog class="bk-sheet" id="sh-filters" aria-labelledby="sh-filters-t">
+  <button class="bk-button bk-dialog-close" data-variant="ghost" data-size="icon-sm" type="button" data-bk-close aria-label="Close"><svg class="bk-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="sh-filters-t">Filters</h2><p class="bk-dialog-description">142 stays match.</p></div>
+  <div class="bk-dialog-body">
+    <label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span>Free cancellation</span></label>
+    <label class="bk-option"><input class="bk-checkbox" type="checkbox"><span>Breakfast included</span></label>
+  </div>
+  <div class="bk-dialog-footer"><button class="bk-button" type="button" data-bk-close>Show 142 stays</button></div>
+</dialog>
+<dialog class="bk-sheet" data-side="bottom" id="sh-share" aria-labelledby="sh-share-t">
+  <div class="bk-sheet-handle" aria-hidden="true"></div>
+  <div class="bk-dialog-header"><h2 class="bk-dialog-title" id="sh-share-t">Share trip</h2><p class="bk-dialog-description">People with the link can view the plan.</p></div>
+  <div class="bk-dialog-body"><label class="bk-switch-row"><span>Allow editing</span><input class="bk-switch" type="checkbox" role="switch"></label></div>
+</dialog>
+```
+
+## Usage
+
+```tsx
+import { Sheet, Button } from 'bento-shad-ui/react';
+
+<Sheet open={open} onOpenChange={setOpen} title="Filters" description="142 stays match." footer={<Button onClick={() => setOpen(false)}>Show 142 stays</Button>}>
+  …
+</Sheet>
+
+<Sheet side="bottom" open={sharing} onOpenChange={setSharing} title="Share trip">…</Sheet>
+```
+
+## API
+
+<!-- props: SheetProps -->
+
+## Accessibility
+
+- Same as [Dialog](dialog.md): focus trap, Esc to close, inert background, focus returns to the trigger.
+- Bottom sheets add a drag handle for looks only. Close them with the backdrop, Esc or a button.
+
+<!-- docs/components/bottom-nav.md -->
+
+# Bottom nav
+
+> A mobile tab bar for three to five primary destinations.
+
+```html
+<nav class="bk-bottom-nav" aria-label="Tabs" style="width: 340px">
+  <a class="bk-bottom-nav-item" href="#" aria-current="page"><svg class="bk-icon" aria-hidden="true"><use href="#i-home"/></svg>Home</a>
+  <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-search"/></svg>Explore</a>
+  <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-plane"/></svg>Trips</a>
+  <a class="bk-bottom-nav-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+</nav>
+```
+
+## Usage
+
+```tsx
+import { BottomNav, BottomNavItem } from 'bento-shad-ui/react';
+
+<BottomNav aria-label="Tabs">
+  <BottomNavItem href="/" icon={<Home />} current>Home</BottomNavItem>
+  <BottomNavItem href="/trips" icon={<Plane />}>Trips</BottomNavItem>
+</BottomNav>
+```
+
+Fix it to the bottom of the screen in your layout, with `env(safe-area-inset-bottom)` padding for phones with a home indicator.
+
+## API
+
+<!-- props: BottomNavItemProps -->
+
+## Accessibility
+
+- Every item has a visible label, not just an icon.
+- The current destination has `aria-current="page"`.
+
+<!-- docs/components/breadcrumb.md -->
+
+# Breadcrumb
+
+> Shows where the current page sits in the hierarchy, with links back up.
+
+```html
+<nav aria-label="Breadcrumb"><ol class="bk-breadcrumb"><li><a href="#">Trips</a></li><li><a href="#">Lisbon</a></li><li><span aria-current="page">Day 2</span></li></ol></nav>
+```
+
+## Usage
+
+```tsx
+import { Breadcrumb } from 'bento-shad-ui/react';
+import Link from 'next/link';
+
+<Breadcrumb
+  items={[{ label: 'Trips', href: '/trips' }, { label: 'Lisbon', href: '/trips/lisbon' }, { label: 'Day 2' }]}
+  linkAs={Link}
+/>
+```
+
+## API
+
+<!-- props: BreadcrumbProps -->
+
+## Accessibility
+
+- A `nav` labelled "Breadcrumb" holding an ordered list; the last item has `aria-current="page"`.
+- The separators are drawn by CSS, so screen readers don't read them.
+
+<!-- docs/components/navbar.md -->
+
+# Navbar
+
+> A floating pill navigation bar with brand, links and actions. Links scroll sideways on narrow screens.
+
+```html
+<nav class="bk-navbar" aria-label="Main">
+  <a class="bk-navbar-brand" href="#">Tripline</a>
+  <div class="bk-navbar-links">
+    <a class="bk-navbar-link" href="#" aria-current="page">Trips</a>
+    <a class="bk-navbar-link" href="#">Explore</a>
+    <a class="bk-navbar-link" href="#">Saved</a>
+  </div>
+  <div class="bk-navbar-actions">
+    <button class="bk-button" data-variant="ghost" data-size="icon-sm" type="button" aria-label="Notifications"><svg class="bk-icon" aria-hidden="true"><use href="#i-bell"/></svg></button>
+    <button class="bk-button" data-size="sm" type="button"><svg class="bk-icon" aria-hidden="true"><use href="#i-plus"/></svg>New trip</button>
+  </div>
+</nav>
+```
+
+## Usage
+
+```tsx
+import { Navbar, NavbarBrand, NavbarLinks, NavbarLink, NavbarActions, Button } from 'bento-shad-ui/react';
+import Link from 'next/link';
+
+<Navbar aria-label="Main">
+  <NavbarBrand asChild><Link href="/">Tripline</Link></NavbarBrand>
+  <NavbarLinks>
+    <NavbarLink asChild current={pathname === '/trips'}><Link href="/trips">Trips</Link></NavbarLink>
+    <NavbarLink asChild current={pathname === '/explore'}><Link href="/explore">Explore</Link></NavbarLink>
+  </NavbarLinks>
+  <NavbarActions><Button size="sm">New trip</Button></NavbarActions>
+</Navbar>
+```
+
+## API
+
+### NavbarLink and NavbarBrand
+
+<!-- props: LinkLikeProps -->
+
+`Navbar`, `NavbarLinks` and `NavbarActions` render a `nav` and two `div`s.
+
+## Accessibility
+
+- Give the `nav` an `aria-label`, and mark the current page with `current` (`aria-current="page"`).
+- On phones, consider moving primary destinations to a [Bottom nav](bottom-nav.md).
+
+<!-- docs/components/pagination.md -->
+
+# Pagination
+
+> Move through pages of a long list, with first, last and nearby pages always visible.
+
+```html
+<nav class="bk-pagination" aria-label="Pagination">
+  <a class="bk-pagination-link" href="#" aria-label="Previous page"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></a>
+  <a class="bk-pagination-link" href="#">1</a>
+  <span class="bk-pagination-ellipsis" aria-hidden="true">…</span>
+  <a class="bk-pagination-link" href="#">5</a>
+  <a class="bk-pagination-link" href="#" aria-current="page">6</a>
+  <a class="bk-pagination-link" href="#">7</a>
+  <span class="bk-pagination-ellipsis" aria-hidden="true">…</span>
+  <a class="bk-pagination-link" href="#">20</a>
+  <a class="bk-pagination-link" href="#" aria-label="Next page"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+</nav>
+```
+
+## Usage
+
+```tsx
+import { Pagination, getPaginationRange } from 'bento-shad-ui/react';
+
+<Pagination page={page} pageCount={20} onPageChange={setPage} />
+
+// Server-rendered lists: real links
+<Pagination page={page} pageCount={20} getHref={(p) => `?page=${p}`} />
+
+getPaginationRange(6, 20); // [1, 'ellipsis', 5, 6, 7, 'ellipsis', 20]
+```
+
+## API
+
+<!-- props: PaginationProps -->
+
+## Accessibility
+
+- The current page has `aria-current="page"`; each number has a label such as "Page 6".
+- Previous and Next are disabled at the ends rather than hidden, so the layout doesn't shift.
+
+<!-- docs/components/sidebar.md -->
+
+# Sidebar
+
+> App navigation with a brand, grouped items, counts and a footer.
+
+```html
+<nav class="bk-sidebar" aria-label="App" style="width: 240px">
+  <div class="bk-sidebar-brand">Tripline</div>
+  <a class="bk-sidebar-item" href="#" aria-current="page"><svg class="bk-icon" aria-hidden="true"><use href="#i-home"/></svg>Home</a>
+  <a class="bk-sidebar-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-plane"/></svg>Trips<span class="bk-badge" data-variant="secondary">4</span></a>
+  <a class="bk-sidebar-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-inbox"/></svg>Inbox<span class="bk-badge" data-variant="brand">2</span></a>
+  <div class="bk-sidebar-label">Workspace</div>
+  <a class="bk-sidebar-item" href="#"><svg class="bk-icon" aria-hidden="true"><use href="#i-sliders"/></svg>Settings</a>
+  <div class="bk-sidebar-footer"><span class="bk-avatar" data-size="sm" data-status="online">MK</span><div class="bk-list-item-text"><span>Maya Kim</span><span>Plus plan</span></div></div>
+</nav>
+```
+
+## Usage
+
+```tsx
+import { Sidebar, SidebarBrand, SidebarItem, SidebarLabel, SidebarFooter, Badge } from 'bento-shad-ui/react';
+
+<Sidebar aria-label="App">
+  <SidebarBrand>Tripline</SidebarBrand>
+  <SidebarItem href="/" icon={<Home />} current>Home</SidebarItem>
+  <SidebarItem href="/inbox" icon={<Inbox />} badge={<Badge variant="brand">2</Badge>}>Inbox</SidebarItem>
+  <SidebarLabel>Workspace</SidebarLabel>
+  <SidebarItem asChild icon={<Settings />}><Link href="/settings">Settings</Link></SidebarItem>
+  <SidebarFooter>…</SidebarFooter>
+</Sidebar>
+```
+
+The sidebar uses the `--sidebar-*` tokens, so it can be themed separately from the page. In a bento layout, give it `rows` so it runs down the grid (see the dashboard recipe in [Layout](../layout.md)).
+
+## API
+
+<!-- props: SidebarItemProps -->
+
+`Sidebar`, `SidebarBrand`, `SidebarLabel` and `SidebarFooter` render a `nav` and `div`s.
+
+## Accessibility
+
+- Label the `nav`, and mark the current page with `current`.
+- Badges are read as part of the link ("Inbox 2"). Add hidden text if the number needs context ("2 unread").
+
+<!-- docs/components/tabs.md -->
+
+# Tabs
+
+> Switch between views in one place. Pill and underline styles, with full keyboard support.
+
+```html
+<div data-bk-tabs style="width: 340px">
+  <div class="bk-tabs-list" role="tablist" aria-label="Itinerary view">
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tb-day">Day</button>
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tb-week" aria-selected="true">Week</button>
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tb-month">Month</button>
+  </div>
+  <div class="bk-tabs-content" role="tabpanel" id="tb-day" hidden><span class="bk-num">3</span> <span class="bk-muted">activities today</span></div>
+  <div class="bk-tabs-content" role="tabpanel" id="tb-week"><span class="bk-num">7</span> <span class="bk-muted">activities this week</span></div>
+  <div class="bk-tabs-content" role="tabpanel" id="tb-month" hidden><span class="bk-num">22</span> <span class="bk-muted">activities in March</span></div>
+</div>
+```
+
+## Usage
+
+```tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from 'bento-shad-ui/react';
+
+<Tabs defaultValue="week">
+  <TabsList aria-label="Itinerary view">
+    <TabsTrigger value="day">Day</TabsTrigger>
+    <TabsTrigger value="week">Week</TabsTrigger>
+  </TabsList>
+  <TabsContent value="day">…</TabsContent>
+  <TabsContent value="week">…</TabsContent>
+</Tabs>
+```
+
+## Examples
+
+### Underline style
+
+```html
+<div data-bk-tabs style="width: 340px">
+  <div class="bk-tabs-list" data-variant="line" role="tablist" aria-label="Trip sections">
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-a" aria-selected="true">Itinerary</button>
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-b">Bookings</button>
+    <button class="bk-tabs-trigger" role="tab" type="button" aria-controls="tl-c">Notes</button>
+  </div>
+  <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-a">4 days, 11 stops.</div>
+  <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-b" hidden>2 flights, 1 hotel.</div>
+  <div class="bk-tabs-content bk-muted" role="tabpanel" id="tl-c" hidden>3 notes from 2 people.</div>
+</div>
+```
+
+```tsx
+<TabsList variant="line">…</TabsList>
+<TabsList full>…</TabsList> {/* triggers fill the width */}
+```
+
+## API
+
+### Tabs
+
+<!-- props: TabsProps -->
+
+### TabsList
+
+<!-- props: TabsListProps -->
+
+### TabsTrigger
+
+<!-- props: TabsTriggerProps -->
+
+### TabsContent
+
+<!-- props: TabsContentProps -->
+
+### HTML
+
+Wrap the list and panels in `[data-bk-tabs]`. Each `role="tab"` button points at its panel with `aria-controls`; the script handles selection and keys.
+
+## Accessibility
+
+- ←/→ move between tabs and select them, Home and End jump to the ends. Only the selected tab is in the Tab order.
+- Tabs and panels are linked with `aria-controls` and `aria-labelledby`.

@@ -1,6 +1,6 @@
 {
   "name": "bento-shad-ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bento-grid UI library with shadcn/ui anatomy: framework-free CSS, a typed vanilla core, React components, a shadcn/Tailwind v4 theme and a Flutter theme from one token file.",
   "keywords": [
     "ui",
@@ -67,9 +67,11 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
+    "docs": "node scripts/docs.mjs",
+    "docs:serve": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs",
-    "check": "npm run typecheck && npm run build && npm test"
+    "check": "npm run typecheck && npm run build && npm test && npm run docs"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -84,8 +86,10 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "esbuild": "^0.24.0",
+    "marked": "^15.0.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "shiki": "^1.29.2",
     "typescript": "^5.7.0"
   },
   "engines": {

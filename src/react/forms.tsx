@@ -8,6 +8,7 @@ export const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttribute
 });
 
 export interface FieldProps {
+  /** Visible label, linked to the control. */
   label?: React.ReactNode;
   /** Help text under the control. */
   description?: React.ReactNode;
@@ -17,6 +18,7 @@ export interface FieldProps {
   required?: boolean;
   /** Id for the control. Generated when omitted. */
   id?: string;
+  /** Class for the wrapper. */
   className?: string;
   /** Exactly one control: `Input`, `Textarea`, `Select`, `Slider`… */
   children: React.ReactElement;
@@ -62,6 +64,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
 });
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** Shorthand for `aria-invalid`. */
   invalid?: boolean;
 }
 
@@ -70,6 +73,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(fun
 });
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  /** Shorthand for `aria-invalid`. */
   invalid?: boolean;
 }
 
@@ -102,6 +106,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(func
 interface OptionTextProps {
   /** When set, the control is wrapped in a clickable label row. */
   label?: React.ReactNode;
+  /** Smaller second line under the label. */
   description?: React.ReactNode;
 }
 
@@ -119,7 +124,9 @@ function OptionRow({ control, label, description, className }: { control: React.
 }
 
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>, OptionTextProps {
+  /** Shows a dash: some, but not all, sub-options are checked. */
   indeterminate?: boolean;
+  /** Called with the new checked state. */
   onCheckedChange?: (checked: boolean) => void;
 }
 
@@ -167,8 +174,11 @@ const RadioGroupContext = React.createContext<RadioGroupContextValue | null>(nul
 export interface RadioGroupProps extends Omit<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, 'defaultValue' | 'onChange'> {
   /** Visible group label. Use `aria-label` instead to keep it hidden. */
   legend?: React.ReactNode;
+  /** Selected value (controlled). */
   value?: string;
+  /** Initially selected value (uncontrolled). */
   defaultValue?: string;
+  /** Called with the newly selected value. */
   onValueChange?: (value: string) => void;
   /** Shared `name` for the radios. Generated when omitted. */
   name?: string;
@@ -193,8 +203,11 @@ export const RadioGroup = React.forwardRef<HTMLFieldSetElement, RadioGroupProps>
 });
 
 export interface ChoiceCardProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  /** Single choice in a group (`radio`) or independent (`checkbox`). */
   type?: 'radio' | 'checkbox';
+  /** Main text of the card. */
   label: React.ReactNode;
+  /** Second line under the label. */
   description?: React.ReactNode;
   /** Right-aligned detail, e.g. a price. */
   aside?: React.ReactNode;
@@ -222,7 +235,9 @@ export const ChoiceCard = React.forwardRef<HTMLInputElement, ChoiceCardProps>(fu
 });
 
 export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'role'>, OptionTextProps {
+  /** `brand` uses the accent colour when on. */
   tone?: 'default' | 'brand';
+  /** Called with the new on/off state. */
   onCheckedChange?: (checked: boolean) => void;
 }
 
@@ -260,11 +275,17 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function S
 /* ---------------------------------------------------------------- Slider */
 
 export interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue' | 'onChange'> {
+  /** Current value (controlled). */
   value?: number;
+  /** Initial value (uncontrolled). Defaults to `min`. */
   defaultValue?: number;
+  /** Called with the new number while dragging. */
   onValueChange?: (value: number) => void;
+  /** Lowest value. Default 0. */
   min?: number;
+  /** Highest value. Default 100. */
   max?: number;
+  /** Increment. Default 1. */
   step?: number;
 }
 
@@ -296,11 +317,15 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(function S
 export interface InputOTPProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
   /** Digits per group, e.g. `[3, 3]` for a 6-digit code with a separator. Default `[6]`. */
   groups?: number[];
+  /** Entered code (controlled). */
   value?: string;
+  /** Initial code (uncontrolled). */
   defaultValue?: string;
+  /** Called with the code on every change. */
   onValueChange?: (value: string) => void;
   /** Called once every slot is filled. */
   onComplete?: (value: string) => void;
+  /** Disables every slot. */
   disabled?: boolean;
 }
 
@@ -381,9 +406,13 @@ export const InputOTP = React.forwardRef<HTMLDivElement, InputOTPProps>(function
 /* ---------------------------------------------------------------- Dropzone */
 
 export interface DropzoneProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'title'> {
+  /** Main line of text. Default "Drop files or click to upload". */
   title?: React.ReactNode;
+  /** Second line, for example accepted types and size. */
   hint?: React.ReactNode;
+  /** Icon above the text. */
   icon?: React.ReactNode;
+  /** Called with the chosen files. */
   onFiles?: (files: File[]) => void;
 }
 

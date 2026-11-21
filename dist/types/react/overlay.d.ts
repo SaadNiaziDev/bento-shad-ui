@@ -1,8 +1,12 @@
 import * as React from 'react';
 interface ModalProps extends Omit<React.DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'title'> {
+    /** Whether it is open. Controlled: pair with `onOpenChange`. */
     open: boolean;
+    /** Called with `false` when Esc, the backdrop or the close button closes it. */
     onOpenChange: (open: boolean) => void;
+    /** Heading, linked with `aria-labelledby`. */
     title?: React.ReactNode;
+    /** Text under the title, linked with `aria-describedby`. */
     description?: React.ReactNode;
     /** Buttons at the bottom, right-aligned. */
     footer?: React.ReactNode;
@@ -32,14 +36,17 @@ export interface DropdownMenuProps extends Omit<React.HTMLAttributes<HTMLDivElem
     trigger: React.ReactElement;
     /** Edge of the trigger to line up with. Default `start`. */
     align?: 'start' | 'center' | 'end';
+    /** Menu items, labels and separators. */
     children: React.ReactNode;
 }
 /** Menu of actions. Arrow keys move between items, Esc and outside clicks close it. */
 export declare function DropdownMenu({ trigger, align, className, children, onKeyDown, ...props }: DropdownMenuProps): React.ReactElement;
 export interface DropdownMenuItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Icon before the label. */
     icon?: React.ReactNode;
     /** Shortcut hint shown on the right, e.g. "⌘S". */
     shortcut?: string;
+    /** `destructive` colours the item red. */
     variant?: 'default' | 'destructive';
     /** Called when chosen with mouse or keyboard. */
     onSelect?: () => void;
@@ -48,15 +55,20 @@ export interface DropdownMenuItemProps extends React.ButtonHTMLAttributes<HTMLBu
 }
 export declare const DropdownMenuItem: React.ForwardRefExoticComponent<DropdownMenuItemProps & React.RefAttributes<HTMLButtonElement>>;
 export interface DropdownMenuCheckboxItemProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+    /** Whether the option is on. */
     checked: boolean;
+    /** Called with the new state; the menu stays open. */
     onCheckedChange: (checked: boolean) => void;
 }
 export declare const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownMenuCheckboxItemProps & React.RefAttributes<HTMLButtonElement>>;
 export declare function DropdownMenuLabel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement;
 export declare function DropdownMenuSeparator({ className, ...props }: React.HTMLAttributes<HTMLHRElement>): React.ReactElement;
 export interface PopoverProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+    /** The button that opens the popover. */
     trigger: React.ReactElement;
+    /** Edge of the trigger to line up with. Default `start`. */
     align?: 'start' | 'center' | 'end';
+    /** Content of the panel. */
     children: React.ReactNode;
 }
 /** Floating panel for a small form or details. Esc and outside clicks close it. */
@@ -81,18 +93,25 @@ export interface CommandGroup {
 /** Groups and items that match `query` (case-insensitive, label + keywords). Empty groups are dropped. */
 export declare function filterCommandGroups(groups: readonly CommandGroup[], query: string): CommandGroup[];
 export interface CommandProps {
+    /** Sections of items to search. */
     groups: readonly CommandGroup[];
+    /** Search field placeholder, also its label. */
     placeholder?: string;
+    /** Shown when nothing matches. Default "No results." */
     emptyText?: string;
     /** Called after an item's own `onSelect`. */
     onSelect?: (item: CommandItem) => void;
+    /** Focus the search field on mount. */
     autoFocus?: boolean;
+    /** Class for the root element. */
     className?: string;
 }
 /** Inline command list with search and keyboard navigation. */
 export declare function Command({ className, ...props }: CommandProps): React.ReactElement;
 export interface CommandDialogProps extends CommandProps {
+    /** Whether the palette is open (controlled). */
     open: boolean;
+    /** Called when it opens or closes, including from the hotkey. */
     onOpenChange: (open: boolean) => void;
     /** Key that toggles the palette with ⌘ / Ctrl. `false` disables it. Default `"k"`. */
     hotkey?: string | false;

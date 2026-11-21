@@ -107,6 +107,7 @@ export const Row = React.forwardRef<HTMLDivElement, RowProps>(function Row({ gap
 });
 
 export interface SeparatorProps extends React.HTMLAttributes<HTMLHRElement> {
+  /** Direction of the rule. */
   orientation?: 'horizontal' | 'vertical';
 }
 

@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.1.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.1.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 /* Tokens only. Dark mode: class="dark" or data-theme="dark" on <html>; data-theme="system" follows the OS. */
 :root {
   --font-sans: "Red Hat Text", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -204,6 +204,8 @@
   text-rendering: optimizeLegibility;
 }
 .bk *, .bk *::before, .bk *::after { box-sizing: border-box; }
+/* Browsers default code, kbd, pre and samp to monospace. The kit has no monospace face, so they inherit. */
+:where(.bk) :where(code, kbd, pre, samp, tt) { font-family: inherit; }
 .bk :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .bk ::selection { background: color-mix(in oklch, var(--brand) 35%, transparent); }
 .bk img, .bk svg, .bk video { max-width: 100%; }

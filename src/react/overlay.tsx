@@ -15,9 +15,13 @@ function CloseIcon() {
 /* ---------------------------------------------------------------- Dialog, Sheet (native <dialog>) */
 
 interface ModalProps extends Omit<React.DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'title'> {
+  /** Whether it is open. Controlled: pair with `onOpenChange`. */
   open: boolean;
+  /** Called with `false` when Esc, the backdrop or the close button closes it. */
   onOpenChange: (open: boolean) => void;
+  /** Heading, linked with `aria-labelledby`. */
   title?: React.ReactNode;
+  /** Text under the title, linked with `aria-describedby`. */
   description?: React.ReactNode;
   /** Buttons at the bottom, right-aligned. */
   footer?: React.ReactNode;
@@ -183,6 +187,7 @@ export interface DropdownMenuProps extends Omit<React.HTMLAttributes<HTMLDivElem
   trigger: React.ReactElement;
   /** Edge of the trigger to line up with. Default `start`. */
   align?: 'start' | 'center' | 'end';
+  /** Menu items, labels and separators. */
   children: React.ReactNode;
 }
 
@@ -225,9 +230,11 @@ function hideClosestPopover(el: Element): void {
 }
 
 export interface DropdownMenuItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Icon before the label. */
   icon?: React.ReactNode;
   /** Shortcut hint shown on the right, e.g. "⌘S". */
   shortcut?: string;
+  /** `destructive` colours the item red. */
   variant?: 'default' | 'destructive';
   /** Called when chosen with mouse or keyboard. */
   onSelect?: () => void;
@@ -262,7 +269,9 @@ export const DropdownMenuItem = React.forwardRef<HTMLButtonElement, DropdownMenu
 });
 
 export interface DropdownMenuCheckboxItemProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+  /** Whether the option is on. */
   checked: boolean;
+  /** Called with the new state; the menu stays open. */
   onCheckedChange: (checked: boolean) => void;
 }
 
@@ -295,8 +304,11 @@ export function DropdownMenuSeparator({ className, ...props }: React.HTMLAttribu
 }
 
 export interface PopoverProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** The button that opens the popover. */
   trigger: React.ReactElement;
+  /** Edge of the trigger to line up with. Default `start`. */
   align?: 'start' | 'center' | 'end';
+  /** Content of the panel. */
   children: React.ReactNode;
 }
 
@@ -348,12 +360,17 @@ export function filterCommandGroups(groups: readonly CommandGroup[], query: stri
 }
 
 export interface CommandProps {
+  /** Sections of items to search. */
   groups: readonly CommandGroup[];
+  /** Search field placeholder, also its label. */
   placeholder?: string;
+  /** Shown when nothing matches. Default "No results." */
   emptyText?: string;
   /** Called after an item's own `onSelect`. */
   onSelect?: (item: CommandItem) => void;
+  /** Focus the search field on mount. */
   autoFocus?: boolean;
+  /** Class for the root element. */
   className?: string;
 }
 
@@ -458,7 +475,9 @@ export function Command({ className, ...props }: CommandProps): React.ReactEleme
 }
 
 export interface CommandDialogProps extends CommandProps {
+  /** Whether the palette is open (controlled). */
   open: boolean;
+  /** Called when it opens or closes, including from the hotkey. */
   onOpenChange: (open: boolean) => void;
   /** Key that toggles the palette with ⌘ / Ctrl. `false` disables it. Default `"k"`. */
   hotkey?: string | false;

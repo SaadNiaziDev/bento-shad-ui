@@ -9,17 +9,17 @@ git clone https://github.com/SaadNiaziDev/bento-shad-ui.git
 cd bento-shad-ui
 npm install
 npm run check
-open index.html
+npm run docs:serve   # http://localhost:4321/bento-shad-ui/
 ```
 
-Node 18+ is required. The only dev dependencies are TypeScript, esbuild and React (for types and render tests).
+Node 18+ is required. Dev dependencies: TypeScript and esbuild (build), React (types and render tests), marked and Shiki (docs site).
 
 ## Making a change
 
 1. **Tokens**: edit `src/tokens.json` (both `light` and `dark`). If you add a pair that carries text, add it to `test/tokens.test.mjs`.
 2. **CSS**: edit `src/css/components.css`. Use tokens; follow the `bk-` prefix and `data-*` variant pattern.
 3. **Behaviour**: `src/core/` for the vanilla script, `src/react/` for React. Keep the core SSR-safe.
-4. **Docs**: update `docs/components.md` and add a tile to `index.html` for new components.
+4. **Docs**: new components get a page in `docs/components/` (see AGENTS.md for the format), a link in `docs/components.md` and a tile in `site/kit.html`. Document every prop with JSDoc; the props tables are generated from it.
 5. `npm run check`. CI fails if `dist/` is out of date or a test fails.
 
 ## Commit messages

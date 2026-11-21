@@ -23,6 +23,7 @@ interface CalendarBaseProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
     month?: Date;
     /** Month shown first when uncontrolled. Default: the selected date, or today. */
     defaultMonth?: Date;
+    /** Called with the first day of the month the user moved to. */
     onMonthChange?: (month: Date) => void;
     /** Marks a day as today. Default: the current date. Pass `null` to mark none. */
     today?: Date | null;
@@ -34,15 +35,23 @@ interface CalendarBaseProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
     isDisabled?: (date: Date) => boolean;
 }
 export interface CalendarSingleProps extends CalendarBaseProps {
+    /** Pick one day. */
     mode?: 'single';
+    /** Selected day (controlled). */
     value?: Date | null;
+    /** Initially selected day (uncontrolled). */
     defaultValue?: Date | null;
+    /** Called with the picked day. */
     onValueChange?: (date: Date) => void;
 }
 export interface CalendarRangeProps extends CalendarBaseProps {
+    /** Pick a start and an end day. */
     mode: 'range';
+    /** Selected range (controlled). */
     value?: DateRange | null;
+    /** Initial range (uncontrolled). */
     defaultValue?: DateRange | null;
+    /** Called with the range; `to` is missing until the second click. */
     onValueChange?: (range: DateRange) => void;
 }
 export type CalendarProps = CalendarSingleProps | CalendarRangeProps;

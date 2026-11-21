@@ -53,6 +53,7 @@ export interface RowProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 export declare const Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement>>;
 export interface SeparatorProps extends React.HTMLAttributes<HTMLHRElement> {
+    /** Direction of the rule. */
     orientation?: 'horizontal' | 'vertical';
 }
 export declare const Separator: React.ForwardRefExoticComponent<SeparatorProps & React.RefAttributes<HTMLHRElement>>;

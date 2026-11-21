@@ -23,3 +23,5 @@ jobs:
       - name: Generated files are committed and up to date
         run: git diff --exit-code -- dist r llms-full.txt
       - run: npm test
+      - name: Docs site builds (links, props tables, previews)
+        run: npm run docs

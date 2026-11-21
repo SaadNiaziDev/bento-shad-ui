@@ -17,6 +17,7 @@ export declare function ThemeScript({ nonce }: {
     nonce?: string;
 }): React.ReactElement;
 export interface ThemeToggleProps {
+    /** Class for the group. */
     className?: string;
     /** Accessible names for the three buttons. */
     labels?: Partial<Record<Theme, string>>;

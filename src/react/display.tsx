@@ -6,6 +6,7 @@ import { cx, flag, part } from './utils';
 export type BadgeVariant = 'default' | 'brand' | 'secondary' | 'outline' | 'destructive' | 'success' | 'warning' | 'info';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Colour. `success`, `warning` and `info` are soft fills for status. */
   variant?: BadgeVariant;
   /** Small coloured dot before the text. */
   dot?: boolean;
@@ -18,12 +19,17 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badg
 /* ---------------------------------------------------------------- Avatar */
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Image URL. */
   src?: string;
+  /** Alternative text for the image. */
   alt?: string;
   /** Shown when there is no image or it fails to load. Usually initials. */
   fallback?: React.ReactNode;
+  /** Diameter: sm 28px, default 36px, lg 48px, xl 64px. */
   size?: 'sm' | 'default' | 'lg' | 'xl';
+  /** `square` rounds the corners instead of a circle. */
   shape?: 'circle' | 'square';
+  /** Coloured dot in the corner. */
   status?: 'online' | 'busy' | 'offline';
 }
 
@@ -94,7 +100,9 @@ export const List = part('ul', 'bk-list', 'List');
 export interface ListItemProps extends Omit<React.LiHTMLAttributes<HTMLLIElement>, 'title'> {
   /** Avatar or icon at the start. */
   leading?: React.ReactNode;
+  /** Main line, cut with an ellipsis when too long. */
   title: React.ReactNode;
+  /** Second line, muted. */
   description?: React.ReactNode;
   /** Small text at the end, e.g. a time. */
   meta?: React.ReactNode;
@@ -117,11 +125,15 @@ export const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(function 
 /* ---------------------------------------------------------------- Stat, Sparkline */
 
 export interface StatProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** What the number measures. */
   label: React.ReactNode;
+  /** The number, formatted for display. */
   value: React.ReactNode;
   /** Change text, e.g. "+12.4% vs February". */
   delta?: React.ReactNode;
+  /** Colours `delta`: up is success, down is destructive. */
   trend?: 'up' | 'down' | 'flat';
+  /** Icon before the label. */
   icon?: React.ReactNode;
 }
 
@@ -161,6 +173,7 @@ function round(n: number): number {
 }
 
 export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
+  /** Values from oldest to newest. The line scales to their min and max. */
   data: readonly number[];
   /** Accessible summary, e.g. "Bookings rose from 12 to 31 per day". Required because the chart has no text. */
   label: string;
@@ -197,6 +210,7 @@ export function barHeights(data: readonly BarDatum[], max?: number): number[] {
 }
 
 export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Bars in order, each with a label and a value. */
   data: readonly BarDatum[];
   /** Value of the top of the scale. Defaults to the largest value. */
   max?: number;
@@ -267,6 +281,7 @@ export interface MeterSegment {
 }
 
 export interface MeterProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Parts in order, each with a label, value and CSS colour. */
   segments: readonly MeterSegment[];
   /** Value of a full bar. Default 100. The rest shows as empty track. */
   total?: number;
@@ -287,8 +302,11 @@ export const Meter = React.forwardRef<HTMLDivElement, MeterProps>(function Meter
 /* ---------------------------------------------------------------- Progress, Ring, Skeleton */
 
 export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Current progress. */
   value: number;
+  /** Value of a full bar. Default 100. */
   max?: number;
+  /** Fill colour. */
   tone?: 'default' | 'brand' | 'success';
   /** Accessible name, e.g. "Upload". */
   label: string;
@@ -351,7 +369,9 @@ export const Ring = React.forwardRef<HTMLDivElement, RingProps>(function Ring({ 
 });
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** CSS width, or pixels as a number. */
   width?: number | string;
+  /** CSS height, or pixels as a number. Default 12. */
   height?: number | string;
   /** Fully round, for avatars. */
   circle?: boolean;
@@ -372,8 +392,11 @@ export const Skeleton = React.forwardRef<HTMLSpanElement, SkeletonProps>(functio
 /* ---------------------------------------------------------------- Alert */
 
 export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** Meaning and colour. `destructive` is announced immediately. */
   variant?: 'default' | 'info' | 'success' | 'warning' | 'destructive';
+  /** Icon at the start. */
   icon?: React.ReactNode;
+  /** Bold first line. */
   title?: React.ReactNode;
   /** Buttons under the text. */
   actions?: React.ReactNode;
@@ -400,9 +423,13 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert
 /* ---------------------------------------------------------------- Empty state */
 
 export interface EmptyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** Icon in a rounded square above the title. */
   icon?: React.ReactNode;
+  /** What is missing, for example "No trips yet". */
   title: React.ReactNode;
+  /** What will appear here and how to add the first one. */
   description?: React.ReactNode;
+  /** Buttons under the text. */
   actions?: React.ReactNode;
 }
 
@@ -424,8 +451,11 @@ export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(function Empty
 export const Accordion = part('div', 'bk-accordion', 'Accordion');
 
 export interface AccordionItemProps extends Omit<React.DetailsHTMLAttributes<HTMLDetailsElement>, 'title' | 'onToggle'> {
+  /** Text of the clickable row. */
   title: React.ReactNode;
+  /** Start expanded. */
   defaultOpen?: boolean;
+  /** Called when the row opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 

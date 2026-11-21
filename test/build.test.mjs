@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
 const root = new URL('../', import.meta.url);
@@ -18,7 +20,7 @@ test('every exported file exists', () => {
 });
 
 test('no monospace font anywhere in the shipped styles, themes or kit', () => {
-  for (const file of ['dist/bento.css', 'dist/tokens.css', 'dist/shadcn-theme.css', 'dist/flutter/bento_theme.dart', 'dist/tokens.json', 'index.html', 'src/css/components.css']) {
+  for (const file of ['dist/bento.css', 'dist/tokens.css', 'dist/shadcn-theme.css', 'dist/flutter/bento_theme.dart', 'dist/tokens.json', 'site/kit.html', 'site/home.html', 'site/assets/docs.css', 'src/css/components.css']) {
     assert.doesNotMatch(read(file), /font-mono|JetBrains|Courier|IBM Plex Mono|Red Hat Mono|\bmonospace\s*[;,}"'\)]/i, file);
   }
 });
@@ -29,6 +31,12 @@ test('component CSS reads colours from tokens', () => {
   assert.deepEqual(literals, [], 'unexpected hex colours in components.css');
 });
 
+function docFiles() {
+  const dir = fileURLToPath(new URL('docs/', root));
+  const walk = (d) => readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(join(d, e.name)) : e.name.endsWith('.md') ? [join(d, e.name)] : []));
+  return walk(dir).map((f) => relative(fileURLToPath(root), f));
+}
+
 function classesIn(html) {
   const out = new Set();
   for (const m of html.matchAll(/class(?:Name)?="([^"]+)"/g)) {
@@ -38,7 +46,7 @@ function classesIn(html) {
 }
 
 test('every bk- class used in the docs and the kit exists in bento.css', () => {
-  const sources = ['index.html', ...readdirSync(new URL('docs/', root)).map((f) => `docs/${f}`)];
+  const sources = ['site/kit.html', 'site/home.html', ...docFiles()];
   const missing = [];
   for (const file of sources) {
     for (const cls of classesIn(read(file))) {
@@ -97,5 +105,6 @@ test('llms.txt follows the llmstxt.org shape and llms-full.txt holds every guide
   assert.match(index, /^# bento-shad-ui\n\n> /);
   assert.match(index, /\n## Docs\n/);
   const full = read('llms-full.txt');
-  for (const f of readdirSync(new URL('docs/', root))) assert.ok(full.includes(`<!-- docs/${f} -->`), `${f} missing from llms-full.txt`);
+  for (const f of docFiles()) assert.ok(full.includes(`<!-- ${f} -->`), `${f} missing from llms-full.txt`);
+  assert.doesNotMatch(full, /```html preview/, 'preview flags should be stripped for LLMs');
 });

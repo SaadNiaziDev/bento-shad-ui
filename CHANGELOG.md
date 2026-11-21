@@ -2,6 +2,23 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [0.1.2] - 2026-11-21
+
+### Added
+
+- Documentation website at https://saadniazidev.github.io/bento-shad-ui/: a landing page, sidebar navigation, a page per component with live previews and Preview/HTML tabs, syntax-highlighted code with copy buttons, props tables generated from the TypeScript types, ⌘K search, "On this page" contents, previous/next links, Edit on GitHub, Copy page as Markdown, light/dark, sitemap and 404.
+- 47 component pages and a Typography guide in `docs/`. `llms-full.txt` now includes every component page.
+- JSDoc descriptions for every React prop, so editors show them on hover.
+- `npm run docs` and `npm run docs:serve`. CI builds the site; Pages deploys it.
+
+### Fixed
+
+- `code`, `kbd`, `pre` and `samp` inside `.bk` no longer fall back to the browser's monospace font.
+
+### Changed
+
+- The live kit moved from `index.html` to `site/kit.html` and is served at `/kit/`.
+
 ## [0.1.1] - 2026-11-21
 
 ### Fixed
@@ -25,5 +42,6 @@ First public release.
 - Docs for HTML, React, shadcn, Flutter, theming, layout, components, JS API, accessibility and AI agents; `llms.txt` and `llms-full.txt`.
 - Tests: token parity, WCAG contrast, build output, React rendering and pure helpers. CI and GitHub Pages workflows.
 
+[0.1.2]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.2
 [0.1.1]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.0

@@ -13,7 +13,7 @@ function Chevron({ dir }: { dir: 'left' | 'right' }) {
 
 /* ---------------------------------------------------------------- Link-like items (asChild support) */
 
-interface LinkLikeProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface LinkLikeProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Marks the item as the current page (`aria-current="page"`). */
   current?: boolean;
   /** Render the single child (e.g. Next.js `<Link>`) instead of an `<a>`. */
@@ -70,8 +70,11 @@ function useTabs(component: string): TabsContextValue {
 const slug = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '-');
 
 export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+  /** Selected tab (controlled). */
   value?: string;
+  /** Initially selected tab (uncontrolled). */
   defaultValue?: string;
+  /** Called with the newly selected tab value. */
   onValueChange?: (value: string) => void;
 }
 
@@ -123,6 +126,7 @@ export const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(function
 });
 
 export interface TabsTriggerProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {
+  /** Matches the `value` of a `TabsContent`. */
   value: string;
 }
 
@@ -149,6 +153,7 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
 });
 
 export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Shown when this matches the selected tab's `value`. */
   value: string;
   /** Keep the panel in the DOM when hidden (it stays hidden). */
   forceMount?: boolean;
@@ -181,6 +186,7 @@ export interface BreadcrumbItem {
 }
 
 export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
+  /** Trail from the top level to the current page. The last item is the current page. */
   items: readonly BreadcrumbItem[];
   /** Link component for router links, e.g. Next.js `Link`. Receives `href`. Default `a`. */
   linkAs?: React.ElementType;
@@ -230,9 +236,13 @@ export function getPaginationRange(page: number, pageCount: number, siblingCount
 }
 
 export interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
+  /** Current page, starting at 1. */
   page: number;
+  /** Total number of pages. */
   pageCount: number;
+  /** Called with the page the user picked. */
   onPageChange?: (page: number) => void;
+  /** Pages shown on each side of the current one. Default 1. */
   siblingCount?: number;
   /** Render links instead of buttons (for server-rendered pages). */
   getHref?: (page: number) => string;
@@ -297,6 +307,7 @@ export const SidebarLabel = part('div', 'bk-sidebar-label', 'SidebarLabel');
 export const SidebarFooter = part('div', 'bk-sidebar-footer', 'SidebarFooter');
 
 export interface SidebarItemProps extends LinkLikeProps {
+  /** Icon before the label. */
   icon?: React.ReactNode;
   /** Count or status at the end, usually a `Badge`. */
   badge?: React.ReactNode;
@@ -311,6 +322,7 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
 export const BottomNav = part('nav', 'bk-bottom-nav', 'BottomNav');
 
 export interface BottomNavItemProps extends LinkLikeProps {
+  /** Icon above the label. */
   icon: React.ReactNode;
 }
 

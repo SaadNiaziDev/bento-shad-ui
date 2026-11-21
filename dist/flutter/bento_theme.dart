@@ -1,4 +1,4 @@
-// bento-shad-ui v0.1.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui
+// bento-shad-ui v0.1.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui
 // Generated from tokens.json by scripts/build.mjs. Do not edit by hand.
 //
 // MaterialApp(theme: BentoTheme.light(), darkTheme: BentoTheme.dark())
@@ -379,7 +379,7 @@ class BentoColors extends ThemeExtension<BentoColors> {
 class BentoTheme {
   BentoTheme._();
 
-  static const String version = '0.1.1';
+  static const String version = '0.1.2';
   static const String fontFamily = 'Red Hat Text';
   static const String headingFontFamily = 'Red Hat Display';
   static const double radius = 16;

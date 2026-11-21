@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.1.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.1.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 "use strict";
 var BentoUI = (() => {
   var __defProp = Object.defineProperty;
@@ -401,7 +401,7 @@ var BentoUI = (() => {
   }
 
   // src/core/index.ts
-  var version = "0.1.1";
+  var version = "0.1.2";
   function init(root = isBrowser ? document : void 0) {
     if (!isBrowser || !root) return;
     initTabs(root);

@@ -2,7 +2,7 @@
 // from src/ and docs/. Deterministic: running it twice gives identical output (CI checks this).
 import { build, transform } from 'esbuild';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hexToOklch } from './color.mjs';
@@ -428,15 +428,31 @@ await build({
 execFileSync(join(root, 'node_modules/.bin/tsc'), ['-p', join(root, 'tsconfig.json'), '--emitDeclarationOnly', '--outDir', join(root, 'dist/types')], { stdio: 'inherit' });
 
 /* ------------------------------------------------------------------ llms-full.txt */
-const DOC_ORDER = [
-  'getting-started', 'installation', 'html', 'react', 'shadcn', 'flutter', 'theming', 'layout', 'components', 'javascript-api', 'accessibility', 'ai-agents',
+const GUIDE_ORDER = [
+  'getting-started', 'installation', 'html', 'react', 'shadcn', 'flutter', 'theming', 'typography', 'layout', 'components', 'javascript-api', 'accessibility', 'ai-agents',
 ];
+const GROUP_ORDER = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation'];
+function forLlm(file) {
+  const raw = read(file);
+  const m = raw.match(/^---\n([\s\S]*?)\n---\n?/);
+  const fm = {};
+  if (m) for (const line of m[1].split('\n')) { const i = line.indexOf(':'); if (i > 0) fm[line.slice(0, i).trim()] = line.slice(i + 1).trim(); }
+  let body = m ? raw.slice(m[0].length) : raw;
+  body = body.replace(/^```(\w+)[ \t]+preview(?:[ \t]+full)?[ \t]*$/gm, '```$1');
+  const head = fm.title ? `# ${fm.title}\n\n> ${fm.description ?? ''}\n\n` : '';
+  return { fm, text: `<!-- ${file} -->\n\n${head}${body.trim()}\n` };
+}
+const componentDocs = readdirSync(join(root, 'docs/components'))
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => forLlm(`docs/components/${f}`))
+  .sort((a, b) => GROUP_ORDER.indexOf(a.fm.group) - GROUP_ORDER.indexOf(b.fm.group) || a.fm.title.localeCompare(b.fm.title));
 const full = [
   `# bento-shad-ui v${VERSION}: full documentation for LLMs`,
   '',
-  `> Every guide in one file. Source: https://github.com/${REPO}/tree/main/docs. Index: llms.txt.`,
+  `> Every guide and every component page in one file. Source: https://github.com/${REPO}/tree/main/docs. Website: ${pkg.homepage}. Index: llms.txt.`,
   '',
-  ...DOC_ORDER.map((name) => `<!-- docs/${name}.md -->\n\n${read(`docs/${name}.md`).trim()}\n`),
+  ...GUIDE_ORDER.map((name) => forLlm(`docs/${name}.md`).text),
+  ...componentDocs.map((d) => d.text),
 ].join('\n');
 write('llms-full.txt', full.replace(/\n{3,}/g, '\n\n'));
 
