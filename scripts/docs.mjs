@@ -34,6 +34,7 @@ const slugify = (s) =>
   s.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
 const write = (p, content) => {
   if (p.endsWith('.html') && !p.startsWith('kit/')) {
+    content = prerenderCharacters(content);
     const problems = checkNesting(content);
     if (problems.length) throw new Error(`${p}: broken HTML structure\n  ${problems.slice(0, 8).join('\n  ')}`);
   }
@@ -100,7 +101,7 @@ addPage('CONTRIBUTING.md', 'docs/contributing/', { navTitle: 'Contributing' });
 const byFile = new Map(pages.map((p) => [p.file, p]));
 const byUrl = new Map(pages.map((p) => [p.url, p]));
 
-const COMPONENT_GROUPS = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation'];
+const COMPONENT_GROUPS = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation', 'Illustrations'];
 for (const p of pages.filter((p) => p.file.startsWith('docs/components/'))) {
   if (!COMPONENT_GROUPS.includes(p.group)) throw new Error(`${p.file}: group "${p.group}" must be one of ${COMPONENT_GROUPS.join(', ')}`);
 }
@@ -202,6 +203,39 @@ function extractProps() {
   return tables;
 }
 const PROPS = extractProps();
+const ILL = await import(join(ROOT, 'dist/illustrations.js'));
+const MOOD_LABEL = { neutral: 'Neutral', happy: 'Happy', surprised: 'Surprised', sad: 'Sad', thinking: 'Thinking', sleepy: 'Sleepy' };
+
+function characterGallery() {
+  const tiles = ILL.characters.map((c) => {
+    const target = `gal-${c.id}`;
+    const toggles = ILL.moods
+      .map((m) => `<button class="bk-toggle" type="button" data-doc-mood="${m}" data-target="${target}" aria-pressed="${m === 'neutral'}">${MOOD_LABEL[m]}</button>`)
+      .join('');
+    return `<article class="bk-tile doc-character" id="character-${c.id}">
+<div class="doc-character-art"><span class="bk-illustration" id="${target}" data-bk-character="${c.id}" data-mood="neutral" style="--size: 176px" aria-label="${esc(c.name)} the ${c.kind === 'person' ? 'traveller' : esc(c.role.split(' ')[1] ?? 'animal')}"></span></div>
+<div class="bk-toggle-group doc-moods" data-type="single" role="group" aria-label="${esc(c.name)}'s mood">${toggles}</div>
+<div><h3 class="bk-tile-title">${esc(c.name)} <span class="bk-badge" data-variant="${c.kind === 'person' ? 'info' : 'success'}">${c.kind === 'person' ? 'Person' : 'Animal'}</span></h3><p class="bk-tile-description">${esc(c.role)}</p></div>
+<div class="bk-row" style="--gap: 5px">${c.traits.map((t) => `<span class="bk-badge" data-variant="outline">${esc(t)}</span>`).join('')}</div>
+<p class="doc-character-uses"><b>Good for:</b> ${esc(c.bestFor.join(', '))}</p>
+</article>`;
+  });
+  return `<div class="bk-bento doc-gallery"><div class="bk-bento-grid">${tiles.join('')}</div></div>`;
+}
+
+/** Draws every empty [data-bk-character] placeholder into the HTML, so characters show before scripts run. */
+let drawn = 0;
+function prerenderCharacters(html) {
+  return html.replace(/<(span|div)(\s[^>]*?data-bk-character="([a-z]+)"[^>]*)><\/\1>/g, (all, tag, attrs, id) => {
+    const mood = attrs.match(/data-mood="([a-z]+)"/)?.[1] ?? 'neutral';
+    const label = attrs.match(/aria-label="([^"]*)"/)?.[1];
+    if (!ILL.isCharacterId(id) || !ILL.isMood(mood)) throw new Error(`Unknown character or mood: ${id} ${mood}`);
+    let a = attrs.replace(/\saria-label="[^"]*"/, label ? ` data-label="${label}"` : '');
+    if (!/class="[^"]*bk-illustration/.test(a)) a = a.includes('class="') ? a.replace('class="', 'class="bk-illustration ') : ` class="bk-illustration"${a}`;
+    const svg = ILL.renderCharacter(id, mood, { idPrefix: `pre${++drawn}`, title: label?.replace(/&quot;/g, '"').replace(/&amp;/g, '&') });
+    return `<${tag}${a}>${svg}</${tag}>`;
+  });
+}
 
 function propsTable(name) {
   const table = PROPS.get(name);
@@ -294,6 +328,7 @@ marked.use({
     html({ text }) {
       const m = text.match(/<!--\s*props:\s*(\w+)\s*-->/);
       if (m) return propsTable(m[1]);
+      if (/<!--\s*character-gallery\s*-->/.test(text)) return characterGallery();
       return text;
     },
     blockquote({ tokens }) {
@@ -397,6 +432,7 @@ ${body}
   <div class="bk-command-footer"><span><kbd class="bk-kbd">↑</kbd><kbd class="bk-kbd">↓</kbd> move</span><span><kbd class="bk-kbd">↵</kbd> open</span><span><kbd class="bk-kbd">esc</kbd> close</span></div>
 </dialog>
 <script src="${root}dist/bento.iife.min.js"></script>
+<script src="${root}dist/illustrations.iife.min.js"></script>
 <script src="${root}assets/docs.js"></script>
 </body>
 </html>
@@ -504,7 +540,7 @@ const notFound = shell({
   url: '',
   title: 'Page not found',
   description: 'This page does not exist.',
-  body: `<main class="doc-404" id="content"><div class="bk-empty"><span class="bk-empty-icon">${icon('map-pin', 'lg')}</span><h1 class="bk-empty-title">Page not found</h1><p class="bk-empty-description">The page moved or never existed. Search the docs or start from the introduction.</p><div class="bk-empty-actions"><a class="bk-button" href="docs/getting-started/">Introduction</a><button class="bk-button" data-variant="outline" type="button" data-doc-search>Search docs</button></div></div></main>`,
+  body: `<main class="doc-404" id="content"><div class="bk-empty"><div class="bk-empty-illustration"><span class="bk-illustration" data-bk-character="biscuit" data-mood="surprised" style="--size: 190px"></span></div><h1 class="bk-empty-title">Page not found</h1><p class="bk-empty-description">Biscuit sniffed everywhere and found nothing. The page moved or never existed. Search the docs or start from the introduction.</p><div class="bk-empty-actions"><a class="bk-button" href="docs/getting-started/">Introduction</a><button class="bk-button" data-variant="outline" type="button" data-doc-search>Search docs</button></div></div></main>`,
 }).replace('<head>', '<head>\n<base href="/bento-shad-ui/">');
 write('404.html', notFound);
 

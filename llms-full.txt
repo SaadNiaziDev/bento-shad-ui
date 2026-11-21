@@ -1,4 +1,4 @@
-# bento-shad-ui v0.1.2: full documentation for LLMs
+# bento-shad-ui v0.2.0: full documentation for LLMs
 
 > Every guide and every component page in one file. Source: https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs. Website: https://saadniazidev.github.io/bento-shad-ui/. Index: llms.txt.
 
@@ -30,8 +30,8 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
 </head>
 <body class="bk">
   <main class="bk-container">
@@ -53,7 +53,7 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 ## Quick start: React / Next.js
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
 ```
 
 ```tsx
@@ -87,7 +87,7 @@ Add `className="bk"` to `<body>` (or wrap your app in an element with it) so bas
 
 ## Versioning
 
-The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.1.2`, `@v0.1.2`).
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.2.0`, `@v0.2.0`).
 
 ## Next
 
@@ -107,9 +107,9 @@ Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). Fo
 The package is installed straight from the GitHub repository. Always pin a tag.
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
-# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.1.2
-# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.1.2
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.2.0
+# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.2.0
 ```
 
 What you can import:
@@ -133,8 +133,8 @@ The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it 
 jsDelivr serves files from the GitHub tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
 ```
 
 The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
@@ -143,7 +143,7 @@ As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/index.js';
+  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/index.js';
   start();
 </script>
 ```
@@ -154,9 +154,9 @@ In a project that already ran `npx shadcn@latest init`:
 
 ```bash
 # 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
 # 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
 ```
 
 Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
@@ -168,7 +168,7 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
 
 ```bash
-curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).
@@ -337,7 +337,7 @@ The kit doesn't ship an icon set. Any 24×24 stroke icon works; Lucide matches b
 ## Install
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
 ```
 
 ## Next.js App Router
@@ -518,8 +518,8 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-theme.json --overwrite
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
 ```
 
 - `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.
@@ -613,7 +613,7 @@ It passes `flutter analyze` with no warnings.
 ## Install
 
 ```bash
-curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/dist/flutter/bento_theme.dart
+curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/dist/flutter/bento_theme.dart
 ```
 
 ## Fonts
@@ -798,7 +798,7 @@ To change the brand for CSS, shadcn and Flutter at once:
 
 1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
 2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
-3. Commit, tag (`v0.1.2-yourbrand.1`) and install your fork's tag.
+3. Commit, tag (`v0.2.0-yourbrand.1`) and install your fork's tag.
 
 ## Scoped themes
 
@@ -974,7 +974,7 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 
 # Components
 
-47 components, each with a live preview, HTML markup, React usage, a props table generated from the TypeScript source, and accessibility notes.
+47 components and 8 illustrated characters, each with a live preview, HTML markup, React usage, a props table generated from the TypeScript source, and accessibility notes.
 
 ## Layout
 
@@ -1018,6 +1018,10 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 ## Navigation
 
 - [Tabs](components/tabs.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
+
+## Illustrations
+
+- [Characters](components/characters.md): eight pencil-drawn people and animals with six moods each, for empty states, errors, loading and success
 
 ## Conventions
 
@@ -2753,6 +2757,19 @@ Variants: `default`, `info`, `success`, `warning`, `destructive`.
 </div>
 ```
 
+### With a character
+
+```html
+<div class="bk-empty">
+  <div class="bk-empty-illustration"><span class="bk-illustration" data-bk-character="pip" data-mood="thinking"></span></div>
+  <h4 class="bk-empty-title">No results for "Lisbn"</h4>
+  <p class="bk-empty-description">Check the spelling, or search for a country instead of a city.</p>
+  <div class="bk-empty-actions"><button class="bk-button" data-variant="outline" type="button">Clear search</button></div>
+</div>
+```
+
+See [Characters](characters.md) for the whole cast.
+
 ## Usage
 
 ```tsx
@@ -2764,6 +2781,12 @@ import { Plane, Plus } from 'lucide-react';
   title="No trips yet"
   description="Trips you plan or get invited to show up here. Start with a city and dates."
   actions={<Button><Plus />Plan a trip</Button>}
+/>
+
+<Empty
+  illustration={<PencilCharacter character="pip" mood="thinking" />}
+  title='No results for "Lisbn"'
+  description="Check the spelling, or search for a country instead of a city."
 />
 ```
 
@@ -3482,3 +3505,113 @@ Wrap the list and panels in `[data-bk-tabs]`. Each `role="tab"` button points at
 
 - ←/→ move between tabs and select them, Home and End jump to the ends. Only the selected tab is in the Tab order.
 - Tabs and panels are linked with `aria-controls` and `aria-labelledby`.
+
+<!-- docs/components/characters.md -->
+
+# Characters
+
+> Eight hand-drawn pencil characters, four people and four animals, each with six moods. Use them for empty states, errors, loading, success and onboarding.
+
+<!-- character-gallery -->
+
+Pick a mood on any card to see it. Every character is drawn by the same pencil kit: graphite lines drawn twice and slightly wobbled, hatching for shadows, and coloured-pencil fills taken from the tint tokens. Lines follow the text colour, so in dark mode they turn into chalk on dark paper.
+
+## Usage
+
+```tsx
+import { PencilCharacter, Empty, Button } from 'bento-shad-ui/react';
+
+<PencilCharacter character="pip" mood="thinking" size={160} />
+
+<Empty
+  illustration={<PencilCharacter character="pip" mood="thinking" />}
+  title="No trips yet"
+  description="Trips you plan or get invited to show up here."
+  actions={<Button>Plan a trip</Button>}
+/>
+```
+
+In HTML, load the illustrations script once. It draws every element with `data-bk-character`, including ones added later, and redraws when `data-mood` changes:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations.iife.min.js" defer></script>
+
+<span data-bk-character="moss" data-mood="sleepy" data-size="140" aria-label="Moss the turtle, waiting"></span>
+```
+
+```js
+document.querySelector('[data-bk-character]').dataset.mood = 'happy'; // redraws
+```
+
+Or use a ready-made file. These use plain colours instead of tokens, so they work in `<img>`, email, Figma and Flutter:
+
+```html
+<img src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations/biscuit-surprised.svg" width="160" height="160" alt="">
+```
+
+Files are named `<character>-<mood>.svg`, for example `pip-thinking.svg`. `dist/illustrations/index.json` lists all of them.
+
+### Any JavaScript
+
+```ts
+import { renderCharacter, characters, moods } from 'bento-shad-ui/illustrations';
+
+el.innerHTML = renderCharacter('dumpling', 'sad', { title: 'Dumpling the cat, looking sorry' });
+characters.map((c) => c.name); // ['Mira', 'Theo', 'Zara', 'Kofi', 'Pip', 'Dumpling', 'Biscuit', 'Moss']
+```
+
+`renderCharacter` is a pure function that returns an SVG string, so it also works on the server and in build scripts. Pass a unique `idPrefix` when you render the same character more than once on a page.
+
+### Flutter
+
+Copy the SVG files into `assets/characters/` and draw them with `flutter_svg`. The pencil uses `currentColor`, so `SvgTheme` sets it:
+
+```dart
+SvgPicture.asset(
+  'assets/characters/pip-thinking.svg',
+  width: 160,
+  theme: SvgTheme(currentColor: Theme.of(context).extension<BentoColors>()!.foreground),
+)
+```
+
+## Which character for which moment
+
+| Situation | Character and mood |
+|---|---|
+| Empty list, no search results | Pip, `thinking` |
+| Loading, waiting, slow connection | Moss, `sleepy` |
+| Success, booking confirmed | Mira, `happy` |
+| Error, failed action | Dumpling, `sad` |
+| Page not found | Biscuit, `surprised` |
+| Offline, no messages | Zara, `sad` |
+| Welcome, guided tour, tips | Theo, `neutral` or `happy` |
+| Achievement, first trip planned | Kofi, `happy` |
+
+## Moods
+
+| Mood | Face | Extra |
+|---|---|---|
+| `neutral` | Open eyes, soft smile | Light blush |
+| `happy` | Closed smiling eyes, open smile | Blush |
+| `surprised` | Wide eyes, raised brows, round mouth | Motion lines |
+| `sad` | Drooping brows, frown | A tear |
+| `thinking` | Eyes looking up, one brow raised | Thought bubble with "?" |
+| `sleepy` | Closed eyes, small mouth | "z z" |
+
+## Changing the pencil colour
+
+The graphite colour is `--pencil`, which defaults to a mix of `--foreground` and `--background`. Override it on any parent:
+
+```css
+.onboarding { --pencil: var(--brand); }
+```
+
+## API
+
+<!-- props: PencilCharacterProps -->
+
+## Accessibility
+
+- Characters are decorative by default: the SVG is hidden from screen readers. Pass `label` (React) or `aria-label` (HTML) only when the drawing adds meaning the text around it doesn't already give.
+- Never put information only in the drawing. An empty state still needs its title and description.
+- The drawings have no animation, so they're unaffected by reduced-motion settings.

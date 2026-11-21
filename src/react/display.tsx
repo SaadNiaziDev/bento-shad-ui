@@ -425,6 +425,8 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert
 export interface EmptyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Icon in a rounded square above the title. */
   icon?: React.ReactNode;
+  /** A larger drawing above the title, usually a `PencilCharacter`. Use instead of `icon`. */
+  illustration?: React.ReactNode;
   /** What is missing, for example "No trips yet". */
   title: React.ReactNode;
   /** What will appear here and how to add the first one. */
@@ -434,9 +436,10 @@ export interface EmptyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 }
 
 /** Says what will appear here and how to add the first one. */
-export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(function Empty({ icon, title, description, actions, className, children, ...props }, ref) {
+export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(function Empty({ icon, illustration, title, description, actions, className, children, ...props }, ref) {
   return (
     <div ref={ref} className={cx('bk-empty', className)} {...props}>
+      {illustration ? <div className="bk-empty-illustration">{illustration}</div> : null}
       {icon ? <span className="bk-empty-icon" aria-hidden="true">{icon}</span> : null}
       <h4 className="bk-empty-title">{title}</h4>
       {description ? <p className="bk-empty-description">{description}</p> : null}

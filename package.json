@@ -1,7 +1,7 @@
 {
   "name": "bento-shad-ui",
-  "version": "0.1.2",
-  "description": "Bento-grid UI library with shadcn/ui anatomy: framework-free CSS, a typed vanilla core, React components, a shadcn/Tailwind v4 theme and a Flutter theme from one token file.",
+  "version": "0.2.0",
+  "description": "Bento-grid UI library with shadcn/ui anatomy: framework-free CSS, a typed vanilla core, React components, pencil-drawn characters, a shadcn/Tailwind v4 theme and a Flutter theme from one token file.",
   "keywords": [
     "ui",
     "design-system",
@@ -12,7 +12,9 @@
     "css",
     "components",
     "dark-mode",
-    "flutter"
+    "flutter",
+    "illustrations",
+    "characters"
   ],
   "license": "MIT",
   "author": "Saad Ali Khan (https://github.com/SaadNiaziDev)",
@@ -29,7 +31,9 @@
     "*.css",
     "./dist/auto.js",
     "./dist/bento.iife.js",
-    "./dist/bento.iife.min.js"
+    "./dist/bento.iife.min.js",
+    "./dist/illustrations.iife.js",
+    "./dist/illustrations.iife.min.js"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -47,6 +51,11 @@
       "types": "./dist/types/react/index.d.ts",
       "default": "./dist/react.js"
     },
+    "./illustrations": {
+      "types": "./dist/types/illustrations/index.d.ts",
+      "default": "./dist/illustrations.js"
+    },
+    "./illustrations/*": "./dist/illustrations/*",
     "./bento.css": "./dist/bento.css",
     "./bento.min.css": "./dist/bento.min.css",
     "./tokens.css": "./dist/tokens.css",
@@ -70,7 +79,7 @@
     "docs": "node scripts/docs.mjs",
     "docs:serve": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs",
+    "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs test/illustrations.test.mjs",
     "check": "npm run typecheck && npm run build && npm test && npm run docs"
   },
   "peerDependencies": {

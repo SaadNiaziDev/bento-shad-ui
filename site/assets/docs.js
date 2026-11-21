@@ -32,6 +32,11 @@
       return;
     }
     if (t.closest('[data-doc-search]')) openSearch();
+    var moodBtn = t.closest('[data-doc-mood]');
+    if (moodBtn) {
+      var art = document.getElementById(moodBtn.getAttribute('data-target'));
+      if (art) art.setAttribute('data-mood', moodBtn.getAttribute('data-doc-mood'));
+    }
   });
 
   /* ---------- keep the current sidebar link in view ---------- */

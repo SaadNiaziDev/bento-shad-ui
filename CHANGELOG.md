@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [0.2.0] - 2026-11-21
+
+### Added
+
+- **Pencil characters**: eight original hand-drawn characters, four people (Mira, Theo, Zara, Kofi) and four animals (Pip the owl, Dumpling the cat, Biscuit the dachshund, Moss the turtle). Each has six moods: neutral, happy, surprised, sad, thinking, sleepy.
+  - Graphite lines in `currentColor` (re-coloured with `--pencil`), hatching, and coloured-pencil fills from the tint tokens, so they follow the theme and dark mode.
+  - `bento-shad-ui/illustrations`: `renderCharacter(id, mood, options)`, `characters`, `moods`, typed and SSR-safe.
+  - React: `<PencilCharacter character mood size label />`, re-exported from `bento-shad-ui/react`.
+  - HTML: `dist/illustrations.iife.min.js` draws every `[data-bk-character]` and redraws when `data-mood` changes.
+  - 48 standalone SVGs with plain colours in `dist/illustrations/` (for `<img>`, Figma, Flutter via `flutter_svg`) plus `index.json`.
+- `Empty` gets an `illustration` slot; CSS `.bk-illustration` and `.bk-empty-illustration`.
+- Docs: Characters page with a live mood switcher, Biscuit on the 404 page, the cast on the home page.
+
 ## [0.1.2] - 2026-11-21
 
 ### Added
@@ -42,6 +55,7 @@ First public release.
 - Docs for HTML, React, shadcn, Flutter, theming, layout, components, JS API, accessibility and AI agents; `llms.txt` and `llms-full.txt`.
 - Tests: token parity, WCAG contrast, build output, React rendering and pure helpers. CI and GitHub Pages workflows.
 
+[0.2.0]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.2.0
 [0.1.2]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.2
 [0.1.1]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.0

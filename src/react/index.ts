@@ -10,7 +10,10 @@ export * from './navigation';
 export * from './calendar';
 export * from './overlay';
 export * from './theme';
+export * from './illustration';
 export { cx, Slot, useControllableState } from './utils';
+export { characters, moods, renderCharacter } from '../illustrations';
+export type { CharacterId, CharacterInfo, Mood } from '../illustrations';
 
 export { getTheme, onThemeChange, resolveTheme, setTheme, themeScript, toast, version } from '../core';
 export type { DismissToast, ResolvedTheme, Theme, ThemeChangeDetail, ToastAction, ToastOptions, ToastVariant } from '../core';

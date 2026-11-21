@@ -176,6 +176,8 @@ export declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.R
 export interface EmptyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     /** Icon in a rounded square above the title. */
     icon?: React.ReactNode;
+    /** A larger drawing above the title, usually a `PencilCharacter`. Use instead of `icon`. */
+    illustration?: React.ReactNode;
     /** What is missing, for example "No trips yet". */
     title: React.ReactNode;
     /** What will appear here and how to add the first one. */

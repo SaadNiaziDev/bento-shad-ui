@@ -1,5 +1,5 @@
 "use client";
-/*! bento-shad-ui v0.1.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.2.0 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 
 // src/react/layout.tsx
 import * as React2 from "react";
@@ -641,8 +641,9 @@ var Alert = React5.forwardRef(function Alert2({ variant = "default", icon, title
     }
   );
 });
-var Empty = React5.forwardRef(function Empty2({ icon, title, description, actions, className, children, ...props }, ref) {
+var Empty = React5.forwardRef(function Empty2({ icon, illustration, title, description, actions, className, children, ...props }, ref) {
   return /* @__PURE__ */ jsxs4("div", { ref, className: cx("bk-empty", className), ...props, children: [
+    illustration ? /* @__PURE__ */ jsx4("div", { className: "bk-empty-illustration", children: illustration }) : null,
     icon ? /* @__PURE__ */ jsx4("span", { className: "bk-empty-icon", "aria-hidden": "true", children: icon }) : null,
     /* @__PURE__ */ jsx4("h4", { className: "bk-empty-title", children: title }),
     description ? /* @__PURE__ */ jsx4("p", { className: "bk-empty-description", children: description }) : null,
@@ -1312,7 +1313,27 @@ function ThemeToggle({ className, labels = {} }) {
   return /* @__PURE__ */ jsx8("div", { role: "group", "aria-label": "Theme", className: cx("bk-toggle-group", className), "data-bk-react": "", children: ["light", "dark", "system"].map((t) => /* @__PURE__ */ jsx8("button", { type: "button", className: "bk-toggle", "aria-pressed": theme === t, "aria-label": names[t], onClick: () => setTheme(t), children: ICONS[t] }, t)) });
 }
 
+// src/react/illustration.tsx
+import * as React10 from "react";
+import { renderCharacter } from "./illustrations.js";
+import { jsx as jsx9 } from "react/jsx-runtime";
+var PencilCharacter = React10.forwardRef(function PencilCharacter2({ character, mood = "neutral", size = 160, label, className, style, ...props }, ref) {
+  const idPrefix = useSafeId("ch");
+  const svg = React10.useMemo(() => renderCharacter(character, mood, { idPrefix, title: label }), [character, mood, idPrefix, label]);
+  return /* @__PURE__ */ jsx9(
+    "span",
+    {
+      ref,
+      className: cx("bk-illustration", className),
+      style: { ...style, ["--size"]: `${size}px` },
+      dangerouslySetInnerHTML: { __html: svg },
+      ...props
+    }
+  );
+});
+
 // src/react/index.ts
+import { characters, moods, renderCharacter as renderCharacter2 } from "./illustrations.js";
 import { getTheme as getTheme2, onThemeChange as onThemeChange2, resolveTheme as resolveTheme2, setTheme as setTheme2, themeScript as themeScript2, toast, version as version2 } from "./index.js";
 export {
   Accordion,
@@ -1367,6 +1388,7 @@ export {
   NavbarLink,
   NavbarLinks,
   Pagination,
+  PencilCharacter,
   Popover,
   Progress,
   Radio,
@@ -1414,6 +1436,7 @@ export {
   ToggleGroup,
   Tooltip,
   barHeights,
+  characters,
   closePopover,
   cx,
   filterCommandGroups,
@@ -1421,7 +1444,9 @@ export {
   getPaginationRange,
   getTheme2 as getTheme,
   isSameDay,
+  moods,
   onThemeChange2 as onThemeChange,
+  renderCharacter2 as renderCharacter,
   resolveTheme2 as resolveTheme,
   setTheme2 as setTheme,
   sparklinePoints,

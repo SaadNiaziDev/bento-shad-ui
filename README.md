@@ -32,21 +32,24 @@ A UI library for interfaces built from tiles: plain CSS, a typed core and React 
 
 ## Features
 
-- **47 components**: buttons, forms, calendar, OTP, tables, stats, charts, dialogs, sheets, menus, command palette, navbar, sidebar and bottom nav. Each has a [docs page](https://saadniazidev.github.io/bento-shad-ui/docs/components/) with a live preview, HTML, React usage and a generated props table.
+- **47 components and 8 characters**: buttons, forms, calendar, OTP, tables, stats, charts, dialogs, sheets, menus, command palette, navbar, sidebar and bottom nav. Each has a [docs page](https://saadniazidev.github.io/bento-shad-ui/docs/components/) with a live preview, HTML, React usage and a generated props table.
 - **Bento layout**: tiles span 1–4 columns and 1–3 rows. The grid follows its container's width through container queries, so the same markup works in a sidebar, a modal or a full page.
 - **One token file, five targets**: framework-free CSS, a typed vanilla core, React components, a shadcn/ui + Tailwind v4 theme with registry items, and a Flutter theme.
 - **shadcn-compatible tokens**: the same names (`--primary`, `--muted-foreground`…) plus brand, status, inverse and five tile tints, written in OKLCH.
 - **Accessible**: WCAG AA contrast for every token pair in both themes, enforced by tests. Visible focus rings, full keyboard support, and native `<dialog>`, `popover` and `<details>` elements.
 - **Typed and SSR-safe**: TypeScript source with declaration files. Nothing touches `window` at import time, and the React bundle is marked `"use client"`.
+- **Pencil characters**: eight hand-drawn people and animals (Mira, Theo, Zara, Kofi, Pip, Dumpling, Biscuit, Moss), each with six moods, for empty states, errors, loading and success. They follow your tokens and turn to chalk in dark mode. [Meet the cast](https://saadniazidev.github.io/bento-shad-ui/docs/components/characters/).
 - **Distinctive type**: Red Hat Display and Red Hat Text, with no monospace font anywhere.
 - **Written for AI agents too**: `llms.txt`, `llms-full.txt` and a Markdown version of every docs page.
+
+<p align="center"><img src=".github/assets/characters.png" alt="The eight pencil characters: Mira with her map, Theo in a bucket hat, Zara with headphones, Kofi with a paper plane, Pip the owl on books, Dumpling the cat, Biscuit the dachshund and Moss the turtle." width="900"></p>
 
 <p align="center"><img src=".github/assets/docs-page.png" alt="A component page in the docs: sidebar navigation, a live Button preview with Preview and HTML tabs, and highlighted usage code." width="820"></p>
 
 ## Installation
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
 ```
 
 | Your stack | Use | Guide |
@@ -59,8 +62,8 @@ npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
 No build step:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
 ```
 
 Fonts: [Red Hat Display and Red Hat Text](https://fonts.google.com/?query=red+hat) (SIL OFL). The [installation guide](https://saadniazidev.github.io/bento-shad-ui/docs/installation/) covers Google Fonts, `next/font` and Flutter assets.
@@ -127,6 +130,9 @@ dist/
   index.js, auto.js               vanilla core (ESM)
   bento.iife.js, .min.js          script-tag build (window.BentoUI)
   react.js                        React components (ESM, "use client")
+  illustrations.js                pencil characters: renderCharacter(), characters, moods
+  illustrations.iife(.min).js     script-tag build: draws every [data-bk-character]
+  illustrations/*.svg             48 standalone SVGs (8 characters x 6 moods) + index.json
   types/                          TypeScript declarations
   shadcn-theme.css                globals.css for shadcn/ui + Tailwind v4
   flutter/bento_theme.dart        Flutter ThemeData + ThemeExtension

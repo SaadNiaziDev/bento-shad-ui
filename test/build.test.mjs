@@ -12,7 +12,7 @@ const css = read('dist/bento.css');
 test('every exported file exists', () => {
   for (const [subpath, target] of Object.entries(pkg.exports)) {
     const files = typeof target === 'string' ? [target] : Object.values(target);
-    for (const file of files) assert.ok(existsSync(new URL(file, root)), `${subpath} → ${file} is missing`);
+    for (const file of files) if (!file.includes('*')) assert.ok(existsSync(new URL(file, root)), `${subpath} → ${file} is missing`);
   }
   for (const file of ['dist/bento.iife.js', 'dist/bento.iife.min.js', 'r/bento-theme.json', 'r/bento-grid.json', 'r/registry.json', 'llms.txt', 'llms-full.txt']) {
     assert.ok(existsSync(new URL(file, root)), `${file} is missing`);

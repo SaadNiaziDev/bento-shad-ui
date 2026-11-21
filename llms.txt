@@ -4,19 +4,21 @@
 
 Key facts for generating code with this library:
 
-- Install: `npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2`. CSS: `import 'bento-shad-ui/bento.css'`. React: `import { … } from 'bento-shad-ui/react'`. HTML pages also need `class="bk"` on `<body>`.
+- Install: `npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0`. CSS: `import 'bento-shad-ui/bento.css'`. React: `import { … } from 'bento-shad-ui/react'`. HTML pages also need `class="bk"` on `<body>`.
 - Layout: `.bk-bento > .bk-bento-grid > .bk-tile` (React: `<BentoGrid><Tile span={2} rows={2} tone="peach">`). The grid has 4 columns above 900px of container width, 2 down to 560px, then 1.
 - Variants are `data-variant` / `data-size` / `data-tone` attributes in HTML and `variant` / `size` / `tone` props in React.
 - Colours only through tokens: shadcn names (`--background`, `--primary`, `--muted-foreground`…) plus `--brand`, `--success`, `--warning`, `--info`, `--destructive-foreground`, `--inverse`, `--tint-{peach,sky,mint,lilac,butter}`.
 - Fonts: Red Hat Text (body) and Red Hat Display (headings). There is no monospace font. Never add one.
 - Dark mode: `class="dark"` or `data-theme="dark|system"` on `<html>`; `setTheme()`; `<ThemeScript />` in `<head>`.
-- shadcn/ui projects: `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.1.2/r/bento-theme.json --overwrite`, then the same URL with `bento-grid.json`; use `BentoGrid`/`BentoTile` from `@/components/ui/bento-grid`.
+- Illustrations: 8 pencil characters (`mira`, `theo`, `zara`, `kofi` people; `pip` owl, `dumpling` cat, `biscuit` dachshund, `moss` turtle) × 6 moods (`neutral`, `happy`, `surprised`, `sad`, `thinking`, `sleepy`). React: `<PencilCharacter character="pip" mood="thinking" />`, `<Empty illustration={…} />`. HTML: `<span data-bk-character="pip" data-mood="thinking"></span>` + `dist/illustrations.iife.min.js`. Pairings: empty → Pip thinking, loading → Moss sleepy, success → Mira happy, error → Dumpling sad, 404 → Biscuit surprised.
+- shadcn/ui projects: `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite`, then the same URL with `bento-grid.json`; use `BentoGrid`/`BentoTile` from `@/components/ui/bento-grid`.
 
 ## Docs
 
 - [Getting started](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/getting-started.md): what the library is, the five layers, quick starts
 - [Installation](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/installation.md): npm from GitHub, CDN, shadcn registry, Flutter, fonts, troubleshooting
 - [Components](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components.md): index of all 47 components; each has its own page in docs/components/ with HTML, React and props
+- [Characters](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components/characters.md): the pencil-drawn cast, moods, React/HTML/Flutter usage, which character for which moment
 - [Typography](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/typography.md): type scale, classes, fonts
 - [Layout](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/layout.md): bento grid, spans, rows, tones, layout rules and recipes
 - [Theming](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/theming.md): full token list, dark mode, rebranding, scoped themes

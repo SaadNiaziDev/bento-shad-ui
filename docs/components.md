@@ -1,6 +1,6 @@
 # Components
 
-47 components, each with a live preview, HTML markup, React usage, a props table generated from the TypeScript source, and accessibility notes.
+47 components and 8 illustrated characters, each with a live preview, HTML markup, React usage, a props table generated from the TypeScript source, and accessibility notes.
 
 ## Layout
 
@@ -44,6 +44,10 @@
 ## Navigation
 
 - [Tabs](components/tabs.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
+
+## Illustrations
+
+- [Characters](components/characters.md): eight pencil-drawn people and animals with six moods each, for empty states, errors, loading and success
 
 ## Conventions
 

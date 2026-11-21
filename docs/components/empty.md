@@ -13,6 +13,19 @@ group: Feedback
 </div>
 ```
 
+### With a character
+
+```html preview full
+<div class="bk-empty">
+  <div class="bk-empty-illustration"><span class="bk-illustration" data-bk-character="pip" data-mood="thinking"></span></div>
+  <h4 class="bk-empty-title">No results for "Lisbn"</h4>
+  <p class="bk-empty-description">Check the spelling, or search for a country instead of a city.</p>
+  <div class="bk-empty-actions"><button class="bk-button" data-variant="outline" type="button">Clear search</button></div>
+</div>
+```
+
+See [Characters](characters.md) for the whole cast.
+
 ## Usage
 
 ```tsx
@@ -24,6 +37,12 @@ import { Plane, Plus } from 'lucide-react';
   title="No trips yet"
   description="Trips you plan or get invited to show up here. Start with a city and dates."
   actions={<Button><Plus />Plan a trip</Button>}
+/>
+
+<Empty
+  illustration={<PencilCharacter character="pip" mood="thinking" />}
+  title='No results for "Lisbn"'
+  description="Check the spelling, or search for a country instead of a city."
 />
 ```
 

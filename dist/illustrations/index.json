@@ -1,0 +1,202 @@
+{
+  "version": "0.2.0",
+  "moods": [
+    "neutral",
+    "happy",
+    "surprised",
+    "sad",
+    "thinking",
+    "sleepy"
+  ],
+  "characters": [
+    {
+      "id": "mira",
+      "name": "Mira",
+      "kind": "person",
+      "role": "The planner. Curious, organised, always one step ahead with a paper map.",
+      "traits": [
+        "Curly top bun",
+        "Round glasses",
+        "Freckles",
+        "Striped scarf",
+        "Folded paper map"
+      ],
+      "bestFor": [
+        "Onboarding",
+        "Success",
+        "Plans and schedules"
+      ]
+    },
+    {
+      "id": "theo",
+      "name": "Theo",
+      "kind": "person",
+      "role": "The guide. Unhurried and kind, has seen every trail twice.",
+      "traits": [
+        "Bucket hat",
+        "Bushy moustache and brows",
+        "Binoculars",
+        "Smile lines",
+        "Field jacket"
+      ],
+      "bestFor": [
+        "Welcome screens",
+        "Tips and help",
+        "Guided tours"
+      ]
+    },
+    {
+      "id": "zara",
+      "name": "Zara",
+      "kind": "person",
+      "role": "The connector. Always on a call, always the first to know.",
+      "traits": [
+        "Hijab",
+        "Over-ear headphones",
+        "Phone with a star sticker",
+        "Long lashes"
+      ],
+      "bestFor": [
+        "Messages and chat",
+        "Notifications",
+        "Offline states"
+      ]
+    },
+    {
+      "id": "kofi",
+      "name": "Kofi",
+      "kind": "person",
+      "role": "The explorer. Nine years old, unstoppable, folds a paper plane for every trip.",
+      "traits": [
+        "Twists",
+        "Gap-tooth grin",
+        "Backpack with a star patch",
+        "Paper plane",
+        "Hoodie"
+      ],
+      "bestFor": [
+        "Celebrations",
+        "First-run moments",
+        "Achievements"
+      ]
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "kind": "animal",
+      "role": "The owl who has read everything. Calm, a little smug, never lost for an answer.",
+      "traits": [
+        "Mismatched eyes",
+        "Monocle on a chain",
+        "Ear tufts",
+        "Sits on a stack of books"
+      ],
+      "bestFor": [
+        "Empty states",
+        "Search with no results",
+        "Help and docs"
+      ]
+    },
+    {
+      "id": "dumpling",
+      "name": "Dumpling",
+      "kind": "animal",
+      "role": "The cat who knocks things off tables, then looks very sorry about it.",
+      "traits": [
+        "One bent ear",
+        "Bell collar",
+        "Striped tail",
+        "Very round"
+      ],
+      "bestFor": [
+        "Errors and \"oops\" moments",
+        "Failed actions",
+        "Undo prompts"
+      ]
+    },
+    {
+      "id": "biscuit",
+      "name": "Biscuit",
+      "kind": "animal",
+      "role": "The dachshund who will sniff out anything, as long as it is roughly at nose height.",
+      "traits": [
+        "Extra-long body",
+        "Floppy ear",
+        "Polka-dot bandana",
+        "Wagging tail"
+      ],
+      "bestFor": [
+        "404 and not found",
+        "Search",
+        "Lost connections"
+      ]
+    },
+    {
+      "id": "moss",
+      "name": "Moss",
+      "kind": "animal",
+      "role": "The turtle who is never late, just takes the scenic route. A sprout grows from its shell.",
+      "traits": [
+        "Sprout on the shell",
+        "Hexagon shell",
+        "Stubby legs",
+        "Patient smile"
+      ],
+      "bestFor": [
+        "Loading",
+        "Waiting and progress",
+        "Slow connections"
+      ]
+    }
+  ],
+  "files": [
+    "mira-neutral.svg",
+    "mira-happy.svg",
+    "mira-surprised.svg",
+    "mira-sad.svg",
+    "mira-thinking.svg",
+    "mira-sleepy.svg",
+    "theo-neutral.svg",
+    "theo-happy.svg",
+    "theo-surprised.svg",
+    "theo-sad.svg",
+    "theo-thinking.svg",
+    "theo-sleepy.svg",
+    "zara-neutral.svg",
+    "zara-happy.svg",
+    "zara-surprised.svg",
+    "zara-sad.svg",
+    "zara-thinking.svg",
+    "zara-sleepy.svg",
+    "kofi-neutral.svg",
+    "kofi-happy.svg",
+    "kofi-surprised.svg",
+    "kofi-sad.svg",
+    "kofi-thinking.svg",
+    "kofi-sleepy.svg",
+    "pip-neutral.svg",
+    "pip-happy.svg",
+    "pip-surprised.svg",
+    "pip-sad.svg",
+    "pip-thinking.svg",
+    "pip-sleepy.svg",
+    "dumpling-neutral.svg",
+    "dumpling-happy.svg",
+    "dumpling-surprised.svg",
+    "dumpling-sad.svg",
+    "dumpling-thinking.svg",
+    "dumpling-sleepy.svg",
+    "biscuit-neutral.svg",
+    "biscuit-happy.svg",
+    "biscuit-surprised.svg",
+    "biscuit-sad.svg",
+    "biscuit-thinking.svg",
+    "biscuit-sleepy.svg",
+    "moss-neutral.svg",
+    "moss-happy.svg",
+    "moss-surprised.svg",
+    "moss-sad.svg",
+    "moss-thinking.svg",
+    "moss-sleepy.svg"
+  ]
+}

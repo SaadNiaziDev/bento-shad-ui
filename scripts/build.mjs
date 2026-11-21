@@ -410,8 +410,35 @@ const coreExternal = {
   name: 'core-external',
   setup(b) {
     b.onResolve({ filter: /^\.\.\/core$/ }, () => ({ path: './index.js', external: true }));
+    b.onResolve({ filter: /^\.\.\/illustrations$/ }, () => ({ path: './illustrations.js', external: true }));
   },
 };
+
+/* ------------------------------------------------------------------ Illustrations */
+await build({ ...common, entryPoints: [join(root, 'src/illustrations/index.ts')], outfile: join(root, 'dist/illustrations.js'), format: 'esm', platform: 'neutral', banner: { js: `/*! ${banner} */` } });
+for (const minify of [false, true]) {
+  await build({
+    ...common,
+    entryPoints: [join(root, 'src/illustrations/browser.ts')],
+    outfile: join(root, minify ? 'dist/illustrations.iife.min.js' : 'dist/illustrations.iife.js'),
+    format: 'iife',
+    globalName: 'BentoIllustrations',
+    platform: 'browser',
+    minify,
+    banner: { js: `/*! ${banner} */` },
+  });
+}
+const ill = await import(`${join(root, 'dist/illustrations.js')}?v=${Date.now()}`);
+const files = [];
+for (const c of ill.characters) {
+  for (const mood of ill.moods) {
+    const file = `${c.id}-${mood}.svg`;
+    const svg = ill.renderCharacter(c.id, mood, { colors: 'static', size: 200, title: `${c.name}, ${mood}` });
+    write(`dist/illustrations/${file}`, `<?xml version="1.0" encoding="UTF-8"?>\n<!-- ${banner} -->\n${svg}\n`);
+    files.push(file);
+  }
+}
+write('dist/illustrations/index.json', JSON.stringify({ version: VERSION, moods: ill.moods, characters: ill.characters, files }, null, 2) + '\n');
 await build({
   ...common,
   entryPoints: [join(root, 'src/react/index.ts')],
@@ -431,7 +458,7 @@ execFileSync(join(root, 'node_modules/.bin/tsc'), ['-p', join(root, 'tsconfig.js
 const GUIDE_ORDER = [
   'getting-started', 'installation', 'html', 'react', 'shadcn', 'flutter', 'theming', 'typography', 'layout', 'components', 'javascript-api', 'accessibility', 'ai-agents',
 ];
-const GROUP_ORDER = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation'];
+const GROUP_ORDER = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation', 'Illustrations'];
 function forLlm(file) {
   const raw = read(file);
   const m = raw.match(/^---\n([\s\S]*?)\n---\n?/);

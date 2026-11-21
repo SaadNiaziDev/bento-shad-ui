@@ -24,8 +24,8 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.1.2/dist/bento.iife.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
 </head>
 <body class="bk">
   <main class="bk-container">
@@ -47,7 +47,7 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 ## Quick start: React / Next.js
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.1.2
+npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
 ```
 
 ```tsx
@@ -81,7 +81,7 @@ Add `className="bk"` to `<body>` (or wrap your app in an element with it) so bas
 
 ## Versioning
 
-The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.1.2`, `@v0.1.2`).
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.2.0`, `@v0.2.0`).
 
 ## Next
 
