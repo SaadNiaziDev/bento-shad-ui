@@ -26,6 +26,10 @@ Node 18+ is required. Dev dependencies: TypeScript and esbuild (build), React (t
 
 Use the imperative mood and a scope when it helps: `button: add icon-lg size`, `tokens: darken warning for contrast`, `docs: Flutter fonts`.
 
+## Releases
+
+Maintainers release by tagging `vX.Y.Z` and publishing a GitHub release. The publish workflow then puts that version on npm with provenance. See "Releasing" in [AGENTS.md](https://github.com/SaadNiaziDev/bento-shad-ui/blob/main/AGENTS.md).
+
 ## Reporting bugs
 
 Open an issue with the browser, the stack (HTML / React / shadcn / Flutter), the smallest markup or code that shows the problem, and what you expected.

@@ -5,8 +5,8 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
 ```
 
 - `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.

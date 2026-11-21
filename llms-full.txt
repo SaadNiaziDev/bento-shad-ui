@@ -1,4 +1,4 @@
-# bento-shad-ui v0.2.0: full documentation for LLMs
+# bento-shad-ui v0.2.1: full documentation for LLMs
 
 > Every guide and every component page in one file. Source: https://github.com/SaadNiaziDev/bento-shad-ui/tree/main/docs. Website: https://saadniazidev.github.io/bento-shad-ui/. Index: llms.txt.
 
@@ -30,8 +30,8 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.iife.min.js" defer></script>
 </head>
 <body class="bk">
   <main class="bk-container">
@@ -53,7 +53,7 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 ## Quick start: React / Next.js
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui
 ```
 
 ```tsx
@@ -87,7 +87,7 @@ Add `className="bk"` to `<body>` (or wrap your app in an element with it) so bas
 
 ## Versioning
 
-The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. Always pin a tag (`#v0.2.0`, `@v0.2.0`).
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. npm ranges like `^0.2.1` only accept patch releases while the version is below 1.0, so updates never surprise you. Pin exact versions in CDN URLs.
 
 ## Next
 
@@ -102,15 +102,16 @@ The library follows semantic versioning. Class names, data attributes, token nam
 
 Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). For npm installs, Node 18+. For React, React 18 or 19.
 
-## 1. npm, from GitHub
-
-The package is installed straight from the GitHub repository. Always pin a tag.
+## 1. npm
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
-# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.2.0
-# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui
+# pnpm add bento-shad-ui
+# yarn add bento-shad-ui
+# bun add bento-shad-ui
 ```
+
+[bento-shad-ui on npm](https://www.npmjs.com/package/bento-shad-ui). Releases are published from GitHub Actions with npm provenance, so each version links to the commit it was built from.
 
 What you can import:
 
@@ -128,22 +129,24 @@ What you can import:
 
 The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it with no config.
 
+To install an unreleased commit, or your own fork, install from GitHub instead: `npm install github:SaadNiaziDev/bento-shad-ui#main`.
+
 ## 2. CDN (no build step)
 
-jsDelivr serves files from the GitHub tag:
+jsDelivr and unpkg serve every npm version. Pin the exact version in production:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.iife.min.js" defer></script>
 ```
 
-The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
+`https://unpkg.com/bento-shad-ui@0.2.1/dist/bento.min.css` works the same way. The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
 
 As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/index.js';
+  import { start, toast } from 'https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/index.js';
   start();
 </script>
 ```
@@ -154,9 +157,9 @@ In a project that already ran `npx shadcn@latest init`:
 
 ```bash
 # 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
 # 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
 ```
 
 Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
@@ -165,10 +168,10 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 
 ## 4. Flutter
 
-Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
+Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from the CDN):
 
 ```bash
-curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).
@@ -208,10 +211,11 @@ If the fonts fail to load, the system UI font is used; nothing breaks.
 ## Updating
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui@latest
+npm outdated bento-shad-ui   # what you have vs. the newest version
 ```
 
-Read `CHANGELOG.md` first. For CDN links, change the tag in the URL.
+Read the [changelog](https://github.com/SaadNiaziDev/bento-shad-ui/blob/main/CHANGELOG.md) first: until 1.0, a minor version (0.x.0) can contain breaking changes. For CDN links, change the version in the URL.
 
 ## Troubleshooting
 
@@ -337,7 +341,7 @@ The kit doesn't ship an icon set. Any 24×24 stroke icon works; Lucide matches b
 ## Install
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui
 ```
 
 ## Next.js App Router
@@ -518,8 +522,8 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
 ```
 
 - `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.
@@ -613,7 +617,7 @@ It passes `flutter analyze` with no warnings.
 ## Install
 
 ```bash
-curl -o lib/theme/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/dist/flutter/bento_theme.dart
+curl -o lib/theme/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/flutter/bento_theme.dart
 ```
 
 ## Fonts
@@ -798,7 +802,7 @@ To change the brand for CSS, shadcn and Flutter at once:
 
 1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
 2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
-3. Commit, tag (`v0.2.0-yourbrand.1`) and install your fork's tag.
+3. Commit, tag (`v0.2.1-yourbrand.1`) and install your fork with `npm install github:<you>/bento-shad-ui#v0.2.1-yourbrand.1`.
 
 ## Scoped themes
 
@@ -3534,7 +3538,7 @@ import { PencilCharacter, Empty, Button } from 'bento-shad-ui/react';
 In HTML, load the illustrations script once. It draws every element with `data-bk-character`, including ones added later, and redraws when `data-mood` changes:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations.iife.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/illustrations.iife.min.js" defer></script>
 
 <span data-bk-character="moss" data-mood="sleepy" data-size="140" aria-label="Moss the turtle, waiting"></span>
 ```
@@ -3546,7 +3550,7 @@ document.querySelector('[data-bk-character]').dataset.mood = 'happy'; // redraws
 Or use a ready-made file. These use plain colours instead of tokens, so they work in `<img>`, email, Figma and Flutter:
 
 ```html
-<img src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations/biscuit-surprised.svg" width="160" height="160" alt="">
+<img src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/illustrations/biscuit-surprised.svg" width="160" height="160" alt="">
 ```
 
 Files are named `<character>-<mood>.svg`, for example `pip-thinking.svg`. `dist/illustrations/index.json` lists all of them.

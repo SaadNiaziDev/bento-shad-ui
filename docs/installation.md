@@ -2,15 +2,16 @@
 
 Requirements: a current browser (Chrome, Edge, Safari, Firefox from 2024 on). For npm installs, Node 18+. For React, React 18 or 19.
 
-## 1. npm, from GitHub
-
-The package is installed straight from the GitHub repository. Always pin a tag.
+## 1. npm
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
-# pnpm add github:SaadNiaziDev/bento-shad-ui#v0.2.0
-# yarn add bento-shad-ui@github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui
+# pnpm add bento-shad-ui
+# yarn add bento-shad-ui
+# bun add bento-shad-ui
 ```
+
+[bento-shad-ui on npm](https://www.npmjs.com/package/bento-shad-ui). Releases are published from GitHub Actions with npm provenance, so each version links to the commit it was built from.
 
 What you can import:
 
@@ -28,22 +29,24 @@ What you can import:
 
 The package is ESM-only. Bundlers (Next.js, Vite, webpack 5, esbuild) handle it with no config.
 
+To install an unreleased commit, or your own fork, install from GitHub instead: `npm install github:SaadNiaziDev/bento-shad-ui#main`.
+
 ## 2. CDN (no build step)
 
-jsDelivr serves files from the GitHub tag:
+jsDelivr and unpkg serve every npm version. Pin the exact version in production:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/bento.iife.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.iife.min.js" defer></script>
 ```
 
-The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
+`https://unpkg.com/bento-shad-ui@0.2.1/dist/bento.min.css` works the same way. The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
 
 As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/index.js';
+  import { start, toast } from 'https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/index.js';
   start();
 </script>
 ```
@@ -54,9 +57,9 @@ In a project that already ran `npx shadcn@latest init`:
 
 ```bash
 # 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
 # 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
 ```
 
 Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
@@ -65,10 +68,10 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 
 ## 4. Flutter
 
-Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from GitHub):
+Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from the CDN):
 
 ```bash
-curl -o lib/bento_theme.dart https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.0/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).
@@ -108,10 +111,11 @@ If the fonts fail to load, the system UI font is used; nothing breaks.
 ## Updating
 
 ```bash
-npm install github:SaadNiaziDev/bento-shad-ui#v0.2.0
+npm install bento-shad-ui@latest
+npm outdated bento-shad-ui   # what you have vs. the newest version
 ```
 
-Read `CHANGELOG.md` first. For CDN links, change the tag in the URL.
+Read the [changelog](https://github.com/SaadNiaziDev/bento-shad-ui/blob/main/CHANGELOG.md) first: until 1.0, a minor version (0.x.0) can contain breaking changes. For CDN links, change the version in the URL.
 
 ## Troubleshooting
 

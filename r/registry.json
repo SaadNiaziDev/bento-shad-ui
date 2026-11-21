@@ -7,7 +7,7 @@
       "name": "bento-theme",
       "type": "registry:theme",
       "title": "Bento theme",
-      "description": "bento-shad-ui v0.2.0 tokens: shadcn colours plus brand, status, inverse and tile tints, light and dark."
+      "description": "bento-shad-ui v0.2.1 tokens: shadcn colours plus brand, status, inverse and tile tints, light and dark."
     },
     {
       "name": "bento-grid",

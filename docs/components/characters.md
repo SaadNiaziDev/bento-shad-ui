@@ -26,7 +26,7 @@ import { PencilCharacter, Empty, Button } from 'bento-shad-ui/react';
 In HTML, load the illustrations script once. It draws every element with `data-bk-character`, including ones added later, and redraws when `data-mood` changes:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations.iife.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/illustrations.iife.min.js" defer></script>
 
 <span data-bk-character="moss" data-mood="sleepy" data-size="140" aria-label="Moss the turtle, waiting"></span>
 ```
@@ -38,7 +38,7 @@ document.querySelector('[data-bk-character]').dataset.mood = 'happy'; // redraws
 Or use a ready-made file. These use plain colours instead of tokens, so they work in `<img>`, email, Figma and Flutter:
 
 ```html
-<img src="https://cdn.jsdelivr.net/gh/SaadNiaziDev/bento-shad-ui@v0.2.0/dist/illustrations/biscuit-surprised.svg" width="160" height="160" alt="">
+<img src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/illustrations/biscuit-surprised.svg" width="160" height="160" alt="">
 ```
 
 Files are named `<character>-<mood>.svg`, for example `pip-thinking.svg`. `dist/illustrations/index.json` lists all of them.

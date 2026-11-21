@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [0.2.1] - 2026-11-21
+
+First release on npm.
+
+### Added
+
+- Published to npm as [`bento-shad-ui`](https://www.npmjs.com/package/bento-shad-ui): `npm install bento-shad-ui` (pnpm, yarn and bun too).
+- `.github/workflows/publish.yml`: publishing a GitHub release puts the version on npm through trusted publishing, with provenance.
+
+### Changed
+
+- Install commands in the docs, README and `llms.txt` use npm instead of `github:SaadNiaziDev/bento-shad-ui#tag`. Installing from GitHub still works, for unreleased commits and forks.
+- CDN links use jsDelivr's npm route (`cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/…`); unpkg works as well.
+- README rewritten for npmjs.com: absolute image and link URLs, npm badges, a characters section and a table of every import path.
+
 ## [0.2.0] - 2026-11-21
 
 ### Added
@@ -55,6 +70,7 @@ First public release.
 - Docs for HTML, React, shadcn, Flutter, theming, layout, components, JS API, accessibility and AI agents; `llms.txt` and `llms-full.txt`.
 - Tests: token parity, WCAG contrast, build output, React rendering and pure helpers. CI and GitHub Pages workflows.
 
+[0.2.1]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.2.0
 [0.1.2]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.2
 [0.1.1]: https://github.com/SaadNiaziDev/bento-shad-ui/releases/tag/v0.1.1

@@ -64,6 +64,9 @@ group: Actions   # Layout | Actions | Forms | Data display | Feedback | Overlays
 
 ## Releasing
 
-1. Update `version` in `package.json` and add a `CHANGELOG.md` entry.
+Published to npm as `bento-shad-ui`. Versions on npm are permanent: a published version can never be changed or reused.
+
+1. Update `version` in `package.json` and add a `CHANGELOG.md` entry. Update pinned versions in the docs (`cdn.jsdelivr.net/npm/bento-shad-ui@X.Y.Z`, registry `/vX.Y.Z/` URLs) and the README.
 2. `npm run check`, commit, then `git tag vX.Y.Z && git push --follow-tags`.
-3. `gh release create vX.Y.Z --notes-file <notes>`. GitHub Pages redeploys from `main`.
+3. `gh release create vX.Y.Z --notes-file <notes>`. `.github/workflows/publish.yml` publishes to npm through trusted publishing (no token, with provenance) and skips a version that is already on npm. GitHub Pages redeploys from `main`.
+4. Check `npm view bento-shad-ui version` and the jsDelivr URL.
