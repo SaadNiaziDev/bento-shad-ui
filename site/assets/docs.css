@@ -111,7 +111,8 @@ body { margin: 0; min-height: 100vh; }
 .doc-example-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; min-height: 150px; padding: 32px 24px; font-size: 14px; line-height: 1.5; background: radial-gradient(circle at 1px 1px, color-mix(in oklch, var(--foreground) 10%, transparent) 1px, transparent 0) 0 0 / 16px 16px, var(--background); }
 .doc-example-preview[hidden] { display: none; }
 .doc-example-full .doc-example-preview { align-items: stretch; }
-.doc-example-preview > * { max-width: 100%; }
+/* zero specificity, so a component's own max-width (calendar, dialog…) still wins */
+:where(.doc-example-preview) > * { max-width: 100%; }
 .doc-example-code .doc-code { margin: 0; border: 0; border-radius: 0; }
 @media (max-width: 640px) { .doc-example-preview { padding: 24px 14px; } }
 

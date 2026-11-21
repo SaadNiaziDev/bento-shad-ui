@@ -33,6 +33,10 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 const slugify = (s) =>
   s.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
 const write = (p, content) => {
+  if (p.endsWith('.html') && !p.startsWith('kit/')) {
+    const problems = checkNesting(content);
+    if (problems.length) throw new Error(`${p}: broken HTML structure\n  ${problems.slice(0, 8).join('\n  ')}`);
+  }
   mkdirSync(dirname(join(OUT, p)), { recursive: true });
   writeFileSync(join(OUT, p), content);
 };
@@ -186,7 +190,8 @@ function extractProps() {
       let def = componentDefaults[prop.name];
       if (!def) {
         const m = doc.match(/Default:?\s+([^.,]+?)(?:\)|\.|,|$)/);
-        if (m) def = m[1].trim();
+        const raw = m?.[1].trim();
+        if (raw && /^([`'"\d[{-]|true$|false$|null$)/.test(raw)) def = raw.replace(/`/g, '');
       }
       rows.push({ name: prop.name, type: typeText, optional, def, doc });
     }
@@ -205,7 +210,7 @@ function propsTable(name) {
     .map(
       (r) => `<tr><td><code class="doc-prop">${esc(r.name)}</code>${r.optional ? '' : ' <span class="bk-badge" data-variant="secondary">required</span>'}</td>` +
         `<td><code class="doc-type">${esc(r.type)}</code></td><td>${r.def ? `<code class="doc-type">${esc(r.def)}</code>` : '<span class="doc-dash">–</span>'}</td>` +
-        `<td>${esc(r.doc)}</td></tr>`,
+        `<td>${esc(r.doc).replace(/`([^`]+)`/g, '<code class="doc-type">$1</code>')}</td></tr>`,
     )
     .join('');
   const extends_ = table.heritage.filter((h) => /^(Omit<)?React\./.test(h));
@@ -300,7 +305,7 @@ marked.use({
 function renderMarkdown(page) {
   ctx = { page, ids: new Set(['content']), toc: [], headings: [], examples: 0 };
   let html = marked.parse(page.body);
-  html = html.replace(/<table>/g, '<div class="bk-table-wrap"><table class="bk-table">').replace(/<\/table>/g, '</table></div>');
+  html = html.replace(/<table>([\s\S]*?)<\/table>/g, '<div class="bk-table-wrap"><table class="bk-table">$1</table></div>');
   return { html, toc: ctx.toc, headings: ctx.headings };
 }
 
@@ -400,6 +405,32 @@ ${body}
 
 function footer(root) {
   return `<footer class="doc-footer"><div>bento-shad-ui v${VERSION} · MIT · <a href="${REPO}">GitHub</a> · <a href="${root}llms.txt">llms.txt</a></div><div>Fonts: Red Hat Display, Red Hat Text (SIL OFL)</div></footer>`;
+}
+
+/* ------------------------------------------------------------------ HTML structure check */
+const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+/** Returns problems like "</div> closes over <main>" so broken pages fail the build instead of shipping. */
+function checkNesting(html) {
+  const body = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, '');
+  const stack = [];
+  const problems = [];
+  for (const m of body.matchAll(/<(\/?)([a-zA-Z][\w-]*)\b[^>]*?(\/?)>/g)) {
+    const [, closing, rawTag, selfClosing] = m;
+    const tag = rawTag.toLowerCase();
+    if (VOID.has(tag) || selfClosing) continue;
+    if (!closing) {
+      stack.push(tag);
+      continue;
+    }
+    const i = stack.lastIndexOf(tag);
+    if (i === -1) problems.push(`stray </${tag}>`);
+    else {
+      if (i !== stack.length - 1) problems.push(`</${tag}> closes over <${stack.slice(i + 1).join('>, <')}>`);
+      stack.length = i;
+    }
+  }
+  if (stack.length) problems.push(`unclosed <${stack.join('>, <')}>`);
+  return problems;
 }
 
 /* ------------------------------------------------------------------ build */
