@@ -5,7 +5,13 @@ group: Navigation
 ---
 
 ```html preview
-<nav aria-label="Breadcrumb"><ol class="bk-breadcrumb"><li><a href="#">Trips</a></li><li><a href="#">Lisbon</a></li><li><span aria-current="page">Day 2</span></li></ol></nav>
+<nav aria-label="Breadcrumb">
+    <ol class="bk-breadcrumb">
+        <li><a href="#">Trips</a></li>
+        <li><a href="#">Lisbon</a></li>
+        <li><span aria-current="page">Day 2</span></li>
+    </ol>
+</nav>
 ```
 
 ## Usage
@@ -15,9 +21,13 @@ import { Breadcrumb } from 'bento-shad-ui/react';
 import Link from 'next/link';
 
 <Breadcrumb
-  items={[{ label: 'Trips', href: '/trips' }, { label: 'Lisbon', href: '/trips/lisbon' }, { label: 'Day 2' }]}
-  linkAs={Link}
-/>
+    items={[
+        { label: 'Trips', href: '/trips' },
+        { label: 'Lisbon', href: '/trips/lisbon' },
+        { label: 'Day 2' },
+    ]}
+    linkAs={Link}
+/>;
 ```
 
 ## API

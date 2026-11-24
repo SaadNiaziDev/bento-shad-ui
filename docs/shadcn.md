@@ -5,8 +5,8 @@ If a project already uses shadcn/ui, keep its components and add the bento theme
 ## Option A: registry (recommended)
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.2/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.2/r/bento-grid.json
 ```
 
 - `bento-theme` writes the tokens into your CSS file (`:root`, `.dark`, `@theme inline`): every shadcn colour, the radius, the Red Hat fonts, and new tokens such as `--color-brand` and `--color-tint-peach` so `bg-brand` or `text-tint-sky-foreground` work. **Use `--overwrite`.** Without it, shadcn keeps its own values for tokens that already exist (`--primary`, `--radius`, `--font-sans`) and only adds the new ones.
@@ -24,7 +24,10 @@ Replace `app/globals.css` (or your Tailwind entry CSS) with `node_modules/bento-
 // app/layout.tsx
 import { Red_Hat_Display, Red_Hat_Text } from 'next/font/google';
 const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
-const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
+const display = Red_Hat_Display({
+    subsets: ['latin'],
+    variable: '--font-rh-display',
+});
 // <html className={`${text.variable} ${display.variable}`}>
 ```
 
@@ -33,8 +36,9 @@ The theme sets `--font-sans` and `--font-heading` to the Red Hat family names, w
 ```css
 /* in globals.css, inside @theme inline: point the font tokens at next/font */
 @theme inline {
-  --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
+    --font-heading:
+        var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
 }
 ```
 
@@ -43,30 +47,44 @@ Headings (`h1`–`h4`) use `--font-heading` through the base layer. Use `font-he
 ## BentoGrid and BentoTile
 
 ```tsx
-import { BentoGrid, BentoTile, BentoTileHeader, BentoTileTitle, BentoTileDescription } from '@/components/ui/bento-grid';
+import {
+    BentoGrid,
+    BentoTile,
+    BentoTileHeader,
+    BentoTileTitle,
+    BentoTileDescription,
+} from '@/components/ui/bento-grid';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 
 export function Features() {
-  return (
-    <BentoGrid>
-      <BentoTile span={2} rows={2} className="dark bg-background text-foreground border-transparent">
-        <BentoTileTitle className="text-2xl">Plan together</BentoTileTitle>
-        <Button>Invite people</Button>
-      </BentoTile>
-      <BentoTile tone="peach">
-        <BentoTileTitle>Offline maps</BentoTileTitle>
-        <BentoTileDescription>Download a city before you fly.</BentoTileDescription>
-      </BentoTile>
-      <BentoTile tone="sky">
-        <BentoTileHeader>
-          <BentoTileTitle>Price alerts</BentoTileTitle>
-          <Switch defaultChecked />
-        </BentoTileHeader>
-      </BentoTile>
-      <BentoTile span={2}>…</BentoTile>
-    </BentoGrid>
-  );
+    return (
+        <BentoGrid>
+            <BentoTile
+                span={2}
+                rows={2}
+                className="dark bg-background text-foreground border-transparent"
+            >
+                <BentoTileTitle className="text-2xl">
+                    Plan together
+                </BentoTileTitle>
+                <Button>Invite people</Button>
+            </BentoTile>
+            <BentoTile tone="peach">
+                <BentoTileTitle>Offline maps</BentoTileTitle>
+                <BentoTileDescription>
+                    Download a city before you fly.
+                </BentoTileDescription>
+            </BentoTile>
+            <BentoTile tone="sky">
+                <BentoTileHeader>
+                    <BentoTileTitle>Price alerts</BentoTileTitle>
+                    <Switch defaultChecked />
+                </BentoTileHeader>
+            </BentoTile>
+            <BentoTile span={2}>…</BentoTile>
+        </BentoGrid>
+    );
 }
 ```
 

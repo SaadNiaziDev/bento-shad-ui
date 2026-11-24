@@ -5,10 +5,28 @@ group: Layout
 ---
 
 ```html preview
-<div class="bk-stack" style="width: 300px">
-  <span class="bk-small">Itinerary</span>
-  <hr class="bk-separator">
-  <div class="bk-row" style="--gap: 12px; height: 20px"><span class="bk-muted">Day 1</span><hr class="bk-separator" data-orientation="vertical"><span class="bk-muted">Day 2</span><hr class="bk-separator" data-orientation="vertical"><span class="bk-muted">Day 3</span></div>
+<div
+    class="bk-stack"
+    style="width: 300px"
+>
+    <span class="bk-small">Itinerary</span>
+    <hr class="bk-separator" />
+    <div
+        class="bk-row"
+        style="--gap: 12px; height: 20px"
+    >
+        <span class="bk-muted">Day 1</span>
+        <hr
+            class="bk-separator"
+            data-orientation="vertical"
+        />
+        <span class="bk-muted">Day 2</span>
+        <hr
+            class="bk-separator"
+            data-orientation="vertical"
+        />
+        <span class="bk-muted">Day 3</span>
+    </div>
 </div>
 ```
 

@@ -5,7 +5,23 @@ group: Actions
 ---
 
 ```html preview
-<p class="bk-muted" style="margin:0">Press <span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span> to search, or <span class="bk-kbd-group"><kbd class="bk-kbd">Ctrl</kbd>+<kbd class="bk-kbd">K</kbd></span> on Windows.</p>
+<p
+    class="bk-muted"
+    style="margin: 0"
+>
+    Press
+    <span class="bk-kbd-group">
+        <kbd class="bk-kbd">⌘</kbd>
+        <kbd class="bk-kbd">K</kbd>
+    </span>
+    to search, or
+    <span class="bk-kbd-group">
+        <kbd class="bk-kbd">Ctrl</kbd>
+        +
+        <kbd class="bk-kbd">K</kbd>
+    </span>
+    on Windows.
+</p>
 ```
 
 ## Usage
@@ -13,11 +29,17 @@ group: Actions
 ```tsx
 import { Kbd, KbdGroup } from 'bento-shad-ui/react';
 
-<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
+<KbdGroup>
+    <Kbd>⌘</Kbd>
+    <Kbd>K</Kbd>
+</KbdGroup>;
 ```
 
 ```html
-<span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
+<span class="bk-kbd-group">
+    <kbd class="bk-kbd">⌘</kbd>
+    <kbd class="bk-kbd">K</kbd>
+</span>
 ```
 
 ## API

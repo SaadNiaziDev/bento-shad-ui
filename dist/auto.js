@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.2.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.2.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 // Side-effect entry: starts the vanilla behaviours. import 'bento-shad-ui/auto'
 import { start } from './index.js';
 

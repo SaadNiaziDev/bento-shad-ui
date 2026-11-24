@@ -41,24 +41,52 @@ export function toast(input: string | ToastOptions): DismissToast {
   region().appendChild(el);
 
   let timer: ReturnType<typeof setTimeout> | undefined;
-  const duration = options.duration ?? DEFAULT_DURATION;
+  let remaining = options.duration ?? DEFAULT_DURATION;
+  let startedAt = 0;
+  let hovered = false;
+  let focused = false;
+  let leaving = false;
+
+  const pause = () => {
+    if (timer === undefined) return;
+    clearTimeout(timer);
+    timer = undefined;
+    remaining = Math.max(0, remaining - (performance.now() - startedAt));
+  };
   const dismiss: DismissToast = () => {
-    if (timer) clearTimeout(timer);
-    if (!el.isConnected || el.hasAttribute('data-leaving')) return;
+    if (leaving) return;
+    leaving = true;
+    pause();
+    document.removeEventListener('visibilitychange', syncTimer);
+    if (!el.isConnected) return;
     el.setAttribute('data-leaving', '');
     setTimeout(() => el.remove(), 190);
   };
-  const schedule = (ms: number) => {
-    if (Number.isFinite(ms)) timer = setTimeout(dismiss, ms);
+  const syncTimer = () => {
+    if (leaving) return;
+    if (hovered || focused || document.hidden) {
+      pause();
+      return;
+    }
+    if (timer !== undefined || !Number.isFinite(remaining)) return;
+    startedAt = performance.now();
+    timer = setTimeout(dismiss, Math.max(0, remaining));
   };
 
   el.querySelector('[data-dismiss]')?.addEventListener('click', dismiss);
   el.querySelector('[data-act]')?.addEventListener('click', () => {
+    if (leaving) return;
     options.action?.onClick?.();
     dismiss();
   });
-  el.addEventListener('mouseenter', () => timer && clearTimeout(timer));
-  el.addEventListener('mouseleave', () => schedule(1800));
-  schedule(duration);
+  el.addEventListener('mouseenter', () => { hovered = true; syncTimer(); });
+  el.addEventListener('mouseleave', () => { hovered = false; syncTimer(); });
+  el.addEventListener('focusin', () => { focused = true; syncTimer(); });
+  el.addEventListener('focusout', (event) => {
+    focused = el.contains(event.relatedTarget as Node | null);
+    syncTimer();
+  });
+  document.addEventListener('visibilitychange', syncTimer);
+  syncTimer();
   return dismiss;
 }

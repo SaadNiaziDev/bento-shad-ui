@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.2.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.2.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 
 // src/illustrations/characters.ts
 var ground = (s, x1 = 44, x2 = 156, y = 189) => {

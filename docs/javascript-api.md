@@ -94,8 +94,11 @@ All events bubble.
 `dist/bento.iife.min.js` defines `window.BentoUI` with every export above and calls `start()` immediately.
 
 ```html
-<script src="…/bento.iife.min.js" defer></script>
+<script
+    src="…/bento.iife.min.js"
+    defer
+></script>
 <script>
-  addEventListener('DOMContentLoaded', () => BentoUI.toast('Ready'));
+    addEventListener('DOMContentLoaded', () => BentoUI.toast('Ready'));
 </script>
 ```

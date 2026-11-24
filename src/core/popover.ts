@@ -26,6 +26,9 @@ export function placePopover(popover: HTMLElement, anchor: HTMLElement | null = 
   let top = rect.bottom + gap;
   if (top + height > viewportHeight - 8 && rect.top - gap - height > 8) top = rect.top - gap - height;
 
+  // Grow from the nearest point to the trigger, including after a viewport flip.
+  const originX = Math.max(0, Math.min(width, rect.left + rect.width / 2 - left));
+  popover.style.transformOrigin = `${Math.round(originX)}px ${top < rect.top ? 'bottom' : 'top'}`;
   popover.style.left = `${Math.round(left)}px`;
   popover.style.top = `${Math.round(top)}px`;
   popover.setAttribute('data-placed', '');

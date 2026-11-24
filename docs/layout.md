@@ -3,10 +3,12 @@
 ## Structure
 
 ```html
-<div class="bk-bento">          <!-- container: the grid measures this element's width -->
-  <div class="bk-bento-grid">   <!-- the grid -->
-    <article class="bk-tile">…</article>
-  </div>
+<div class="bk-bento">
+    <!-- container: the grid measures this element's width -->
+    <div class="bk-bento-grid">
+        <!-- the grid -->
+        <article class="bk-tile">…</article>
+    </div>
 </div>
 ```
 
@@ -42,15 +44,21 @@ The grid uses `grid-auto-flow: dense`, so later small tiles fill gaps left by la
 
 ```html
 <article class="bk-tile">
-  <header class="bk-tile-header">
-    <div>
-      <h3 class="bk-tile-title">Bookings</h3>
-      <p class="bk-tile-description">This week · 330 total</p>
-    </div>
-    <span class="bk-badge" data-variant="secondary">Week</span>
-  </header>
-  …content…
-  <footer class="bk-tile-footer">…</footer>   <!-- pinned to the bottom -->
+    <header class="bk-tile-header">
+        <div>
+            <h3 class="bk-tile-title">Bookings</h3>
+            <p class="bk-tile-description">This week · 330 total</p>
+        </div>
+        <span
+            class="bk-badge"
+            data-variant="secondary"
+        >
+            Week
+        </span>
+    </header>
+    …content…
+    <footer class="bk-tile-footer">…</footer>
+    <!-- pinned to the bottom -->
 </article>
 ```
 

@@ -23,7 +23,7 @@
     var btn = t.closest('.doc-copy');
     if (btn) {
       var pre = btn.closest('.doc-code').querySelector('pre');
-      copy(pre ? pre.innerText : '', btn);
+      copy(pre ? pre.textContent : '', btn);
       return;
     }
     var page = t.closest('[data-doc-copy-page]');

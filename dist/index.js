@@ -1,4 +1,4 @@
-/*! bento-shad-ui v0.2.1 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
+/*! bento-shad-ui v0.2.2 | MIT | https://github.com/SaadNiaziDev/bento-shad-ui */
 
 // src/core/dom.ts
 var isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
@@ -47,6 +47,8 @@ function placePopover(popover, anchor = invokerFor(popover)) {
   left = Math.max(8, Math.min(left, viewportWidth - width - 8));
   let top = rect.bottom + gap;
   if (top + height > viewportHeight - 8 && rect.top - gap - height > 8) top = rect.top - gap - height;
+  const originX = Math.max(0, Math.min(width, rect.left + rect.width / 2 - left));
+  popover.style.transformOrigin = `${Math.round(originX)}px ${top < rect.top ? "bottom" : "top"}`;
   popover.style.left = `${Math.round(left)}px`;
   popover.style.top = `${Math.round(top)}px`;
   popover.setAttribute("data-placed", "");
@@ -168,24 +170,60 @@ function toast(input) {
   el.innerHTML = `<span class="bk-toast-icon">${icon(variant === "success" ? "success" : variant === "destructive" ? "destructive" : "info")}</span><div class="bk-toast-title">${escapeHtml(options.title)}</div>` + (options.description ? `<div class="bk-toast-description">${escapeHtml(options.description)}</div>` : "") + '<div class="bk-toast-actions">' + (options.action ? `<button type="button" class="bk-button" data-variant="secondary" data-size="xs" data-act>${escapeHtml(options.action.label)}</button>` : "") + `<button type="button" class="bk-button" data-variant="ghost" data-size="icon-sm" aria-label="Dismiss" data-dismiss>${icon("x")}</button></div>`;
   region().appendChild(el);
   let timer;
-  const duration = options.duration ?? DEFAULT_DURATION;
+  let remaining = options.duration ?? DEFAULT_DURATION;
+  let startedAt = 0;
+  let hovered = false;
+  let focused = false;
+  let leaving = false;
+  const pause = () => {
+    if (timer === void 0) return;
+    clearTimeout(timer);
+    timer = void 0;
+    remaining = Math.max(0, remaining - (performance.now() - startedAt));
+  };
   const dismiss = () => {
-    if (timer) clearTimeout(timer);
-    if (!el.isConnected || el.hasAttribute("data-leaving")) return;
+    if (leaving) return;
+    leaving = true;
+    pause();
+    document.removeEventListener("visibilitychange", syncTimer);
+    if (!el.isConnected) return;
     el.setAttribute("data-leaving", "");
     setTimeout(() => el.remove(), 190);
   };
-  const schedule = (ms) => {
-    if (Number.isFinite(ms)) timer = setTimeout(dismiss, ms);
+  const syncTimer = () => {
+    if (leaving) return;
+    if (hovered || focused || document.hidden) {
+      pause();
+      return;
+    }
+    if (timer !== void 0 || !Number.isFinite(remaining)) return;
+    startedAt = performance.now();
+    timer = setTimeout(dismiss, Math.max(0, remaining));
   };
   el.querySelector("[data-dismiss]")?.addEventListener("click", dismiss);
   el.querySelector("[data-act]")?.addEventListener("click", () => {
+    if (leaving) return;
     options.action?.onClick?.();
     dismiss();
   });
-  el.addEventListener("mouseenter", () => timer && clearTimeout(timer));
-  el.addEventListener("mouseleave", () => schedule(1800));
-  schedule(duration);
+  el.addEventListener("mouseenter", () => {
+    hovered = true;
+    syncTimer();
+  });
+  el.addEventListener("mouseleave", () => {
+    hovered = false;
+    syncTimer();
+  });
+  el.addEventListener("focusin", () => {
+    focused = true;
+    syncTimer();
+  });
+  el.addEventListener("focusout", (event) => {
+    focused = el.contains(event.relatedTarget);
+    syncTimer();
+  });
+  document.addEventListener("visibilitychange", syncTimer);
+  syncTimer();
   return dismiss;
 }
 
@@ -360,7 +398,7 @@ function fillSlider(range) {
 }
 
 // src/core/index.ts
-var version = "0.2.1";
+var version = "0.2.2";
 function init(root = isBrowser ? document : void 0) {
   if (!isBrowser || !root) return;
   initTabs(root);

@@ -11,7 +11,7 @@ It passes `flutter analyze` with no warnings.
 ## Install
 
 ```bash
-curl -o lib/theme/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/flutter/bento_theme.dart
+curl -o lib/theme/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/flutter/bento_theme.dart
 ```
 
 ## Fonts

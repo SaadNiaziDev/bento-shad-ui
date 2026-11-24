@@ -5,16 +5,41 @@ group: Forms
 ---
 
 ```html preview
-<div class="bk-stack" style="width: 320px">
-  <div class="bk-input-group">
-    <svg class="bk-icon" aria-hidden="true"><use href="#i-search"/></svg>
-    <input class="bk-input" type="search" placeholder="Search trips" aria-label="Search trips">
-    <span class="bk-input-end bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span>
-  </div>
-  <div class="bk-input-group">
-    <svg class="bk-icon" aria-hidden="true"><use href="#i-map-pin"/></svg>
-    <input class="bk-input" value="Lisbon, Portugal" aria-label="Location">
-  </div>
+<div
+    class="bk-stack"
+    style="width: 320px"
+>
+    <div class="bk-input-group">
+        <svg
+            class="bk-icon"
+            aria-hidden="true"
+        >
+            <use href="#i-search" />
+        </svg>
+        <input
+            class="bk-input"
+            type="search"
+            placeholder="Search trips"
+            aria-label="Search trips"
+        />
+        <span class="bk-input-end bk-kbd-group">
+            <kbd class="bk-kbd">⌘</kbd>
+            <kbd class="bk-kbd">K</kbd>
+        </span>
+    </div>
+    <div class="bk-input-group">
+        <svg
+            class="bk-icon"
+            aria-hidden="true"
+        >
+            <use href="#i-map-pin" />
+        </svg>
+        <input
+            class="bk-input"
+            value="Lisbon, Portugal"
+            aria-label="Location"
+        />
+    </div>
 </div>
 ```
 
@@ -24,9 +49,21 @@ group: Forms
 import { InputGroup, Input, KbdGroup, Kbd } from 'bento-shad-ui/react';
 import { Search } from 'lucide-react';
 
-<InputGroup icon={<Search />} end={<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>}>
-  <Input type="search" placeholder="Search trips" aria-label="Search trips" />
-</InputGroup>
+<InputGroup
+    icon={<Search />}
+    end={
+        <KbdGroup>
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
+        </KbdGroup>
+    }
+>
+    <Input
+        type="search"
+        placeholder="Search trips"
+        aria-label="Search trips"
+    />
+</InputGroup>;
 ```
 
 ## API

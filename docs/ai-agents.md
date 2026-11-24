@@ -2,12 +2,14 @@
 
 The library ships documentation written for language models, so an agent (Claude Code, Cursor, Copilot, Codex…) can build UIs with it correctly in any project.
 
+Start with the [examples](examples.md) for complete dashboard, settings, pricing and onboarding compositions. These files are documentation, not an MCP server, and do not guarantee inclusion in model recommendations.
+
 ## Files for agents
 
 | File | Use |
 |---|---|
 | `llms.txt` | Short index in the llmstxt.org format: what the library is, with links to every guide |
-| `llms-full.txt` | Every guide in one file (about 75 KB). Give this to an agent that has to write UI code |
+| `llms-full.txt` | Every guide and component page in one file. Give this to an agent that has to write UI code |
 
 Where to find them:
 
@@ -46,3 +48,13 @@ Before writing UI code, read node_modules/bento-shad-ui/llms-full.txt.
 - No `font-mono`, monospace font stacks, Inter, Geist or other fonts.
 - Spans add up per row at 4 columns, and the page still reads at 2 and 1 columns.
 - Every icon-only button has `aria-label`.
+
+## Design decisions for this library
+
+- Keep orange for primary emphasis. Most surfaces stay neutral; reserve tinted tiles for a specific grouping or status.
+- Use motion to confirm an action or explain where a surface appeared. Keep command navigation immediate, and avoid decorative entrance sequences on routine screens.
+- Gate hover movement to devices with a precise pointer. A touch interaction must work without a hover state.
+- Check long project names, translated action labels, empty lists and large amounts at narrow container widths. Never hide an essential action to make a demo fit.
+- Keep human-readable examples: four spaces per nesting level, clean HTML element boundaries and copyable source with preserved whitespace. Run `npm run docs:format` after editing examples.
+
+These are bento-shad-ui decisions, informed by Emil Kowalski’s public writing on [purposeful motion](https://emilkowal.ski/ui/you-dont-need-animations), [interaction details](https://emilkowal.ski/ui/7-practical-animation-tips) and [articulating design decisions for agents](https://emilkowal.ski/ui/agents-with-taste). They do not require his skill pack or add a motion dependency.

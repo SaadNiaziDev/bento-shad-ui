@@ -20,27 +20,56 @@ You can mix layers: for example a Next.js marketing site on `bento-shad-ui/react
 
 ```html
 <!doctype html>
-<html lang="en" data-theme="system">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.iife.min.js" defer></script>
-</head>
-<body class="bk">
-  <main class="bk-container">
-    <div class="bk-bento">
-      <div class="bk-bento-grid">
-        <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse">
-          <h1 class="bk-h1">Hello</h1>
-          <button class="bk-button" data-variant="brand" data-bk-toast='{"title":"It works"}'>Try me</button>
-        </article>
-        <article class="bk-tile" data-tone="peach">One idea</article>
-        <article class="bk-tile">Another idea</article>
-      </div>
-    </div>
-  </main>
-</body>
+<html
+    lang="en"
+    data-theme="system"
+>
+    <head>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/bento.min.css"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/bento.iife.min.js"
+            defer
+        ></script>
+    </head>
+    <body class="bk">
+        <main class="bk-container">
+            <div class="bk-bento">
+                <div class="bk-bento-grid">
+                    <article
+                        class="bk-tile bk-span-2 bk-row-2"
+                        data-tone="inverse"
+                    >
+                        <h1 class="bk-h1">Hello</h1>
+                        <button
+                            class="bk-button"
+                            data-variant="brand"
+                            data-bk-toast='{"title":"It works"}'
+                        >
+                            Try me
+                        </button>
+                    </article>
+                    <article
+                        class="bk-tile"
+                        data-tone="peach"
+                    >
+                        One idea
+                    </article>
+                    <article class="bk-tile">Another idea</article>
+                </div>
+            </div>
+        </main>
+    </body>
 </html>
 ```
 
@@ -55,16 +84,25 @@ import 'bento-shad-ui/bento.css';
 import { BentoGrid, Tile, TileTitle, Button, toast } from 'bento-shad-ui/react';
 
 export default function Page() {
-  return (
-    <BentoGrid>
-      <Tile span={2} rows={2} tone="inverse">
-        <TileTitle>Hello</TileTitle>
-        <Button variant="brand" onClick={() => toast({ title: 'It works' })}>Try me</Button>
-      </Tile>
-      <Tile tone="peach">One idea</Tile>
-      <Tile>Another idea</Tile>
-    </BentoGrid>
-  );
+    return (
+        <BentoGrid>
+            <Tile
+                span={2}
+                rows={2}
+                tone="inverse"
+            >
+                <TileTitle>Hello</TileTitle>
+                <Button
+                    variant="brand"
+                    onClick={() => toast({ title: 'It works' })}
+                >
+                    Try me
+                </Button>
+            </Tile>
+            <Tile tone="peach">One idea</Tile>
+            <Tile>Another idea</Tile>
+        </BentoGrid>
+    );
 }
 ```
 
@@ -81,7 +119,7 @@ Add `className="bk"` to `<body>` (or wrap your app in an element with it) so bas
 
 ## Versioning
 
-The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. npm ranges like `^0.2.1` only accept patch releases while the version is below 1.0, so updates never surprise you. Pin exact versions in CDN URLs.
+The library follows semantic versioning. Class names, data attributes, token names and React props are the public API. Until 1.0, minor versions (0.x.0) may include breaking changes and say so in `CHANGELOG.md`; patch versions never do. npm ranges like `^0.2.2` only accept patch releases while the version is below 1.0, so updates never surprise you. Pin exact versions in CDN URLs.
 
 ## Next
 

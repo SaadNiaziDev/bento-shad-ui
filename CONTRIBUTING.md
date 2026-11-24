@@ -19,7 +19,7 @@ Node 18+ is required. Dev dependencies: TypeScript and esbuild (build), React (t
 1. **Tokens**: edit `src/tokens.json` (both `light` and `dark`). If you add a pair that carries text, add it to `test/tokens.test.mjs`.
 2. **CSS**: edit `src/css/components.css`. Use tokens; follow the `bk-` prefix and `data-*` variant pattern.
 3. **Behaviour**: `src/core/` for the vanilla script, `src/react/` for React. Keep the core SSR-safe.
-4. **Docs**: new components get a page in `docs/components/` (see AGENTS.md for the format), a link in `docs/components.md` and a tile in `site/kit.html`. Document every prop with JSDoc; the props tables are generated from it.
+4. **Docs**: new components get a page in `docs/components/` (see AGENTS.md for the format), a link in `docs/components.md` and practical live examples on that page. Run `npm run docs:format` for consistent code examples. Document every prop with JSDoc; the props tables are generated from it.
 5. `npm run check`. CI fails if `dist/` is out of date or a test fails.
 
 ## Commit messages
@@ -33,3 +33,7 @@ Maintainers release by tagging `vX.Y.Z` and publishing a GitHub release. The pub
 ## Reporting bugs
 
 Open an issue with the browser, the stack (HTML / React / shadcn / Flutter), the smallest markup or code that shows the problem, and what you expected.
+
+### Interactive documentation examples
+
+Use `html preview` for the component markup. A following `js demo` fence is displayed as copyable code and executed once, after the library scripts load, on that page. Keep each example scoped to a unique root id. These are trusted repository scripts: avoid network calls and account changes, and describe local-only behavior in the example. Test meaningful interaction and recovery paths in `test/interactions.test.mjs`.

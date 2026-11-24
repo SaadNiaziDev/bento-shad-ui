@@ -6,21 +6,55 @@ Works with any server or static site: plain HTML, PHP, Rails, Django, Laravel, h
 
 ```html
 <!doctype html>
-<html lang="en" data-theme="system">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <!-- 1. no dark-mode flash: copy the string exported as `themeScript`, or this line -->
-  <script>(function(){try{var r=document.documentElement,t=null;try{t=localStorage.getItem('bk-theme')}catch(e){}if(t!=='light'&&t!=='dark'&&t!=='system')t=r.getAttribute('data-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',t);r.classList.toggle('dark',d);}catch(e){}})();</script>
-  <!-- 2. fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
-  <!-- 3. styles and behaviours -->
-  <link rel="stylesheet" href="/vendor/bento-shad-ui/bento.min.css">
-  <script src="/vendor/bento-shad-ui/bento.iife.min.js" defer></script>
-</head>
-<body class="bk">
-  …
-</body>
+<html
+    lang="en"
+    data-theme="system"
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <!-- 1. no dark-mode flash: copy the string exported as `themeScript`, or this line -->
+        <script>
+            (function () {
+                try {
+                    var r = document.documentElement,
+                        t = null;
+                    try {
+                        t = localStorage.getItem('bk-theme');
+                    } catch (e) {}
+                    if (t !== 'light' && t !== 'dark' && t !== 'system')
+                        t = r.getAttribute('data-theme') || 'system';
+                    var d =
+                        t === 'dark' ||
+                        (t === 'system' &&
+                            window.matchMedia &&
+                            matchMedia('(prefers-color-scheme: dark)').matches);
+                    r.setAttribute('data-theme', t);
+                    r.classList.toggle('dark', d);
+                } catch (e) {}
+            })();
+        </script>
+        <!-- 2. fonts -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap"
+        />
+        <!-- 3. styles and behaviours -->
+        <link
+            rel="stylesheet"
+            href="/vendor/bento-shad-ui/bento.min.css"
+        />
+        <script
+            src="/vendor/bento-shad-ui/bento.iife.min.js"
+            defer
+        ></script>
+    </head>
+    <body class="bk">
+        …
+    </body>
 </html>
 ```
 
@@ -30,14 +64,21 @@ Works with any server or static site: plain HTML, PHP, Rails, Django, Laravel, h
 
 ```html
 <main class="bk-container">
-  <div class="bk-bento">            <!-- the box the grid measures -->
-    <div class="bk-bento-grid">     <!-- 4 / 2 / 1 columns -->
-      <article class="bk-tile bk-span-2 bk-row-2">…</article>
-      <article class="bk-tile" data-tone="peach">…</article>
-      <article class="bk-tile">…</article>
-      <article class="bk-tile bk-span-2">…</article>
+    <div class="bk-bento">
+        <!-- the box the grid measures -->
+        <div class="bk-bento-grid">
+            <!-- 4 / 2 / 1 columns -->
+            <article class="bk-tile bk-span-2 bk-row-2">…</article>
+            <article
+                class="bk-tile"
+                data-tone="peach"
+            >
+                …
+            </article>
+            <article class="bk-tile">…</article>
+            <article class="bk-tile bk-span-2">…</article>
+        </div>
     </div>
-  </div>
 </main>
 ```
 
@@ -48,9 +89,27 @@ See [layout.md](layout.md) for spans, rows, tones and rules.
 Every component is markup plus classes. Variants are data attributes:
 
 ```html
-<button class="bk-button" data-variant="outline" data-size="sm">Share</button>
-<span class="bk-badge" data-variant="success" data-dot>Paid</span>
-<div class="bk-alert" data-variant="destructive" role="alert">…</div>
+<button
+    class="bk-button"
+    data-variant="outline"
+    data-size="sm"
+>
+    Share
+</button>
+<span
+    class="bk-badge"
+    data-variant="success"
+    data-dot
+>
+    Paid
+</span>
+<div
+    class="bk-alert"
+    data-variant="destructive"
+    role="alert"
+>
+    …
+</div>
 ```
 
 The full catalogue with markup is in [components.md](components.md). The live kit (`index.html`) has a **Code** button on every tile.
@@ -80,7 +139,11 @@ Content added later (fetch, htmx swaps, Turbo) is set up automatically through a
 ### Calling it from your own code
 
 ```js
-BentoUI.toast({ title: 'Trip saved', description: 'Lisbon, 12–16 March', variant: 'success' });
+BentoUI.toast({
+    title: 'Trip saved',
+    description: 'Lisbon, 12–16 March',
+    variant: 'success',
+});
 BentoUI.setTheme('dark');
 document.addEventListener('bk:theme', (e) => console.log(e.detail)); // { theme, resolved }
 ```

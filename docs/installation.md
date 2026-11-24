@@ -36,18 +36,27 @@ To install an unreleased commit, or your own fork, install from GitHub instead: 
 jsDelivr and unpkg serve every npm version. Pin the exact version in production:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/bento.iife.min.js" defer></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/bento.min.css"
+/>
+<script
+    src="https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/bento.iife.min.js"
+    defer
+></script>
 ```
 
-`https://unpkg.com/bento-shad-ui@0.2.1/dist/bento.min.css` works the same way. The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
+`https://unpkg.com/bento-shad-ui@0.2.2/dist/bento.min.css` works the same way. The script exposes `window.BentoUI` (`BentoUI.toast(...)`, `BentoUI.setTheme('dark')`) and starts itself.
 
 As an ES module without a bundler:
 
 ```html
 <script type="module">
-  import { start, toast } from 'https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/index.js';
-  start();
+    import {
+        start,
+        toast,
+    } from 'https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/index.js';
+    start();
 </script>
 ```
 
@@ -57,9 +66,9 @@ In a project that already ran `npx shadcn@latest init`:
 
 ```bash
 # 1. theme: colours, fonts, radius, tile sizes, light + dark. --overwrite is required
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.2/r/bento-theme.json --overwrite
 # 2. BentoGrid + BentoTile component and the bento-grid / bento-tile utilities
-npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-grid.json
+npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.2/r/bento-grid.json
 ```
 
 Without `--overwrite`, shadcn only adds the new tokens (`--brand`, `--tint-*`…) and keeps its own values for existing ones (`--primary`, `--radius`, `--font-sans`), leaving you with half of each theme.
@@ -71,7 +80,7 @@ Or copy `dist/shadcn-theme.css` over `app/globals.css`. See [shadcn.md](shadcn.m
 Copy `dist/flutter/bento_theme.dart` into `lib/` (from `node_modules/bento-shad-ui/dist/flutter/` or from the CDN):
 
 ```bash
-curl -o lib/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.1/dist/flutter/bento_theme.dart
+curl -o lib/bento_theme.dart https://cdn.jsdelivr.net/npm/bento-shad-ui@0.2.2/dist/flutter/bento_theme.dart
 ```
 
 See [flutter.md](flutter.md).
@@ -83,9 +92,19 @@ The library expects **Red Hat Display** (headings) and **Red Hat Text** (body). 
 Google Fonts:
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap">
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+/>
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+/>
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;600;700;800&family=Red+Hat+Text:wght@400;500;600;700&display=swap"
+/>
 ```
 
 Next.js (`next/font`, self-hosted, no layout shift):
@@ -94,15 +113,19 @@ Next.js (`next/font`, self-hosted, no layout shift):
 // app/layout.tsx
 import { Red_Hat_Display, Red_Hat_Text } from 'next/font/google';
 const text = Red_Hat_Text({ subsets: ['latin'], variable: '--font-rh-text' });
-const display = Red_Hat_Display({ subsets: ['latin'], variable: '--font-rh-display' });
+const display = Red_Hat_Display({
+    subsets: ['latin'],
+    variable: '--font-rh-display',
+});
 // <html className={`${text.variable} ${display.variable}`}> …
 ```
 
 ```css
 /* globals.css, after bento.css */
 :root {
-  --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-rh-text), ui-sans-serif, system-ui, sans-serif;
+    --font-heading:
+        var(--font-rh-display), ui-sans-serif, system-ui, sans-serif;
 }
 ```
 

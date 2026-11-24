@@ -19,8 +19,8 @@ test('every exported file exists', () => {
   }
 });
 
-test('no monospace font anywhere in the shipped styles, themes or kit', () => {
-  for (const file of ['dist/bento.css', 'dist/tokens.css', 'dist/shadcn-theme.css', 'dist/flutter/bento_theme.dart', 'dist/tokens.json', 'site/kit.html', 'site/home.html', 'site/assets/docs.css', 'src/css/components.css']) {
+test('no monospace font anywhere in the shipped styles, themes or site', () => {
+  for (const file of ['dist/bento.css', 'dist/tokens.css', 'dist/shadcn-theme.css', 'dist/flutter/bento_theme.dart', 'dist/tokens.json', 'site/home.html', 'site/assets/docs.css', 'src/css/components.css']) {
     assert.doesNotMatch(read(file), /font-mono|JetBrains|Courier|IBM Plex Mono|Red Hat Mono|\bmonospace\s*[;,}"'\)]/i, file);
   }
 });
@@ -45,8 +45,8 @@ function classesIn(html) {
   return out;
 }
 
-test('every bk- class used in the docs and the kit exists in bento.css', () => {
-  const sources = ['site/kit.html', 'site/home.html', ...docFiles()];
+test('every bk- class used in the docs and the site exists in bento.css', () => {
+  const sources = ['site/home.html', ...docFiles()];
   const missing = [];
   for (const file of sources) {
     for (const cls of classesIn(read(file))) {

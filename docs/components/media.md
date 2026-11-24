@@ -5,8 +5,15 @@ group: Layout
 ---
 
 ```html preview
-<div class="bk-media" style="--ratio: 16 / 10; width: 340px; background: linear-gradient(var(--tint-sky), var(--card))">
-  <span class="bk-media-caption">Alfama, Lisbon</span>
+<div
+    class="bk-media"
+    style="
+        --ratio: 16 / 10;
+        width: 340px;
+        background: linear-gradient(var(--tint-sky), var(--card));
+    "
+>
+    <span class="bk-media-caption">Alfama, Lisbon</span>
 </div>
 ```
 
@@ -15,15 +22,27 @@ group: Layout
 ```tsx
 import { Media } from 'bento-shad-ui/react';
 
-<Media ratio="4 / 3" caption="Alfama, Lisbon">
-  <img src="/alfama.jpg" alt="Rooftops of Alfama at sunset" />
-</Media>
+<Media
+    ratio="4 / 3"
+    caption="Alfama, Lisbon"
+>
+    <img
+        src="/alfama.jpg"
+        alt="Rooftops of Alfama at sunset"
+    />
+</Media>;
 ```
 
 ```html
-<div class="bk-media" style="--ratio: 4 / 3">
-  <img src="/alfama.jpg" alt="Rooftops of Alfama at sunset">
-  <span class="bk-media-caption">Alfama, Lisbon</span>
+<div
+    class="bk-media"
+    style="--ratio: 4 / 3"
+>
+    <img
+        src="/alfama.jpg"
+        alt="Rooftops of Alfama at sunset"
+    />
+    <span class="bk-media-caption">Alfama, Lisbon</span>
 </div>
 ```
 

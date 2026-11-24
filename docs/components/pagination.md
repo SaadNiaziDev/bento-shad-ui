@@ -5,16 +5,77 @@ group: Navigation
 ---
 
 ```html preview
-<nav class="bk-pagination" aria-label="Pagination">
-  <a class="bk-pagination-link" href="#" aria-label="Previous page"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></a>
-  <a class="bk-pagination-link" href="#">1</a>
-  <span class="bk-pagination-ellipsis" aria-hidden="true">…</span>
-  <a class="bk-pagination-link" href="#">5</a>
-  <a class="bk-pagination-link" href="#" aria-current="page">6</a>
-  <a class="bk-pagination-link" href="#">7</a>
-  <span class="bk-pagination-ellipsis" aria-hidden="true">…</span>
-  <a class="bk-pagination-link" href="#">20</a>
-  <a class="bk-pagination-link" href="#" aria-label="Next page"><svg class="bk-icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+<nav
+    class="bk-pagination"
+    aria-label="Pagination"
+>
+    <a
+        class="bk-pagination-link"
+        href="#"
+        aria-label="Previous page"
+    >
+        <svg
+            class="bk-icon"
+            aria-hidden="true"
+        >
+            <use href="#i-chevron-left" />
+        </svg>
+    </a>
+    <a
+        class="bk-pagination-link"
+        href="#"
+    >
+        1
+    </a>
+    <span
+        class="bk-pagination-ellipsis"
+        aria-hidden="true"
+    >
+        …
+    </span>
+    <a
+        class="bk-pagination-link"
+        href="#"
+    >
+        5
+    </a>
+    <a
+        class="bk-pagination-link"
+        href="#"
+        aria-current="page"
+    >
+        6
+    </a>
+    <a
+        class="bk-pagination-link"
+        href="#"
+    >
+        7
+    </a>
+    <span
+        class="bk-pagination-ellipsis"
+        aria-hidden="true"
+    >
+        …
+    </span>
+    <a
+        class="bk-pagination-link"
+        href="#"
+    >
+        20
+    </a>
+    <a
+        class="bk-pagination-link"
+        href="#"
+        aria-label="Next page"
+    >
+        <svg
+            class="bk-icon"
+            aria-hidden="true"
+        >
+            <use href="#i-chevron-right" />
+        </svg>
+    </a>
 </nav>
 ```
 
@@ -24,10 +85,8 @@ group: Navigation
 import { Pagination, getPaginationRange } from 'bento-shad-ui/react';
 
 <Pagination page={page} pageCount={20} onPageChange={setPage} />
-
 // Server-rendered lists: real links
 <Pagination page={page} pageCount={20} getHref={(p) => `?page=${p}`} />
-
 getPaginationRange(6, 20); // [1, 'ellipsis', 5, 6, 7, 'ellipsis', 20]
 ```
 

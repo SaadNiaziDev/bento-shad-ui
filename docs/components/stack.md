@@ -5,10 +5,33 @@ group: Layout
 ---
 
 ```html preview
-<div class="bk-stack" style="--gap: 10px; width: 280px">
-  <div class="bk-row bk-between"><span class="bk-label">Total</span><span class="bk-large">€640</span></div>
-  <div class="bk-row" style="--gap: 6px"><span class="bk-badge">Booked</span><span class="bk-badge" data-variant="outline">4 nights</span></div>
-  <button class="bk-button" data-block type="button">View plan</button>
+<div
+    class="bk-stack"
+    style="--gap: 10px; width: 280px"
+>
+    <div class="bk-row bk-between">
+        <span class="bk-label">Total</span>
+        <span class="bk-large">€640</span>
+    </div>
+    <div
+        class="bk-row"
+        style="--gap: 6px"
+    >
+        <span class="bk-badge">Booked</span>
+        <span
+            class="bk-badge"
+            data-variant="outline"
+        >
+            4 nights
+        </span>
+    </div>
+    <button
+        class="bk-button"
+        data-block
+        type="button"
+    >
+        View plan
+    </button>
 </div>
 ```
 
@@ -18,9 +41,12 @@ group: Layout
 import { Stack, Row } from 'bento-shad-ui/react';
 
 <Stack gap={10}>
-  <Row between><span>Total</span><span>€640</span></Row>
-  <Row gap={6}>…</Row>
-</Stack>
+    <Row between>
+        <span>Total</span>
+        <span>€640</span>
+    </Row>
+    <Row gap={6}>…</Row>
+</Stack>;
 ```
 
 ## API

@@ -2,6 +2,31 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [0.2.2] - 2026-11-24
+
+### Changed
+
+- Fixed focus-style specificity so search inputs and OTP fields do not receive an extra global outline; search highlights its shared row boundary.
+
+- Toasts retain remaining reading time while hovered, keyboard-focused or in a hidden tab. Persistent toasts remain persistent after interaction; dismissing removes visibility listeners and repeated clicks cannot repeat an action.
+- Popover animation origins follow their triggers, including flipped and viewport-clamped placement.
+- Card and toast text can wrap long names and addresses; added a narrow-card example with multilingual content.
+- Native `hidden` attributes are respected inside the library scope, including flex layouts.
+- Added working archive/undo and inline validation examples; the displayed JavaScript is the same code executed by their previews.
+- Condensed the npm README around installation, supported stacks and working examples.
+- Improved code sample readability with four-space nesting, one HTML attribute per line and clean element boundaries; copy preserves source whitespace.
+- Restricted tile hover lift to precise pointers, added subtle enabled-button press feedback, and made command palette opening immediate.
+- Refined the default light and dark palettes with neutral surfaces, the original orange brand accent and quieter tile tints. Token names and component APIs are unchanged; existing interfaces will adopt the new appearance on update.
+- Rebuilt the documentation introduction around an interactive workspace preview and an example gallery.
+- Shortened the README to focus on previews, installation and useful documentation paths.
+- Removed the standalone playground and `/kit/` route; component pages are the primary place to explore examples.
+
+### Added
+
+- Eleven additional component-level examples across Card, Table, Stat and Empty state, plus consistent code formatting with `npm run docs:format`.
+- Copyable dashboard, workspace settings, subscription and onboarding examples, indexed in navigation, search and agent documentation.
+- Relevant npm keywords for TypeScript, Next.js, design tokens and agent-readable documentation.
+
 ## [0.2.1] - 2026-11-21
 
 First release on npm.

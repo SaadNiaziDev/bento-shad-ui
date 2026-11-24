@@ -30,9 +30,9 @@ All tokens are CSS custom properties on `:root`, redefined for dark mode. The na
 
 | Token | Default |
 |---|---|
-| `--radius` | `1rem`; `--radius-sm/md/lg/xl/2xl` are 0.6×, 0.8×, 1×, 1.4×, 1.8× |
+| `--radius` | `0.75rem`; `--radius-sm/md/lg/xl/2xl` are 0.6×, 0.8×, 1×, 1.4×, 1.8× |
 | `--radius-pill` | `999px` (buttons, badges, tabs) |
-| `--tile-radius` ★ | `1.625rem` |
+| `--tile-radius` ★ | `1.25rem` |
 | `--tile-gap` ★ | `12px` |
 | `--tile-pad` ★ | `20px` |
 | `--font-sans` | Red Hat Text |
@@ -57,18 +57,22 @@ Override tokens in your own CSS, loaded after the kit:
 
 ```css
 :root {
-  --brand: oklch(0.62 0.19 255);         /* blue */
-  --brand-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.52 0.19 255);
-  --radius: 0.75rem;
-  --tile-radius: 1.25rem;
+    --brand: oklch(0.62 0.19 255); /* blue */
+    --brand-foreground: oklch(0.99 0 0);
+    --ring: oklch(0.52 0.19 255);
+    --radius: 0.75rem;
+    --tile-radius: 1.25rem;
 }
-.dark, [data-theme="dark"] {
-  --brand: oklch(0.7 0.16 255);
-  --brand-foreground: oklch(0.15 0 0);
+.dark,
+[data-theme='dark'] {
+    --brand: oklch(0.7 0.16 255);
+    --brand-foreground: oklch(0.15 0 0);
 }
 @media (prefers-color-scheme: dark) {
-  [data-theme="system"] { --brand: oklch(0.7 0.16 255); --brand-foreground: oklch(0.15 0 0); }
+    [data-theme='system'] {
+        --brand: oklch(0.7 0.16 255);
+        --brand-foreground: oklch(0.15 0 0);
+    }
 }
 ```
 
@@ -80,7 +84,7 @@ To change the brand for CSS, shadcn and Flutter at once:
 
 1. Fork the repo and edit `src/tokens.json` (hex values; the build converts them to OKLCH).
 2. Run `npm run build`, then `npm test`. The tests fail if a light/dark pair falls below WCAG contrast.
-3. Commit, tag (`v0.2.1-yourbrand.1`) and install your fork with `npm install github:<you>/bento-shad-ui#v0.2.1-yourbrand.1`.
+3. Commit, tag (`v0.2.2-yourbrand.1`) and install your fork with `npm install github:<you>/bento-shad-ui#v0.2.2-yourbrand.1`.
 
 ## Scoped themes
 
@@ -94,8 +98,8 @@ Change fonts by overriding the two variables:
 
 ```css
 :root {
-  --font-sans: "Your Text Face", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Your Display Face", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Your Text Face', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Your Display Face', ui-sans-serif, system-ui, sans-serif;
 }
 ```
 

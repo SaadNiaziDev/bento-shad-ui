@@ -6,7 +6,6 @@
 //   docs/components/*.md      one per component → /docs/components/<name>/
 //   CHANGELOG.md, CONTRIBUTING.md                → /docs/changelog/, /docs/contributing/
 //   site/home.html            landing page      → /
-//   site/kit.html             live kit          → /kit/
 //
 // Markdown extras:
 //   ```html preview          live preview with Preview / HTML tabs
@@ -33,7 +32,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 const slugify = (s) =>
   s.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-');
 const write = (p, content) => {
-  if (p.endsWith('.html') && !p.startsWith('kit/')) {
+  if (p.endsWith('.html')) {
     content = prerenderCharacters(content);
     const problems = checkNesting(content);
     if (problems.length) throw new Error(`${p}: broken HTML structure\n  ${problems.slice(0, 8).join('\n  ')}`);
@@ -66,6 +65,7 @@ function parseFrontmatter(src) {
 const GUIDES = {
   'getting-started': 'Introduction',
   installation: 'Installation',
+  examples: 'Examples',
   html: 'HTML',
   react: 'React and Next.js',
   shadcn: 'shadcn/ui',
@@ -107,7 +107,7 @@ for (const p of pages.filter((p) => p.file.startsWith('docs/components/'))) {
 }
 
 const NAV = [
-  { title: 'Getting started', urls: ['getting-started', 'installation', 'html', 'react', 'shadcn', 'flutter', 'ai-agents'].map((n) => `docs/${n}/`) },
+  { title: 'Getting started', urls: ['getting-started', 'installation', 'examples', 'html', 'react', 'shadcn', 'flutter', 'ai-agents'].map((n) => `docs/${n}/`) },
   { title: 'Foundations', urls: ['theming', 'typography', 'layout', 'accessibility'].map((n) => `docs/${n}/`) },
   { title: 'Components', urls: ['docs/components/'] },
   ...COMPONENT_GROUPS.map((g) => ({
@@ -289,7 +289,10 @@ marked.use({
     },
     code({ text, lang }) {
       const [language = '', ...flags] = (lang ?? '').split(/\s+/);
-      if (!flags.includes('preview')) return codeBlock(text, language);
+      if (!flags.includes('preview')) {
+        if (language === 'js' && flags.includes('demo')) ctx.scripts.push(text);
+        return codeBlock(text, language);
+      }
       const n = ++ctx.examples;
       const base = `ex-${n}`;
       return `<div class="doc-example${flags.includes('full') ? ' doc-example-full' : ''}" data-bk-tabs>
@@ -338,10 +341,10 @@ marked.use({
 });
 
 function renderMarkdown(page) {
-  ctx = { page, ids: new Set(['content']), toc: [], headings: [], examples: 0 };
+  ctx = { page, ids: new Set(['content']), toc: [], headings: [], examples: 0, scripts: [] };
   let html = marked.parse(page.body);
   html = html.replace(/<table>([\s\S]*?)<\/table>/g, '<div class="bk-table-wrap"><table class="bk-table">$1</table></div>');
-  return { html, toc: ctx.toc, headings: ctx.headings };
+  return { html, toc: ctx.toc, headings: ctx.headings, scripts: ctx.scripts };
 }
 
 /* ------------------------------------------------------------------ layout */
@@ -373,7 +376,6 @@ function header(current, root) {
   <nav class="doc-top-nav" aria-label="Main">
     <a class="bk-navbar-link" href="${rel(current, 'docs/getting-started/')}"${current.startsWith('docs/') && !current.startsWith('docs/components') ? ' aria-current="page"' : ''}>Docs</a>
     <a class="bk-navbar-link" href="${rel(current, 'docs/components/')}"${is('docs/components')}>Components</a>
-    <a class="bk-navbar-link" href="${rel(current, 'kit/')}">Kit</a>
   </nav>
   <div class="doc-top-tools">
     <button class="doc-search-btn" type="button" data-doc-search aria-label="Search documentation">${icon('search')}<span>Search docs…</span><span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span></button>
@@ -388,7 +390,7 @@ function header(current, root) {
 </div></header>`;
 }
 
-function shell({ url, title, description, body, mdHref }) {
+function shell({ url, title, description, body, mdHref, scripts = [] }) {
   const root = rootOf(url);
   const fullTitle = url === '' ? 'bento-shad-ui: bento-grid UI library with shadcn/ui anatomy' : `${title} · bento-shad-ui`;
   return `<!doctype html>
@@ -434,6 +436,7 @@ ${body}
 <script src="${root}dist/bento.iife.min.js"></script>
 <script src="${root}dist/illustrations.iife.min.js"></script>
 <script src="${root}assets/docs.js"></script>
+${scripts.map((code) => `<script data-doc-demo>(() => {\n${code.replace(/<\/script/gi, '<\\/script')}\n})();</script>`).join('\n')}
 </body>
 </html>
 `;
@@ -480,7 +483,7 @@ write('.nojekyll', '');
 
 const searchIndex = [];
 pages.forEach((page) => {
-  const { html, toc, headings } = renderMarkdown(page);
+  const { html, toc, headings, scripts } = renderMarkdown(page);
   const root = rootOf(page.url);
   const i = ORDER.indexOf(page.url);
   const prev = byUrl.get(ORDER[i - 1]);
@@ -516,7 +519,7 @@ pages.forEach((page) => {
 </div>`;
 
   const description = page.description || (page.body.replace(/```[\s\S]*?```/g, '').match(/^(?!#|\||-|>|<)[A-Za-z`*].{40,}$/m)?.[0] ?? '').replace(/[`*]/g, '').slice(0, 200);
-  write(`${page.url}index.html`, shell({ url: page.url, title: page.title, description, body, mdHref: 'index.md' }));
+  write(`${page.url}index.html`, shell({ url: page.url, title: page.title, description, body, mdHref: 'index.md', scripts }));
   write(`${page.url}index.md`, `# ${page.title}\n\n${page.description ? `> ${page.description}\n\n` : ''}${page.body.trim()}\n`);
 
   const text = page.body.replace(/```[\s\S]*?```/g, ' ').replace(/<!--[\s\S]*?-->/g, ' ').replace(/[#*`|>_[\]()-]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -533,7 +536,6 @@ pages.forEach((page) => {
 // Landing page and kit
 const home = read('site/home.html').replaceAll('{{root}}', './').replaceAll('{{version}}', VERSION).replaceAll('{{repo}}', REPO);
 write('index.html', shell({ url: '', title: 'bento-shad-ui', description: pkg.description, body: home + `<div class="doc-home-footer">${footer('./')}</div>` }));
-cpSync(join(ROOT, 'site/kit.html'), join(OUT, 'kit/index.html'));
 
 // 404 (served from any path, so it uses an absolute base)
 const notFound = shell({
@@ -545,7 +547,7 @@ const notFound = shell({
 write('404.html', notFound);
 
 write('search-index.json', JSON.stringify(searchIndex));
-const urls = ['', ...pages.map((p) => p.url), 'kit/'];
+const urls = ['', ...pages.map((p) => p.url)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${SITE_URL}${u}</loc></url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}sitemap.xml\n`);
 

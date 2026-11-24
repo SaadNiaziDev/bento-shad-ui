@@ -5,13 +5,57 @@ group: Forms
 ---
 
 ```html preview
-<div class="bk-stack" style="width: 320px">
-  <div class="bk-otp" role="group" aria-label="Verification code">
-    <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"></div>
-    <span class="bk-otp-separator" aria-hidden="true"></span>
-    <div class="bk-otp-group"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
-  </div>
-  <p class="bk-field-description">Type or paste the 6-digit code sent to m•••@example.com.</p>
+<div
+    class="bk-stack"
+    style="width: 320px"
+>
+    <div
+        class="bk-otp"
+        role="group"
+        aria-label="Verification code"
+    >
+        <div class="bk-otp-group">
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 1"
+            />
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 2"
+            />
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 3"
+            />
+        </div>
+        <span
+            class="bk-otp-separator"
+            aria-hidden="true"
+        ></span>
+        <div class="bk-otp-group">
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 4"
+            />
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 5"
+            />
+            <input
+                inputmode="numeric"
+                maxlength="1"
+                aria-label="Digit 6"
+            />
+        </div>
+    </div>
+    <p class="bk-field-description">
+        Type or paste the 6-digit code sent to m•••@example.com.
+    </p>
 </div>
 ```
 
@@ -20,8 +64,17 @@ group: Forms
 ```tsx
 import { InputOTP } from 'bento-shad-ui/react';
 
-<InputOTP groups={[3, 3]} aria-label="Verification code" onComplete={(code) => verify(code)} />
-<InputOTP groups={[4]} value={pin} onValueChange={setPin} aria-label="PIN" />
+<InputOTP
+    groups={[3, 3]}
+    aria-label="Verification code"
+    onComplete={(code) => verify(code)}
+/>
+<InputOTP
+    groups={[4]}
+    value={pin}
+    onValueChange={setPin}
+    aria-label="PIN"
+/>
 ```
 
 ## API

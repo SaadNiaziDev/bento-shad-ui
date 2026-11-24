@@ -456,7 +456,7 @@ execFileSync(join(root, 'node_modules/.bin/tsc'), ['-p', join(root, 'tsconfig.js
 
 /* ------------------------------------------------------------------ llms-full.txt */
 const GUIDE_ORDER = [
-  'getting-started', 'installation', 'html', 'react', 'shadcn', 'flutter', 'theming', 'typography', 'layout', 'components', 'javascript-api', 'accessibility', 'ai-agents',
+  'getting-started', 'installation', 'examples', 'html', 'react', 'shadcn', 'flutter', 'theming', 'typography', 'layout', 'components', 'javascript-api', 'accessibility', 'ai-agents',
 ];
 const GROUP_ORDER = ['Layout', 'Actions', 'Forms', 'Data display', 'Feedback', 'Overlays', 'Navigation', 'Illustrations'];
 function forLlm(file) {
@@ -466,6 +466,7 @@ function forLlm(file) {
   if (m) for (const line of m[1].split('\n')) { const i = line.indexOf(':'); if (i > 0) fm[line.slice(0, i).trim()] = line.slice(i + 1).trim(); }
   let body = m ? raw.slice(m[0].length) : raw;
   body = body.replace(/^```(\w+)[ \t]+preview(?:[ \t]+full)?[ \t]*$/gm, '```$1');
+  body = body.replace(/^```js[ \t]+demo[ \t]*$/gm, '```js');
   const head = fm.title ? `# ${fm.title}\n\n> ${fm.description ?? ''}\n\n` : '';
   return { fm, text: `<!-- ${file} -->\n\n${head}${body.trim()}\n` };
 }

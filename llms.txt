@@ -11,12 +11,14 @@ Key facts for generating code with this library:
 - Fonts: Red Hat Text (body) and Red Hat Display (headings). There is no monospace font. Never add one.
 - Dark mode: `class="dark"` or `data-theme="dark|system"` on `<html>`; `setTheme()`; `<ThemeScript />` in `<head>`.
 - Illustrations: 8 pencil characters (`mira`, `theo`, `zara`, `kofi` people; `pip` owl, `dumpling` cat, `biscuit` dachshund, `moss` turtle) × 6 moods (`neutral`, `happy`, `surprised`, `sad`, `thinking`, `sleepy`). React: `<PencilCharacter character="pip" mood="thinking" />`, `<Empty illustration={…} />`. HTML: `<span data-bk-character="pip" data-mood="thinking"></span>` + `dist/illustrations.iife.min.js`. Pairings: empty → Pip thinking, loading → Moss sleepy, success → Mira happy, error → Dumpling sad, 404 → Biscuit surprised.
-- shadcn/ui projects: `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.1/r/bento-theme.json --overwrite`, then the same URL with `bento-grid.json`; use `BentoGrid`/`BentoTile` from `@/components/ui/bento-grid`.
+- shadcn/ui projects: `npx shadcn@latest add https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/v0.2.2/r/bento-theme.json --overwrite`, then the same URL with `bento-grid.json`; use `BentoGrid`/`BentoTile` from `@/components/ui/bento-grid`.
 
 ## Docs
 
+- [Examples](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/examples.md): copyable dashboard, settings, pricing and onboarding compositions
+
 - [Getting started](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/getting-started.md): what the library is, the five layers, quick starts
-- [Installation](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/installation.md): npm from GitHub, CDN, shadcn registry, Flutter, fonts, troubleshooting
+- [Installation](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/installation.md): npm, CDN, shadcn registry, Flutter, fonts, troubleshooting
 - [Components](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components.md): index of all 47 components; each has its own page in docs/components/ with HTML, React and props
 - [Characters](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components/characters.md): the pencil-drawn cast, moods, React/HTML/Flutter usage, which character for which moment
 - [Typography](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/typography.md): type scale, classes, fonts
@@ -35,5 +37,4 @@ Key facts for generating code with this library:
 - [Full documentation in one file](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/llms-full.txt): every guide concatenated
 - [Tokens](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/src/tokens.json): source colours (hex), fonts, sizes, shadows
 - [Documentation website](https://saadniazidev.github.io/bento-shad-ui/): every guide and component page; append `index.md` to any page URL for its Markdown
-- [Live kit](https://saadniazidev.github.io/bento-shad-ui/kit/): every component on one page, with dashboard, landing and mobile patterns
 - [Changelog](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/CHANGELOG.md)

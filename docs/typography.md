@@ -5,19 +5,30 @@ Two faces from one family: **Red Hat Display** for headings and display text, **
 ## Scale
 
 ```html preview full
-<div class="bk-stack" style="--gap: 14px">
-  <div class="bk-display" style="font-size: 3rem">Plan less, go more</div>
-  <div class="bk-h1">Four nights in Lisbon</div>
-  <div class="bk-h2">Day two: Alfama</div>
-  <div class="bk-h3">Getting around</div>
-  <div class="bk-h4">Tram 28 timetable</div>
-  <p class="bk-lead">Everything for the trip, in one place.</p>
-  <p class="bk-p">Tram 28 leaves Martim Moniz every 12 minutes. Buy a transit card at the kiosk first, because drivers don't sell tickets.</p>
-  <div class="bk-large">Total €640 for 2 travellers</div>
-  <div class="bk-small">Updated 2 hours ago</div>
-  <div class="bk-muted">Prices include taxes and fees.</div>
-  <div class="bk-eyebrow">Itinerary · Day 2</div>
-  <div><code class="bk-code">TP 1351 · 08:40 → 10:05</code></div>
+<div
+    class="bk-stack"
+    style="--gap: 14px"
+>
+    <div
+        class="bk-display"
+        style="font-size: 3rem"
+    >
+        Plan less, go more
+    </div>
+    <div class="bk-h1">Four nights in Lisbon</div>
+    <div class="bk-h2">Day two: Alfama</div>
+    <div class="bk-h3">Getting around</div>
+    <div class="bk-h4">Tram 28 timetable</div>
+    <p class="bk-lead">Everything for the trip, in one place.</p>
+    <p class="bk-p">
+        Tram 28 leaves Martim Moniz every 12 minutes. Buy a transit card at the
+        kiosk first, because drivers don't sell tickets.
+    </p>
+    <div class="bk-large">Total €640 for 2 travellers</div>
+    <div class="bk-small">Updated 2 hours ago</div>
+    <div class="bk-muted">Prices include taxes and fees.</div>
+    <div class="bk-eyebrow">Itinerary · Day 2</div>
+    <div><code class="bk-code">TP 1351 · 08:40 → 10:05</code></div>
 </div>
 ```
 
@@ -47,8 +58,8 @@ See [Installation](installation.md#fonts) for Google Fonts, `next/font` and Flut
 
 ```css
 :root {
-  --font-sans: "Your Text Face", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Your Display Face", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Your Text Face', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Your Display Face', ui-sans-serif, system-ui, sans-serif;
 }
 ```
 

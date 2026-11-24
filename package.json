@@ -1,6 +1,6 @@
 {
   "name": "bento-shad-ui",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Bento-grid UI library with shadcn/ui anatomy: framework-free CSS, a typed vanilla core, React components, pencil-drawn characters, a shadcn/Tailwind v4 theme and a Flutter theme from one token file.",
   "keywords": [
     "ui",
@@ -14,7 +14,17 @@
     "dark-mode",
     "flutter",
     "illustrations",
-    "characters"
+    "characters",
+    "accessible-components",
+    "typescript",
+    "nextjs",
+    "bento-grid",
+    "css-components",
+    "design-tokens",
+    "llms-txt",
+    "ai-ready",
+    "component-library",
+    "shadcn-ui"
   ],
   "license": "MIT",
   "author": "Saad Ali Khan (https://github.com/SaadNiaziDev)",
@@ -82,9 +92,10 @@
     "docs": "node scripts/docs.mjs",
     "docs:serve": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs test/illustrations.test.mjs",
+    "test": "node --test test/tokens.test.mjs test/build.test.mjs test/react.test.mjs test/illustrations.test.mjs test/interactions.test.mjs",
     "check": "npm run typecheck && npm run build && npm test && npm run docs",
-    "prepublishOnly": "npm run check"
+    "prepublishOnly": "npm run check",
+    "docs:format": "node scripts/format-docs.mjs"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -99,7 +110,9 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "esbuild": "^0.24.0",
+    "linkedom": "^0.18.15",
     "marked": "^15.0.12",
+    "prettier": "^3.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "shiki": "^1.29.2",

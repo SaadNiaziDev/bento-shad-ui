@@ -5,11 +5,36 @@ group: Feedback
 ---
 
 ```html preview
-<div class="bk-row" style="--gap: 20px">
-  <span class="bk-spinner" data-size="sm" role="status" aria-label="Loading"></span>
-  <span class="bk-spinner" role="status" aria-label="Loading"></span>
-  <span class="bk-spinner" data-size="lg" role="status" aria-label="Loading" style="color: var(--brand)"></span>
-  <span class="bk-row bk-muted"><span class="bk-spinner" data-size="sm" aria-hidden="true"></span>Checking availability</span>
+<div
+    class="bk-row"
+    style="--gap: 20px"
+>
+    <span
+        class="bk-spinner"
+        data-size="sm"
+        role="status"
+        aria-label="Loading"
+    ></span>
+    <span
+        class="bk-spinner"
+        role="status"
+        aria-label="Loading"
+    ></span>
+    <span
+        class="bk-spinner"
+        data-size="lg"
+        role="status"
+        aria-label="Loading"
+        style="color: var(--brand)"
+    ></span>
+    <span class="bk-row bk-muted">
+        <span
+            class="bk-spinner"
+            data-size="sm"
+            aria-hidden="true"
+        ></span>
+        Checking availability
+    </span>
 </div>
 ```
 
@@ -20,7 +45,9 @@ import { Spinner } from 'bento-shad-ui/react';
 
 <Spinner />
 <Spinner size="lg" label="Loading trips" />
-<span><Spinner size="sm" label="" /> Checking availability</span>
+<span>
+    <Spinner size="sm" label="" /> Checking availability
+</span>
 ```
 
 Inside a button, use `<Button loading>` instead.

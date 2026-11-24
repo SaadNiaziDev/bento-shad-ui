@@ -1,53 +1,30 @@
 <main class="doc-home" id="content">
 
-  <section class="bk-bento" aria-label="Introduction">
-    <div class="bk-bento-grid">
-      <article class="bk-tile bk-span-2 bk-row-2" data-tone="inverse" style="--tile-pad: 32px; justify-content: space-between; gap: 28px;">
-        <span class="bk-eyebrow">v{{version}} · MIT · open source</span>
-        <div class="bk-stack" style="--gap: 16px;">
-          <h1 class="bk-display">Bento layouts. shadcn anatomy. One token file.</h1>
-          <p class="bk-lead">A UI library for interfaces built from tiles. Plain CSS, a typed core and React components, with themes for shadcn/ui and Flutter. Light and dark, accessible by default.</p>
-        </div>
-        <div class="bk-stack" style="--gap: 14px;">
-          <div class="bk-row">
-            <a class="bk-button" data-variant="brand" data-size="lg" href="{{root}}docs/getting-started/">Get started<svg class="bk-icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-            <a class="bk-button" data-variant="secondary" data-size="lg" href="{{root}}docs/components/">Browse components</a>
-          </div>
-          <div class="doc-install">
-            <code>npm install bento-shad-ui</code>
-            <button class="bk-button" data-variant="secondary" data-size="xs" type="button" data-bk-copy="npm install bento-shad-ui">Copy</button>
-          </div>
-        </div>
-      </article>
-
-      <a class="bk-tile doc-cat" data-tone="peach" data-interactive href="{{root}}docs/components/">
-        <span class="bk-eyebrow">Components</span>
-        <span class="bk-num" style="font-size: 3rem;">47</span>
-        <p class="bk-tile-description" style="margin: 0;">Buttons to command palettes, each with a live preview, HTML, React and a props table.</p>
-      </a>
-
-      <a class="bk-tile doc-cat" data-tone="sky" data-interactive href="{{root}}docs/accessibility/">
-        <span class="bk-eyebrow">Accessibility</span>
-        <span class="bk-num" style="font-size: 3rem;">AA</span>
-        <p class="bk-tile-description" style="margin: 0;">WCAG contrast for every token pair, in both themes, checked by the test suite.</p>
-      </a>
-
-      <article class="bk-tile">
-        <div class="bk-tile-header"><div><h2 class="bk-tile-title">Live, right here</h2><p class="bk-tile-description">Every control on this page is the library.</p></div></div>
-        <label class="bk-switch-row"><span>Price alerts</span><input class="bk-switch" type="checkbox" role="switch" checked></label>
-        <label class="bk-switch-row"><span>Offline maps</span><input class="bk-switch" type="checkbox" role="switch" data-tone="brand"></label>
-        <div class="bk-row" style="--gap: 6px;"><span class="bk-badge" data-variant="success" data-dot>Paid</span><span class="bk-badge" data-variant="warning" data-dot>Pending</span><span class="bk-badge" data-variant="outline">3 nights</span></div>
-      </article>
-
-      <article class="bk-tile" data-tone="mint">
-        <span class="bk-eyebrow">Theme</span>
-        <h2 class="bk-tile-title">Light, dark or system</h2>
-        <div class="bk-tabs-list" data-full role="group" aria-label="Theme">
-          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="light">Light</button>
-          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="dark">Dark</button>
-          <button class="bk-tabs-trigger" type="button" data-bk-theme-set="system">System</button>
-        </div>
-      </article>
+  <section class="doc-hero" aria-labelledby="hero-title">
+    <div class="doc-hero-copy">
+      <a class="doc-release" href="{{root}}docs/changelog/"><span class="bk-badge" data-variant="outline">v{{version}}</span> Open source. Yours to build with. <span aria-hidden="true">↗</span></a>
+      <h1 id="hero-title">Small pieces.<br>Thoughtful interfaces.</h1>
+      <p>A calmer starting point for your next product. Compose bento layouts with familiar shadcn-style tokens, typed React components, and plain CSS.</p>
+      <div class="bk-row"><a class="bk-button" data-variant="brand" data-size="lg" href="{{root}}docs/getting-started/">Start building <svg class="bk-icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a><a class="bk-button" data-variant="outline" data-size="lg" href="{{root}}docs/examples/">Explore examples</a></div>
+      <div class="doc-install"><code>npm install bento-shad-ui</code><button class="bk-button" data-variant="ghost" data-size="xs" type="button" data-bk-copy="npm install bento-shad-ui">Copy</button></div>
+      <div class="doc-hero-notes"><span>TypeScript included</span><span>Light &amp; dark</span><span>MIT licensed</span></div>
+    </div>
+    <div class="doc-product" aria-label="Interactive workspace example">
+      <div class="doc-product-bar"><span class="doc-product-dot"></span><span>Workspace / Overview</span><span class="bk-badge" data-variant="outline">Demo</span></div>
+      <div class="doc-product-body">
+        <div class="bk-row bk-between"><div><p class="bk-eyebrow">YOUR WORKSPACE, AT A GLANCE</p><h2 class="bk-h3">A little more clarity.</h2></div><span class="bk-avatar">SK</span></div>
+        <div class="doc-metric-grid"><article class="bk-card"><div class="bk-card-content"><span class="bk-caption">Monthly revenue</span><div class="bk-stat-value">$24,680</div><span class="bk-stat-delta" data-trend="up">+18.6% this month</span></div></article><article class="bk-card"><div class="bk-card-content"><span class="bk-caption">Active projects</span><div class="bk-stat-value">12</div><span class="bk-caption">4 ready for review</span></div></article></div>
+        <article class="bk-card"><div class="bk-card-header"><h3 class="bk-card-title">Make room for good work</h3><p class="bk-card-description">Your next release is coming together.</p></div><div class="bk-card-content bk-stack"><label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span>Define the foundations</span></label><label class="bk-option"><input class="bk-checkbox" type="checkbox" checked><span>Build something useful</span></label><label class="bk-option"><input class="bk-checkbox" type="checkbox"><span>Share it with the world</span></label><div class="bk-progress" role="progressbar" aria-label="Release milestones" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"><span style="--v:67%"></span></div></div></article>
+        <div class="bk-row bk-between"><span class="bk-caption">Built from the components below.</span><button class="bk-button" data-size="sm" type="button" data-bk-toast='{"title":"You’re all set","description":"This is a local demo. Nothing was sent.","variant":"success"}'>Try a toast <svg class="bk-icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button></div>
+      </div>
+    </div>
+  </section>
+  <section class="doc-home-section" aria-labelledby="examples-title">
+    <header><span class="bk-eyebrow">A starting point, not a blank page</span><h2 class="bk-h2" id="examples-title">See the pieces work together.</h2><p class="bk-muted">Practical compositions with live previews and copyable HTML. Bring your own data and application logic.</p></header>
+    <div class="doc-example-grid">
+      <a class="doc-example-card" href="{{root}}docs/examples/#analytics-overview"><div class="doc-example-art" data-scene="analytics"><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span class="bk-eyebrow">01 / Dashboard</span><h3 class="bk-h3">The bigger picture</h3><p>Metrics, activity and a readable revenue chart.</p><span class="bk-small">Explore dashboard ↗</span></div></a>
+      <a class="doc-example-card" href="{{root}}docs/examples/#workspace-settings"><div class="doc-example-art" data-scene="settings"><span></span><span></span><span></span></div><div><span class="bk-eyebrow">02 / Settings</span><h3 class="bk-h3">A place for the details</h3><p>Profile fields, preferences and clear form actions.</p><span class="bk-small">Explore settings ↗</span></div></a>
+      <a class="doc-example-card" href="{{root}}docs/examples/#subscription-plans"><div class="doc-example-art" data-scene="plans"><span></span><span></span><span></span></div><div><span class="bk-eyebrow">03 / Pricing</span><h3 class="bk-h3">Room to grow</h3><p>A compact plan comparison with a focused call to action.</p><span class="bk-small">Explore pricing ↗</span></div></a>
     </div>
   </section>
 
@@ -78,34 +55,6 @@
         <h3 class="bk-tile-title">Flutter</h3>
         <p class="bk-tile-description" style="margin: 0;">ThemeData for both modes and every token as a ThemeExtension.</p>
       </a>
-      <article class="bk-tile bk-span-2">
-        <div class="bk-tile-header"><div><h3 class="bk-tile-title">React</h3><p class="bk-tile-description">Import the stylesheet once, then compose tiles.</p></div><a class="bk-button" data-variant="outline" data-size="xs" href="{{root}}docs/react/">Guide</a></div>
-<pre class="bk-codeblock">import 'bento-shad-ui/bento.css';
-import { BentoGrid, Tile, Stat, Button, toast } from 'bento-shad-ui/react';
-
-export function Overview() {
-  return (
-    &lt;BentoGrid&gt;
-      &lt;Tile span={2} rows={2} tone="inverse"&gt;
-        &lt;Button variant="brand" onClick={() =&gt; toast('Saved')}&gt;Save&lt;/Button&gt;
-      &lt;/Tile&gt;
-      &lt;Tile tone="peach"&gt;&lt;Stat label="Bookings" value="1,284" /&gt;&lt;/Tile&gt;
-    &lt;/BentoGrid&gt;
-  );
-}</pre>
-      </article>
-      <article class="bk-tile bk-span-2">
-        <div class="bk-tile-header"><div><h3 class="bk-tile-title">HTML</h3><p class="bk-tile-description">No build step. The script adds tabs, menus, dialogs and toasts.</p></div><a class="bk-button" data-variant="outline" data-size="xs" href="{{root}}docs/html/">Guide</a></div>
-<pre class="bk-codeblock">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bento-shad-ui@{{version}}/dist/bento.min.css"&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/bento-shad-ui@{{version}}/dist/bento.iife.min.js" defer&gt;&lt;/script&gt;
-
-&lt;body class="bk"&gt;
-  &lt;div class="bk-bento"&gt;&lt;div class="bk-bento-grid"&gt;
-    &lt;article class="bk-tile bk-span-2"&gt;…&lt;/article&gt;
-    &lt;article class="bk-tile" data-tone="peach"&gt;…&lt;/article&gt;
-  &lt;/div&gt;&lt;/div&gt;
-&lt;/body&gt;</pre>
-      </article>
     </div></div>
   </section>
 
@@ -118,10 +67,10 @@ export function Overview() {
     <div class="bk-bento"><div class="bk-bento-grid" data-cols="3">
       <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/button/"><h3 class="bk-tile-title">Actions</h3><div class="bk-row"><span class="bk-button" data-size="sm">Book trip</span><span class="bk-button" data-variant="outline" data-size="sm">Share</span><span class="bk-button" data-variant="ghost" data-size="sm">Cancel</span></div><p class="bk-tile-description" style="margin: 0;">Button, Button group, Toggle, Kbd, Tooltip</p></a>
       <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/field/"><h3 class="bk-tile-title">Forms</h3><div class="bk-input-group"><svg class="bk-icon" aria-hidden="true"><use href="#i-search"/></svg><span class="bk-input" style="display:flex;align-items:center;color:var(--muted-foreground)">Search trips</span></div><p class="bk-tile-description" style="margin: 0;">Field, Input, Select, Checkbox, Radio group, Switch, Slider, Input OTP, Dropzone, Calendar</p></a>
-      <a class="bk-tile doc-cat" data-tone="butter" data-interactive href="{{root}}docs/components/stat/"><h3 class="bk-tile-title">Data display</h3><div class="bk-stat"><span class="bk-stat-value">1,284</span><span class="bk-stat-delta" data-trend="up">+12.4% vs February</span></div><p class="bk-tile-description" style="margin: 0;">Stat, Sparkline, Bar chart, Meter, Table, List, Badge, Avatar, Progress</p></a>
+      <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/stat/"><h3 class="bk-tile-title">Data display</h3><div class="bk-stat"><span class="bk-stat-value">1,284</span><span class="bk-stat-delta" data-trend="up">+12.4% vs February</span></div><p class="bk-tile-description" style="margin: 0;">Stat, Sparkline, Bar chart, Meter, Table, List, Badge, Avatar, Progress</p></a>
       <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/alert/"><h3 class="bk-tile-title">Feedback</h3><div class="bk-alert" data-variant="success" role="presentation"><svg class="bk-icon" aria-hidden="true"><use href="#i-check-circle"/></svg><div class="bk-alert-title">Booking confirmed</div></div><p class="bk-tile-description" style="margin: 0;">Alert, Toast, Empty state, Skeleton, Spinner</p></a>
       <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/command/"><h3 class="bk-tile-title">Overlays</h3><div class="bk-row"><span class="bk-kbd-group"><kbd class="bk-kbd">⌘</kbd><kbd class="bk-kbd">K</kbd></span><span class="bk-muted">opens the command palette</span></div><p class="bk-tile-description" style="margin: 0;">Dialog, Sheet, Dropdown menu, Popover, Command</p></a>
-      <a class="bk-tile doc-cat" data-tone="lilac" data-interactive href="{{root}}docs/components/tabs/"><h3 class="bk-tile-title">Navigation</h3><div class="bk-tabs-list" aria-hidden="true"><span class="bk-tabs-trigger" aria-selected="true">Week</span><span class="bk-tabs-trigger">Month</span></div><p class="bk-tile-description" style="margin: 0;">Tabs, Navbar, Sidebar, Breadcrumb, Pagination, Bottom nav</p></a>
+      <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/tabs/"><h3 class="bk-tile-title">Navigation</h3><div class="bk-tabs-list" aria-hidden="true"><span class="bk-tabs-trigger" aria-selected="true">Week</span><span class="bk-tabs-trigger">Month</span></div><p class="bk-tile-description" style="margin: 0;">Tabs, Navbar, Sidebar, Breadcrumb, Pagination, Bottom nav</p></a>
     </div></div>
   </section>
 
@@ -142,22 +91,22 @@ export function Overview() {
       <a class="bk-tile doc-cat" data-tone="mint" data-interactive href="{{root}}docs/components/characters/"><span class="bk-illustration" data-bk-character="moss" data-mood="sleepy" style="--size: 150px"></span><h3 class="bk-tile-title">Moss, for loading</h3></a>
       <a class="bk-tile doc-cat" data-tone="peach" data-interactive href="{{root}}docs/components/characters/"><span class="bk-illustration" data-bk-character="biscuit" data-mood="surprised" style="--size: 150px"></span><h3 class="bk-tile-title">Biscuit, for 404s</h3></a>
       <a class="bk-tile doc-cat" data-tone="sky" data-interactive href="{{root}}docs/components/characters/"><span class="bk-illustration" data-bk-character="zara" data-mood="happy" style="--size: 150px"></span><h3 class="bk-tile-title">Zara, for messages</h3></a>
-      <a class="bk-tile doc-cat" data-tone="butter" data-interactive href="{{root}}docs/components/characters/"><span class="bk-illustration" data-bk-character="kofi" data-mood="happy" style="--size: 150px"></span><h3 class="bk-tile-title">Kofi, for wins</h3></a>
+      <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/characters/"><span class="bk-illustration" data-bk-character="kofi" data-mood="happy" style="--size: 150px"></span><h3 class="bk-tile-title">Kofi, for wins</h3></a>
     </div></div>
   </section>
 
   <section class="doc-home-section" aria-labelledby="agents">
     <div class="bk-bento"><div class="bk-bento-grid">
-      <article class="bk-tile bk-span-2" data-tone="inverse" style="--tile-pad: 28px;">
+      <article class="bk-tile bk-span-2" style="--tile-pad: 28px;">
         <span class="bk-eyebrow">Built for AI coding agents</span>
         <h2 class="bk-h2" id="agents">Docs your agent can read</h2>
         <p class="bk-muted" style="margin: 0;"><code class="bk-code">llms.txt</code> indexes every guide; <code class="bk-code">llms-full.txt</code> puts them all in one file, shipped inside the package. Every page also has a Copy page button and a Markdown version.</p>
         <div class="bk-row"><a class="bk-button" data-variant="brand" href="{{root}}docs/ai-agents/">Agent guide</a><a class="bk-button" data-variant="secondary" href="{{root}}llms.txt">llms.txt</a></div>
       </article>
-      <a class="bk-tile doc-cat" data-interactive href="{{root}}kit/">
+      <a class="bk-tile doc-cat" data-interactive href="{{root}}docs/components/">
         <svg class="bk-icon" data-size="xl" aria-hidden="true"><use href="#i-grid"/></svg>
-        <h3 class="bk-tile-title">The kit</h3>
-        <p class="bk-tile-description" style="margin: 0;">Every component on one page, with dashboard, landing and mobile patterns.</p>
+        <h3 class="bk-tile-title">Explore components</h3>
+        <p class="bk-tile-description" style="margin: 0;">Live examples, copyable code and practical patterns on each component page.</p>
       </a>
       <a class="bk-tile doc-cat" data-interactive href="{{repo}}">
         <svg class="bk-icon" data-size="xl" aria-hidden="true"><use href="#i-star"/></svg>

@@ -5,10 +5,28 @@ group: Forms
 ---
 
 ```html preview
-<div class="bk-stack" style="width: 300px">
-  <input class="bk-input" type="email" placeholder="you@example.com" aria-label="Email">
-  <input class="bk-input" value="SUMMER" aria-invalid="true" aria-label="Promo code">
-  <input class="bk-input" value="Read only, disabled" disabled aria-label="Disabled example">
+<div
+    class="bk-stack"
+    style="width: 300px"
+>
+    <input
+        class="bk-input"
+        type="email"
+        placeholder="you@example.com"
+        aria-label="Email"
+    />
+    <input
+        class="bk-input"
+        value="SUMMER"
+        aria-invalid="true"
+        aria-label="Promo code"
+    />
+    <input
+        class="bk-input"
+        value="Read only, disabled"
+        disabled
+        aria-label="Disabled example"
+    />
 </div>
 ```
 
@@ -17,12 +35,18 @@ group: Forms
 ```tsx
 import { Input, Field } from 'bento-shad-ui/react';
 
-<Field label="Email"><Input type="email" name="email" /></Field>
+<Field label="Email">
+    <Input type="email" name="email" />
+</Field>
 <Input invalid aria-label="Promo code" />
 ```
 
 ```html
-<input class="bk-input" type="email" aria-label="Email">
+<input
+    class="bk-input"
+    type="email"
+    aria-label="Email"
+/>
 ```
 
 ## API
