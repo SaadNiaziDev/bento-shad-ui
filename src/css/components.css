@@ -735,6 +735,35 @@
 .bk-data-list-item > dd { min-width: 0; margin: 0; font-size: 14px; overflow-wrap: anywhere; }
 .bk-data-list[data-orientation="vertical"] .bk-data-list-item { grid-template-columns: minmax(0, 1fr); }
 
+/* ---------- Hover card ---------- */
+.bk-hovercard { position: fixed; inset: auto; margin: 0; width: min(300px, calc(100vw - 16px)); padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--shadow-lg); font-family: var(--font-sans); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.bk-hovercard:not([data-placed]) { opacity: 0; }
+.bk-hovercard[data-placed] { animation: bk-pop .14s ease-out; }
+
+/* ---------- Line chart: SVG lines, HTML text ---------- */
+.bk-line-chart { --h: 200px; display: flex; flex-direction: column; gap: 10px; min-width: 0; margin: 0; }
+.bk-line-chart-body { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 6px; }
+.bk-line-chart-y { position: relative; width: calc(var(--y-chars, 3) * 1ch + 2px); height: var(--h); font-size: 11.5px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+.bk-line-chart-y > span { position: absolute; right: 0; bottom: var(--y); translate: 0 50%; line-height: 1; white-space: nowrap; }
+.bk-line-chart-plot { position: relative; height: var(--h); border-bottom: 1px solid var(--border); touch-action: pan-y; }
+.bk-line-chart-plot:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: 2px; }
+.bk-line-chart-gridline { position: absolute; left: 0; right: 0; bottom: var(--y); height: 1px; background: color-mix(in oklch, var(--border) 70%, transparent); }
+.bk-line-chart-plot > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.bk-line-chart-line { fill: none; stroke: var(--c); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.bk-line-chart-area { fill: color-mix(in oklch, var(--c) 14%, transparent); stroke: none; }
+.bk-line-chart-cursor { position: absolute; top: 0; bottom: 0; left: var(--x); width: 1px; background: color-mix(in oklch, var(--foreground) 22%, transparent); pointer-events: none; }
+.bk-line-chart-dot { position: absolute; left: 0; bottom: var(--y); width: 9px; height: 9px; translate: -4px 50%; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--card); }
+.bk-line-chart-tip { position: absolute; top: 0; left: 10px; z-index: 1; display: flex; flex-direction: column; gap: 3px; min-width: 128px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--shadow-md); font-size: 12.5px; white-space: nowrap; }
+.bk-line-chart-tip[data-side="start"] { left: auto; right: 10px; }
+.bk-line-chart-tip-title { font-weight: 600; }
+.bk-line-chart-tip-row { display: flex; align-items: center; gap: 8px; color: var(--muted-foreground); }
+.bk-line-chart-tip-row::before { content: ""; width: 8px; height: 8px; flex: none; border-radius: 3px; background: var(--c); }
+.bk-line-chart-tip-row > b { margin-left: auto; padding-left: 12px; color: var(--popover-foreground); font-weight: 600; font-variant-numeric: tabular-nums; }
+.bk-line-chart-x { grid-column: 2; position: relative; height: 14px; font-size: 11.5px; color: var(--muted-foreground); }
+.bk-line-chart-x > span { position: absolute; left: var(--x); translate: -50% 0; line-height: 1; white-space: nowrap; }
+.bk-line-chart-x > span[data-edge="start"] { translate: 0 0; }
+.bk-line-chart-x > span[data-edge="end"] { translate: -100% 0; }
+
 /* ---------- Tip: a pencil character with a speech bubble ---------- */
 .bk-tip { display: flex; align-items: flex-end; gap: 10px; min-width: 0; }
 .bk-tip[data-side="end"] { flex-direction: row-reverse; }
@@ -772,5 +801,5 @@
 @keyframes bk-pulse { 50% { opacity: .55; } }
 @keyframes bk-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .bk *, .bk *::before, .bk *::after, .bk-toast, .bk-dialog, .bk-sheet, .bk-command, .bk-menu, .bk-popover, .bk-combobox-list { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .bk *, .bk *::before, .bk *::after, .bk-toast, .bk-dialog, .bk-sheet, .bk-command, .bk-menu, .bk-popover, .bk-combobox-list, .bk-hovercard { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

@@ -878,6 +878,7 @@ Without JavaScript, everything renders and these still work: buttons, inputs, na
 | `dialog.bk-command[data-bk-hotkey]` | ⌘K / Ctrl+K opens it; typing filters `.bk-command-item`s |
 | `.bk-combobox` (`data-multiple`, `data-name`) | Filters `.bk-combobox-option`s as you type, keyboard picking, chips; fires `bk:change` with `{ value, values }` |
 | `.bk-tags` (`data-name`, `data-max`) | Enter or a comma adds a tag, Backspace removes; fires `bk:change` with `{ values }` |
+| `[data-bk-hovercard="id"]` + `.bk-hovercard[popover="manual"]` | Opens the card after a short rest or on keyboard focus; Esc closes it |
 | `[data-bk-dismiss]` inside `.bk-tip` | Hides the tip |
 | `.bk-dropzone` | Drag-over state and selected file names |
 
@@ -1734,7 +1735,7 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 - [Badge](components/badge.md), [Avatar](components/avatar.md)
 - [Table](components/table.md), [List](components/list.md), [Data list](components/data-list.md)
 - [Timeline](components/timeline.md): events with markers, times and icons
-- [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Progress](components/progress.md) with ring
+- [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Line chart](components/line-chart.md), [Progress](components/progress.md) with ring
 - [Accordion](components/accordion.md)
 
 ## Feedback
@@ -1744,7 +1745,7 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 
 ## Overlays
 
-- [Dialog](components/dialog.md), [Sheet](components/sheet.md), [Dropdown menu](components/dropdown-menu.md), [Popover](components/popover.md), [Command](components/command.md)
+- [Dialog](components/dialog.md), [Sheet](components/sheet.md), [Dropdown menu](components/dropdown-menu.md), [Popover](components/popover.md), [Hover card](components/hover-card.md), [Command](components/command.md)
 
 ## Navigation
 
@@ -1827,6 +1828,9 @@ fillSlider(range: HTMLInputElement): void              // updates --val and <out
 matchesQuery(text: string, query: string): boolean    // combobox matching: every word, ignoring case and accents
 splitTags(text: string, delimiter?: string): string[]  // tags from typed or pasted text
 addTags(tags, incoming, { max?, allowDuplicates? })     // { tags, added, duplicates, rejected }
+niceScale(low, high, count?): { min, max, ticks }       // a readable chart axis
+linePath(values, { min, max }, area?, base?): string     // SVG path data in a 0–100 box
+showHoverCard(card, trigger) / hideHoverCard(card)      // open or close a hover card now
 version: string
 ```
 
@@ -1857,6 +1861,7 @@ All events bubble.
 | `data-multiple` / `data-name` | `.bk-combobox` | pick several values; submit them as hidden inputs with this name |
 | `data-value` / `data-label` / `data-keywords` | `.bk-combobox-option` | value sent, text shown, extra search words |
 | `data-name` / `data-max` / `data-delimiter` / `data-allow-duplicates` / `data-add-on-blur` / `data-required` | `.bk-tags` | form name, tag limit, separator, repeats, keeping leftover text on blur, at least one tag |
+| `data-bk-hovercard` / `data-open-delay` / `data-close-delay` | link or button | id of a `.bk-hovercard[popover="manual"]` to show on hover and focus; timing in ms |
 | `data-bk-dismiss` | button inside `.bk-tip` | hides the tip |
 | `data-indeterminate` | `.bk-checkbox` | sets `indeterminate` on init |
 | `data-prefix` / `data-suffix` | `.bk-slider` | text around the `<output>` value |
@@ -6306,6 +6311,195 @@ import { Badge, DataList, DataListItem } from 'bento-shad-ui/react';
 - It renders a `<dl>` with `<dt>` and `<dd>` pairs, so screen readers announce each label with its value.
 - Long values wrap instead of overflowing, including unbroken strings such as IDs.
 
+<!-- docs/components/line-chart.md -->
+
+# Line chart
+
+> Lines over shared labels, with a value readout under the pointer or the arrow keys and a hidden data table.
+
+```html
+<figure
+    class="bk-line-chart"
+    style="width: 100%; max-width: 520px; --h: 200px; --y-chars: 5"
+>
+    <div class="bk-line-chart-body">
+        <div
+            class="bk-line-chart-y"
+            aria-hidden="true"
+        >
+            <span style="--y: 0%">0</span>
+            <span style="--y: 25%">500</span>
+            <span style="--y: 50%">1,000</span>
+            <span style="--y: 75%">1,500</span>
+            <span style="--y: 100%">2,000</span>
+        </div>
+        <div
+            class="bk-line-chart-plot"
+            role="img"
+            aria-label="Bookings per month, first half of 2026"
+        >
+            <span
+                class="bk-line-chart-gridline"
+                style="--y: 0%"
+            ></span>
+            <span
+                class="bk-line-chart-gridline"
+                style="--y: 25%"
+            ></span>
+            <span
+                class="bk-line-chart-gridline"
+                style="--y: 50%"
+            ></span>
+            <span
+                class="bk-line-chart-gridline"
+                style="--y: 75%"
+            ></span>
+            <span
+                class="bk-line-chart-gridline"
+                style="--y: 100%"
+            ></span>
+            <svg
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+                focusable="false"
+            >
+                <path
+                    class="bk-line-chart-line"
+                    d="M0 59 L20 53.4 L40 54.95 L60 35.5 L80 33.5 L100 24"
+                    style="--c: var(--chart-1)"
+                ></path>
+                <path
+                    class="bk-line-chart-line"
+                    d="M0 98 L20 97.4 L40 98.45 L60 96.8 L80 96.5 L100 97.1"
+                    style="--c: var(--chart-2)"
+                ></path>
+            </svg>
+        </div>
+        <div
+            class="bk-line-chart-x"
+            aria-hidden="true"
+        >
+            <span
+                style="--x: 0%"
+                data-edge="start"
+            >
+                Jan
+            </span>
+            <span style="--x: 20%">Feb</span>
+            <span style="--x: 40%">Mar</span>
+            <span style="--x: 60%">Apr</span>
+            <span style="--x: 80%">May</span>
+            <span
+                style="--x: 100%"
+                data-edge="end"
+            >
+                Jun
+            </span>
+        </div>
+    </div>
+    <div class="bk-legend">
+        <span style="--c: var(--chart-1)">Bookings</span>
+        <span style="--c: var(--chart-2)">Cancellations</span>
+    </div>
+    <table class="bk-sr-only">
+        <caption>Bookings per month, first half of 2026</caption>
+        <thead>
+            <tr>
+                <td></td>
+                <th scope="col">Bookings</th>
+                <th scope="col">Cancellations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Jan</th>
+                <td>820</td>
+                <td>40</td>
+            </tr>
+            <tr>
+                <th scope="row">Feb</th>
+                <td>932</td>
+                <td>52</td>
+            </tr>
+            <tr>
+                <th scope="row">Mar</th>
+                <td>901</td>
+                <td>31</td>
+            </tr>
+            <tr>
+                <th scope="row">Apr</th>
+                <td>1,290</td>
+                <td>64</td>
+            </tr>
+            <tr>
+                <th scope="row">May</th>
+                <td>1,330</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <th scope="row">Jun</th>
+                <td>1,520</td>
+                <td>58</td>
+            </tr>
+        </tbody>
+    </table>
+</figure>
+```
+
+This preview is the markup `LineChart` renders on the server, without the Tab stop that only React makes work. It shows without JavaScript, but the value readout needs React: in an app, rest the pointer on the chart or focus it and press ← and →.
+
+## Usage
+
+```tsx
+import { LineChart } from 'bento-shad-ui/react';
+
+<LineChart
+    label="Bookings per month, first half of 2026"
+    labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+    series={[
+        { label: 'Bookings', data: [820, 932, 901, 1290, 1330, 1520] },
+        { label: 'Cancellations', data: [40, 52, 31, 64, 70, 58] },
+    ]}
+/>;
+```
+
+Lines are straight between points, and the scale starts at 0 for positive data, so changes aren't exaggerated. Lines take `--chart-1` to `--chart-5` in order; set `color` on a series to change one. A `null` value leaves a gap instead of a misleading straight line.
+
+### HTML
+
+`LineChart` is a React component, but it renders on the server: `renderToStaticMarkup` (or your framework's server rendering) gives HTML that shows the chart with `bento.css` and no script. To draw lines yourself, `niceScale(low, high)` and `linePath(values, scale)` are exported from `bento-shad-ui`.
+
+## Examples
+
+### Area
+
+```tsx
+<LineChart
+    label="Revenue per week"
+    area
+    height={140}
+    labels={['W1', 'W2', 'W3', 'W4', 'W5', 'W6']}
+    series={[{ label: 'Revenue', data: [12.4, 15.1, 14.2, 18.9, 21.3, 24.8] }]}
+    formatValue={(v) => `€${v.toFixed(1)}k`}
+/>;
+```
+
+`formatValue` is used on the axis, in the readout and in the data table, so numbers read the same everywhere.
+
+For a single trend inside a stat, a [Sparkline](stat.md) is lighter. For comparing a few totals, use a [Bar chart](bar-chart.md).
+
+## API
+
+<!-- props: LineChartProps -->
+
+## Accessibility
+
+- A visually hidden table, captioned with `label`, holds every value. Screen readers can read it like any table.
+- The plot can be focused. ← and → move the readout (Home and End jump to the ends) and announce the values, for example "Mar: Bookings 901, Cancellations 31".
+- Series are named in the legend and the readout, not only by colour. The chart colours have not been checked for colour-blind contrast, so with several series, label them clearly or use `color` to pick colours you have checked.
+- The pointer readout ignores touch scrolling (`touch-action: pan-y`), so the page still scrolls over the chart on phones.
+
 <!-- docs/components/list.md -->
 
 # List
@@ -8357,6 +8551,93 @@ The menu opens under its trigger, lines up with `align` (`start`, `center`, `end
 
 - Focus moves to the first item when the menu opens. ↑/↓, Home and End move between items; Esc and outside clicks close it.
 - Items use `role="menuitem"` or `menuitemcheckbox` with `aria-checked`. The trigger gets `aria-haspopup="menu"`.
+
+<!-- docs/components/hover-card.md -->
+
+# Hover card
+
+> A preview card that opens while a pointer rests on a link or the link has keyboard focus.
+
+```html
+<p style="margin: 0">
+    Trip organised by
+    <a
+        href="#mira"
+        data-bk-hovercard="hc-mira"
+    >
+        Mira Okafor
+    </a>
+</p>
+<div
+    class="bk-hovercard"
+    id="hc-mira"
+    popover="manual"
+>
+    <div
+        class="bk-row"
+        style="--gap: 12px"
+    >
+        <span class="bk-avatar">MO</span>
+        <div>
+            <strong>Mira Okafor</strong>
+            <div style="font-size: 13px; color: var(--muted-foreground)">
+                Design lead · Lisbon
+            </div>
+        </div>
+    </div>
+    <p style="margin: 10px 0 0; font-size: 13.5px">
+        Organising 3 trips this year.
+    </p>
+</div>
+```
+
+Rest the pointer on the name, or Tab to it. The card opens after half a second so it doesn't flash while the pointer passes over, and stays open while the pointer moves into it. Esc closes it.
+
+A hover card is a shortcut for people with a mouse or keyboard. Touch screens skip it (a tap follows the link), and screen readers don't announce it. Everything in the card must also be on the page the link leads to.
+
+## Usage
+
+```tsx
+import { Avatar, HoverCard } from 'bento-shad-ui/react';
+
+<HoverCard trigger={<a href="/people/mira">Mira Okafor</a>}>
+    <Avatar fallback="MO" />
+    <strong>Mira Okafor</strong>
+    <p>Design lead · Lisbon</p>
+</HoverCard>;
+```
+
+### HTML
+
+Point `data-bk-hovercard` on the trigger at the id of a `.bk-hovercard` with `popover="manual"`. `data-open-delay` and `data-close-delay` on the trigger change the timing, in milliseconds.
+
+```html
+<a
+    href="/people/mira"
+    data-bk-hovercard="hc-mira"
+>
+    Mira Okafor
+</a>
+<div
+    class="bk-hovercard"
+    id="hc-mira"
+    popover="manual"
+>
+    …
+</div>
+```
+
+`data-align="center"` or `"end"` on the card lines it up with the middle or right edge of the trigger.
+
+## API
+
+<!-- props: HoverCardProps -->
+
+## Accessibility
+
+- Keyboard focus opens the card at once; Esc closes it without moving focus. It meets WCAG 1.4.13: it can be dismissed, the pointer can move over it, and it stays until the pointer or focus leaves.
+- The card isn't connected to the trigger for screen readers on purpose: reading a whole card on every focus is noise. Keep the trigger meaningful on its own, such as a person's name that links to their profile.
+- Avoid buttons and forms inside a hover card. They're hard to reach, and the card closes when focus moves on. Use a [Popover](popover.md) for anything interactive.
 
 <!-- docs/components/popover.md -->
 

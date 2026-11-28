@@ -14,6 +14,8 @@ export * from './combobox';
 export * from './tags';
 export * from './inputs';
 export * from './content';
+export * from './hovercard';
+export * from './linechart';
 export * from './theme';
 export * from './illustration';
 export { cx, Slot, useControllableState } from './utils';

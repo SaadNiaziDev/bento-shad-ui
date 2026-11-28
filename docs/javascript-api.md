@@ -63,6 +63,9 @@ fillSlider(range: HTMLInputElement): void              // updates --val and <out
 matchesQuery(text: string, query: string): boolean    // combobox matching: every word, ignoring case and accents
 splitTags(text: string, delimiter?: string): string[]  // tags from typed or pasted text
 addTags(tags, incoming, { max?, allowDuplicates? })     // { tags, added, duplicates, rejected }
+niceScale(low, high, count?): { min, max, ticks }       // a readable chart axis
+linePath(values, { min, max }, area?, base?): string     // SVG path data in a 0–100 box
+showHoverCard(card, trigger) / hideHoverCard(card)      // open or close a hover card now
 version: string
 ```
 
@@ -93,6 +96,7 @@ All events bubble.
 | `data-multiple` / `data-name` | `.bk-combobox` | pick several values; submit them as hidden inputs with this name |
 | `data-value` / `data-label` / `data-keywords` | `.bk-combobox-option` | value sent, text shown, extra search words |
 | `data-name` / `data-max` / `data-delimiter` / `data-allow-duplicates` / `data-add-on-blur` / `data-required` | `.bk-tags` | form name, tag limit, separator, repeats, keeping leftover text on blur, at least one tag |
+| `data-bk-hovercard` / `data-open-delay` / `data-close-delay` | link or button | id of a `.bk-hovercard[popover="manual"]` to show on hover and focus; timing in ms |
 | `data-bk-dismiss` | button inside `.bk-tip` | hides the tip |
 | `data-indeterminate` | `.bk-checkbox` | sets `indeterminate` on init |
 | `data-prefix` / `data-suffix` | `.bk-slider` | text around the `<output>` value |

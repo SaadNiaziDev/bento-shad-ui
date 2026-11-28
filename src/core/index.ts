@@ -8,12 +8,16 @@ import { getStoredTheme, getTheme, setTheme, syncThemeButtons, watchSystemTheme 
 import { toast } from './toast';
 import type { StartOptions, ToastOptions } from './types';
 import { initCombobox } from './combobox';
+import { enableHoverCards } from './hovercard';
 import { initNumber } from './number';
 import { initTags } from './tags';
 import { fillSlider, initCalendar, initCommand, initTabs, once, openCommand, pickCalendarDay } from './widgets';
 
 export { foldText, hideListbox, matchesQuery, showListbox } from './combobox';
 export { clampNumber, stepNumberInput } from './number';
+export { linePath, niceScale } from './chart';
+export type { NiceScale } from './chart';
+export { enableHoverCards, hideHoverCard, HOVERCARD_CLOSE_DELAY, HOVERCARD_OPEN_DELAY, showHoverCard } from './hovercard';
 export { addTags, describeTagChange, splitTags } from './tags';
 export type { AddTagsOptions, AddTagsResult } from './tags';
 export { getStoredTheme, getTheme, isTheme, onThemeChange, resolveTheme, setTheme, THEME_EVENT, THEME_STORAGE_KEY, themeScript } from './theme';
@@ -203,6 +207,7 @@ export function start(options: StartOptions = {}): void {
   document.addEventListener('change', onChange);
   for (const type of ['dragenter', 'dragover', 'dragleave', 'drop'] as const) document.addEventListener(type, onDrag);
   enablePopoverPlacement();
+  enableHoverCards();
   watchSystemTheme();
 
   if (restoreTheme) setTheme(getStoredTheme() ?? getTheme(), { persist: false });

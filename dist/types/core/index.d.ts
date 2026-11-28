@@ -1,6 +1,9 @@
 import type { StartOptions } from './types';
 export { foldText, hideListbox, matchesQuery, showListbox } from './combobox';
 export { clampNumber, stepNumberInput } from './number';
+export { linePath, niceScale } from './chart';
+export type { NiceScale } from './chart';
+export { enableHoverCards, hideHoverCard, HOVERCARD_CLOSE_DELAY, HOVERCARD_OPEN_DELAY, showHoverCard } from './hovercard';
 export { addTags, describeTagChange, splitTags } from './tags';
 export type { AddTagsOptions, AddTagsResult } from './tags';
 export { getStoredTheme, getTheme, isTheme, onThemeChange, resolveTheme, setTheme, THEME_EVENT, THEME_STORAGE_KEY, themeScript } from './theme';

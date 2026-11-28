@@ -260,3 +260,32 @@ test('Timeline and DataList render semantic lists', () => {
   const dl = html(h(UI.DataList, { orientation: 'vertical' }, h(UI.DataListItem, { label: 'Guest' }, 'Mira')));
   assert.equal(dl, '<dl class="bk-data-list" data-orientation="vertical"><div class="bk-data-list-item"><dt>Guest</dt><dd>Mira</dd></div></dl>');
 });
+
+test('LineChart renders lines, axis ticks, a hidden data table and a focusable plot', () => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const out = html(h(UI.LineChart, {
+    label: 'Bookings per month',
+    labels: months,
+    series: [{ label: 'Bookings', data: [820, 932, 901, 1290, 1330, 1520, 1710, 1650, null, 1380, 1210, 1460] }, { label: 'Cancellations', data: months.map(() => 40) }],
+  }));
+  assert.match(out, /^<figure class="bk-line-chart"/);
+  assert.equal((out.match(/class="bk-line-chart-line"/g) ?? []).length, 2);
+  assert.match(out, /d="M0 [\d.]+ L[^"]*M[^"]*"/, 'the null value splits the first line');
+  assert.match(out, /stroke|--c:var\(--chart-1\)/);
+  assert.match(out, /tabindex="0" role="group" aria-roledescription="chart" aria-label="Bookings per month\. Use the left and right arrow keys/i);
+  for (const tick of ['0', '500', '1,000', '1,500', '2,000']) assert.ok(out.includes(`>${tick}</span>`), tick);
+  const xLabels = [...out.matchAll(/class="bk-line-chart-x"[^]*?<\/div>/g)][0][0].match(/>([A-Z][a-z]{2})</g).map((m) => m.slice(1, -1));
+  assert.deepEqual(xLabels, ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Dec']);
+  assert.match(out, /<table class="bk-sr-only"><caption>Bookings per month<\/caption>/);
+  assert.equal((out.match(/<th scope="row">/g) ?? []).length, 12);
+  assert.match(out, /<th scope="row">Sep<\/th><td>No value<\/td>/);
+  assert.match(out, /class="bk-legend"/);
+  assert.doesNotMatch(html(h(UI.LineChart, { label: 'One', labels: ['a', 'b'], series: [{ label: 'A', data: [1, 2] }] })), /bk-legend/);
+});
+
+test('HoverCard links its trigger and a manual popover', () => {
+  const out = html(h(UI.HoverCard, { trigger: h('a', { href: '/people/mira' }, 'Mira') }, 'Design lead'));
+  const id = out.match(/data-bk-hovercard-for="([^"]+)"/)[1];
+  assert.match(out, new RegExp(`id="${id}" popover="manual" class="bk-hovercard" data-align="start" data-bk-react="">Design lead`));
+  assert.match(out, /^<a href="\/people\/mira"/);
+});

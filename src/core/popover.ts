@@ -6,7 +6,11 @@ function invokerFor(popover: HTMLElement): HTMLElement | null {
   const combobox = popover.closest('.bk-combobox');
   if (combobox) return combobox.querySelector<HTMLElement>('.bk-combobox-control, .bk-combobox-input');
   if (!popover.id) return null;
-  return document.querySelector<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`);
+  const id = CSS.escape(popover.id);
+  if (popover.classList.contains('bk-hovercard')) {
+    return document.querySelector<HTMLElement>(`[data-bk-hovercard="${id}"], [data-bk-hovercard-for="${id}"]`);
+  }
+  return document.querySelector<HTMLElement>(`[popovertarget="${id}"]`);
 }
 
 /**
@@ -40,7 +44,7 @@ export function placePopover(popover: HTMLElement, anchor: HTMLElement | null = 
 
 function openPopovers(): HTMLElement[] {
   try {
-    return $$('.bk-menu:popover-open, .bk-popover:popover-open, .bk-combobox-list:popover-open');
+    return $$('.bk-menu:popover-open, .bk-popover:popover-open, .bk-combobox-list:popover-open, .bk-hovercard:popover-open');
   } catch {
     return [];
   }

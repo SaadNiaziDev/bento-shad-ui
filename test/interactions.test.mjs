@@ -446,3 +446,38 @@ test('number input steps within min and max, disables buttons at the limits and 
   env.emit(input, 'blur');
   assert.equal(input.value, '', 'an empty field stays empty');
 });
+
+// Line chart maths
+const { niceScale, linePath, showHoverCard, hideHoverCard } = await import('../dist/index.js');
+
+test('niceScale rounds to 1/2/2.5/5 steps and starts positive data at 0', () => {
+  assert.deepEqual(niceScale(820, 1710), { min: 0, max: 2000, ticks: [0, 500, 1000, 1500, 2000] });
+  assert.deepEqual(niceScale(12.4, 24.8).ticks, [0, 10, 20, 30]);
+  assert.deepEqual(niceScale(-30, 45), { min: -40, max: 60, ticks: [-40, -20, 0, 20, 40, 60] });
+  assert.deepEqual(niceScale(5, 5).ticks.slice(0, 2), [0, 2]);
+});
+
+test('linePath draws to scale, leaves gaps for null and closes areas to the baseline', () => {
+  const scale = { min: 0, max: 100 };
+  assert.equal(linePath([0, 50, 100], scale), 'M0 100 L50 50 L100 0');
+  assert.equal(linePath([10, null, 30, 40], scale), 'M0 90 L0 90 M66.67 70 L100 60');
+  assert.equal(linePath([0, 100], scale, true), 'M0 100 L100 0 L100 100 L0 100 Z');
+});
+
+test('hover card helpers place the card under its trigger and clear it on hide', (t) => {
+  const env = environment(t);
+  domGlobals(t, env.window);
+  document.body.innerHTML = '<a href="#p" data-bk-hovercard="hc">Mira</a><div class="bk-hovercard" id="hc" popover="manual">Card</div>';
+  const trigger = document.querySelector('a');
+  const card = document.getElementById('hc');
+  trigger.getBoundingClientRect = () => ({ left: 40, right: 90, width: 50, top: 20, bottom: 40 });
+  Object.defineProperties(card, { offsetWidth: { value: 300 }, offsetHeight: { value: 100 } });
+  Object.defineProperties(document.documentElement, { clientWidth: { value: 800 } });
+  window.innerHeight = 600;
+  showHoverCard(card, trigger);
+  assert.equal(card.hasAttribute('data-placed'), true);
+  assert.equal(card.style.top, '46px');
+  assert.equal(card.style.left, '40px');
+  hideHoverCard(card);
+  assert.equal(card.hasAttribute('data-placed'), false);
+});

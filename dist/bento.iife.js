@@ -22,25 +22,32 @@ var BentoUI = (() => {
   // src/core/browser.ts
   var browser_exports = {};
   __export(browser_exports, {
+    HOVERCARD_CLOSE_DELAY: () => HOVERCARD_CLOSE_DELAY,
+    HOVERCARD_OPEN_DELAY: () => HOVERCARD_OPEN_DELAY,
     THEME_EVENT: () => THEME_EVENT,
     THEME_STORAGE_KEY: () => THEME_STORAGE_KEY,
     addTags: () => addTags,
     clampNumber: () => clampNumber,
     describeTagChange: () => describeTagChange,
+    enableHoverCards: () => enableHoverCards,
     enablePopoverPlacement: () => enablePopoverPlacement,
     fillSlider: () => fillSlider,
     foldText: () => foldText,
     getStoredTheme: () => getStoredTheme,
     getTheme: () => getTheme,
+    hideHoverCard: () => hideHoverCard,
     hideListbox: () => hideListbox,
     init: () => init,
     isTheme: () => isTheme,
+    linePath: () => linePath,
     matchesQuery: () => matchesQuery,
+    niceScale: () => niceScale,
     onThemeChange: () => onThemeChange,
     openCommand: () => openCommand,
     placePopover: () => placePopover,
     resolveTheme: () => resolveTheme,
     setTheme: () => setTheme,
+    showHoverCard: () => showHoverCard,
     showListbox: () => showListbox,
     splitTags: () => splitTags,
     start: () => start,
@@ -84,7 +91,11 @@ var BentoUI = (() => {
     const combobox = popover.closest(".bk-combobox");
     if (combobox) return combobox.querySelector(".bk-combobox-control, .bk-combobox-input");
     if (!popover.id) return null;
-    return document.querySelector(`[popovertarget="${CSS.escape(popover.id)}"]`);
+    const id = CSS.escape(popover.id);
+    if (popover.classList.contains("bk-hovercard")) {
+      return document.querySelector(`[data-bk-hovercard="${id}"], [data-bk-hovercard-for="${id}"]`);
+    }
+    return document.querySelector(`[popovertarget="${id}"]`);
   }
   function placePopover(popover, anchor = invokerFor(popover)) {
     if (!isBrowser || !anchor) return;
@@ -108,7 +119,7 @@ var BentoUI = (() => {
   }
   function openPopovers() {
     try {
-      return $$(".bk-menu:popover-open, .bk-popover:popover-open, .bk-combobox-list:popover-open");
+      return $$(".bk-menu:popover-open, .bk-popover:popover-open, .bk-combobox-list:popover-open, .bk-hovercard:popover-open");
     } catch {
       return [];
     }
@@ -548,13 +559,103 @@ var BentoUI = (() => {
     }
   }
 
+  // src/core/hovercard.ts
+  var HOVERCARD_OPEN_DELAY = 500;
+  var HOVERCARD_CLOSE_DELAY = 250;
+  var timers = /* @__PURE__ */ new WeakMap();
+  function popoverOpen2(el) {
+    try {
+      return el.matches(":popover-open");
+    } catch {
+      return false;
+    }
+  }
+  function schedule(card, delay, run) {
+    clearTimeout(timers.get(card));
+    timers.set(card, setTimeout(run, delay));
+  }
+  function showHoverCard(card, trigger) {
+    clearTimeout(timers.get(card));
+    if (!popoverOpen2(card) && typeof card.showPopover === "function") {
+      try {
+        card.showPopover();
+      } catch {
+        return;
+      }
+    }
+    placePopover(card, trigger);
+  }
+  function hideHoverCard(card) {
+    clearTimeout(timers.get(card));
+    if (popoverOpen2(card) && typeof card.hidePopover === "function") {
+      try {
+        card.hidePopover();
+      } catch {
+      }
+    }
+    card.removeAttribute("data-placed");
+  }
+  function delays(trigger) {
+    const open = Number(trigger.getAttribute("data-open-delay"));
+    const close = Number(trigger.getAttribute("data-close-delay"));
+    return [Number.isFinite(open) && trigger.hasAttribute("data-open-delay") ? open : HOVERCARD_OPEN_DELAY, Number.isFinite(close) && trigger.hasAttribute("data-close-delay") ? close : HOVERCARD_CLOSE_DELAY];
+  }
+  function cardFor(trigger) {
+    const card = document.getElementById(trigger.getAttribute("data-bk-hovercard") ?? "");
+    return card && card.classList.contains("bk-hovercard") ? card : null;
+  }
+  function triggerFor(card) {
+    return card.id ? document.querySelector(`[data-bk-hovercard="${CSS.escape(card.id)}"]`) : null;
+  }
+  function onOver(event) {
+    if (event instanceof PointerEvent && event.pointerType === "touch") return;
+    const trigger = closestFrom(event.target, "[data-bk-hovercard]");
+    if (trigger && !isManaged(trigger)) {
+      const card2 = cardFor(trigger);
+      if (!card2) return;
+      if (event.type === "focusin" && !trigger.matches(":focus-visible")) return;
+      const [open] = delays(trigger);
+      if (popoverOpen2(card2)) clearTimeout(timers.get(card2));
+      else schedule(card2, event.type === "focusin" ? 0 : open, () => showHoverCard(card2, trigger));
+      return;
+    }
+    const card = closestFrom(event.target, ".bk-hovercard");
+    if (card && !isManaged(card)) clearTimeout(timers.get(card));
+  }
+  function onOut(event) {
+    const from = closestFrom(event.target, "[data-bk-hovercard], .bk-hovercard");
+    if (!from || isManaged(from)) return;
+    const card = from.classList.contains("bk-hovercard") ? from : cardFor(from);
+    const trigger = card ? from === card ? triggerFor(card) : from : null;
+    if (!card || !trigger) return;
+    const to = event.relatedTarget;
+    if (to instanceof Node && (card.contains(to) || trigger.contains(to))) return;
+    schedule(card, delays(trigger)[1], () => hideHoverCard(card));
+  }
+  function onKey(event) {
+    if (event.key !== "Escape") return;
+    for (const card of Array.from(document.querySelectorAll(".bk-hovercard"))) {
+      if (!isManaged(card) && popoverOpen2(card)) hideHoverCard(card);
+    }
+  }
+  var bound2 = false;
+  function enableHoverCards() {
+    if (!isBrowser || bound2) return;
+    bound2 = true;
+    document.addEventListener("pointerover", onOver);
+    document.addEventListener("pointerout", onOut);
+    document.addEventListener("focusin", onOver);
+    document.addEventListener("focusout", onOut);
+    document.addEventListener("keydown", onKey);
+  }
+
   // src/core/number.ts
   function clampNumber(value, min, max) {
     if (min !== void 0 && value < min) return min;
     if (max !== void 0 && value > max) return max;
     return value;
   }
-  var bound2 = (raw) => raw === null || raw === "" ? void 0 : Number(raw);
+  var bound3 = (raw) => raw === null || raw === "" ? void 0 : Number(raw);
   function stepNumberInput(input, direction) {
     if (input.disabled || input.readOnly) return;
     try {
@@ -568,8 +669,8 @@ var BentoUI = (() => {
   }
   function syncButtons(box, input) {
     const value = input.value === "" ? NaN : Number(input.value);
-    const min = bound2(input.getAttribute("min"));
-    const max = bound2(input.getAttribute("max"));
+    const min = bound3(input.getAttribute("min"));
+    const max = bound3(input.getAttribute("max"));
     for (const button of $$(".bk-number-step", box)) {
       const up = button.getAttribute("data-direction") === "up";
       const limit = up ? max : min;
@@ -593,7 +694,7 @@ var BentoUI = (() => {
       input.addEventListener("blur", () => {
         if (input.value === "") return;
         const value = Number(input.value);
-        const clamped = clampNumber(value, bound2(input.getAttribute("min")), bound2(input.getAttribute("max")));
+        const clamped = clampNumber(value, bound3(input.getAttribute("min")), bound3(input.getAttribute("max")));
         if (clamped !== value) {
           input.value = String(clamped);
           input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -947,6 +1048,45 @@ var BentoUI = (() => {
     }
   }
 
+  // src/core/chart.ts
+  function niceScale(low, high, count = 4) {
+    let min = Math.min(low, high);
+    let max = Math.max(low, high);
+    if (min > 0) min = 0;
+    if (max < 0) max = 0;
+    if (min === max) max = min + 1;
+    const raw = (max - min) / Math.max(1, count);
+    const power = 10 ** Math.floor(Math.log10(raw));
+    const step = ([1, 2, 2.5, 5, 10].find((m) => m * power >= raw) ?? 10) * power;
+    const start2 = Math.floor(min / step) * step;
+    const end = Math.ceil(max / step) * step;
+    const ticks = [];
+    for (let v = start2; v <= end + step / 2; v += step) ticks.push(Math.round(v / step) * step);
+    return { min: start2, max: end, ticks: ticks.map((t) => Number(t.toPrecision(12))) };
+  }
+  function linePath(values, scale, area = false, base = 100) {
+    const span = scale.max - scale.min || 1;
+    const x = (i) => values.length > 1 ? i / (values.length - 1) * 100 : 50;
+    const y = (v) => 100 - (v - scale.min) / span * 100;
+    const runs = [];
+    let run = [];
+    values.forEach((v, i) => {
+      if (v === null || !Number.isFinite(v)) {
+        if (run.length) runs.push(run);
+        run = [];
+      } else run.push([x(i), y(v)]);
+    });
+    if (run.length) runs.push(run);
+    const f = (n) => String(Math.round(n * 100) / 100);
+    return runs.map((points) => {
+      const line = points.map(([px, py], i) => `${i ? "L" : "M"}${f(px)} ${f(py)}`).join(" ");
+      if (!area) return points.length === 1 ? `${line} L${f(points[0][0])} ${f(points[0][1])}` : line;
+      const first = points[0];
+      const last = points[points.length - 1];
+      return `${line} L${f(last[0])} ${f(base)} L${f(first[0])} ${f(base)} Z`;
+    }).join(" ");
+  }
+
   // src/core/index.ts
   var version = "0.2.2";
   function init(root = isBrowser ? document : void 0) {
@@ -1095,6 +1235,7 @@ var BentoUI = (() => {
     document.addEventListener("change", onChange);
     for (const type of ["dragenter", "dragover", "dragleave", "drop"]) document.addEventListener(type, onDrag);
     enablePopoverPlacement();
+    enableHoverCards();
     watchSystemTheme();
     if (restoreTheme) setTheme(getStoredTheme() ?? getTheme(), { persist: false });
     const ready = () => {

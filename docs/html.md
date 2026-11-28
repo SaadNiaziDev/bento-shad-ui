@@ -134,6 +134,7 @@ Without JavaScript, everything renders and these still work: buttons, inputs, na
 | `dialog.bk-command[data-bk-hotkey]` | ⌘K / Ctrl+K opens it; typing filters `.bk-command-item`s |
 | `.bk-combobox` (`data-multiple`, `data-name`) | Filters `.bk-combobox-option`s as you type, keyboard picking, chips; fires `bk:change` with `{ value, values }` |
 | `.bk-tags` (`data-name`, `data-max`) | Enter or a comma adds a tag, Backspace removes; fires `bk:change` with `{ values }` |
+| `[data-bk-hovercard="id"]` + `.bk-hovercard[popover="manual"]` | Opens the card after a short rest or on keyboard focus; Esc closes it |
 | `[data-bk-dismiss]` inside `.bk-tip` | Hides the tip |
 | `.bk-dropzone` | Drag-over state and selected file names |
 

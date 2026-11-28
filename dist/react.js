@@ -2149,46 +2149,240 @@ var DataListItem = React13.forwardRef(function DataListItem2({ label, className,
   ] });
 });
 
-// src/react/theme.tsx
+// src/react/hovercard.tsx
 import * as React14 from "react";
+import { enablePopoverPlacement as enablePopoverPlacement4, hideHoverCard, HOVERCARD_CLOSE_DELAY, HOVERCARD_OPEN_DELAY, showHoverCard } from "./index.js";
+import { Fragment as Fragment8, jsx as jsx13, jsxs as jsxs13 } from "react/jsx-runtime";
+function HoverCard({
+  trigger,
+  children,
+  openDelay = HOVERCARD_OPEN_DELAY,
+  closeDelay = HOVERCARD_CLOSE_DELAY,
+  align = "start",
+  className,
+  onPointerEnter,
+  onPointerLeave,
+  ...props
+}) {
+  const id = useSafeId("hovercard");
+  const cardRef = React14.useRef(null);
+  const anchor = React14.useRef(null);
+  const timer = React14.useRef(void 0);
+  React14.useEffect(() => {
+    enablePopoverPlacement4();
+    return () => clearTimeout(timer.current);
+  }, []);
+  const later = (ms, run) => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(run, ms);
+  };
+  const open = (delay) => later(delay, () => {
+    if (cardRef.current && anchor.current) showHoverCard(cardRef.current, anchor.current);
+  });
+  const close = () => later(closeDelay, () => {
+    if (cardRef.current) hideHoverCard(cardRef.current);
+  });
+  const stay = () => clearTimeout(timer.current);
+  const own = trigger.props;
+  const clone = React14.cloneElement(trigger, {
+    "data-bk-hovercard-for": id,
+    onPointerEnter: (e) => {
+      own.onPointerEnter?.(e);
+      if (e.pointerType === "touch") return;
+      anchor.current = e.currentTarget;
+      open(openDelay);
+    },
+    onPointerLeave: (e) => {
+      own.onPointerLeave?.(e);
+      close();
+    },
+    onFocus: (e) => {
+      own.onFocus?.(e);
+      anchor.current = e.currentTarget;
+      if (e.currentTarget.matches(":focus-visible")) open(0);
+    },
+    onBlur: (e) => {
+      own.onBlur?.(e);
+      close();
+    },
+    onKeyDown: (e) => {
+      own.onKeyDown?.(e);
+      if (e.key === "Escape" && cardRef.current) hideHoverCard(cardRef.current);
+    }
+  });
+  return /* @__PURE__ */ jsxs13(Fragment8, { children: [
+    clone,
+    /* @__PURE__ */ jsx13(
+      "div",
+      {
+        ref: cardRef,
+        id,
+        ...{ popover: "manual" },
+        className: cx("bk-hovercard", className),
+        "data-align": align,
+        "data-bk-react": "",
+        onPointerEnter: (e) => {
+          onPointerEnter?.(e);
+          stay();
+        },
+        onPointerLeave: (e) => {
+          onPointerLeave?.(e);
+          close();
+        },
+        ...props,
+        children
+      }
+    )
+  ] });
+}
+
+// src/react/linechart.tsx
+import * as React15 from "react";
+import { linePath, niceScale } from "./index.js";
+import { jsx as jsx14, jsxs as jsxs14 } from "react/jsx-runtime";
+var defaultFormat = (value) => value.toLocaleString();
+var colorAt = (s, i) => s.color ?? `var(--chart-${i % 5 + 1})`;
+var LineChart = React15.forwardRef(function LineChart2({ label, labels, series, area = false, height = 200, min, max, formatValue = defaultFormat, legend, className, style, ...props }, ref) {
+  const values = series.flatMap((s) => s.data.filter((v) => v !== null && Number.isFinite(v)));
+  const auto = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1);
+  const scale = { min: min ?? auto.min, max: max ?? auto.max };
+  const ticks = min === void 0 && max === void 0 ? auto.ticks : niceScale(scale.min, scale.max).ticks.filter((t) => t >= scale.min && t <= scale.max);
+  const span = scale.max - scale.min || 1;
+  const yOf = (v) => (v - scale.min) / span * 100;
+  const xOf = (i) => labels.length > 1 ? i / (labels.length - 1) * 100 : 50;
+  const base = 100 - yOf(Math.max(scale.min, Math.min(scale.max, 0)));
+  const [active, setActive] = React15.useState(null);
+  const [announce, setAnnounce] = React15.useState("");
+  const describe = (i) => `${labels[i]}: ${series.map((s) => `${s.label} ${s.data[i] == null ? "no value" : formatValue(s.data[i])}`).join(", ")}`;
+  const select = (i, speak) => {
+    const clamped = Math.max(0, Math.min(labels.length - 1, i));
+    setActive(clamped);
+    if (speak) setAnnounce(describe(clamped));
+  };
+  const tickLabels = ticks.map(formatValue);
+  const yChars = Math.max(...tickLabels.map((t) => t.length), 1);
+  const every = Math.max(1, Math.ceil(labels.length / 8));
+  const showLegend = legend ?? series.length > 1;
+  return /* @__PURE__ */ jsxs14(
+    "figure",
+    {
+      ref,
+      className: cx("bk-line-chart", className),
+      style: { ...style, ["--h"]: `${height}px`, ["--y-chars"]: yChars },
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxs14("div", { className: "bk-line-chart-body", children: [
+          /* @__PURE__ */ jsx14("div", { className: "bk-line-chart-y", "aria-hidden": "true", children: ticks.map((t, i) => /* @__PURE__ */ jsx14("span", { style: { ["--y"]: `${yOf(t)}%` }, children: tickLabels[i] }, t)) }),
+          /* @__PURE__ */ jsxs14(
+            "div",
+            {
+              className: "bk-line-chart-plot",
+              tabIndex: 0,
+              role: "group",
+              "aria-roledescription": "chart",
+              "aria-label": `${label}. Use the left and right arrow keys to read values.`,
+              onPointerMove: (e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                select(Math.round((e.clientX - r.left) / (r.width || 1) * (labels.length - 1)), false);
+              },
+              onPointerLeave: (e) => {
+                if (document.activeElement !== e.currentTarget) setActive(null);
+              },
+              onFocus: () => select(active ?? labels.length - 1, true),
+              onBlur: () => setActive(null),
+              onKeyDown: (e) => {
+                const current = active ?? labels.length - 1;
+                const next = e.key === "ArrowLeft" ? current - 1 : e.key === "ArrowRight" ? current + 1 : e.key === "Home" ? 0 : e.key === "End" ? labels.length - 1 : null;
+                if (next === null) return;
+                e.preventDefault();
+                select(next, true);
+              },
+              children: [
+                ticks.map((t) => /* @__PURE__ */ jsx14("span", { className: "bk-line-chart-gridline", style: { ["--y"]: `${yOf(t)}%` } }, t)),
+                /* @__PURE__ */ jsxs14("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", "aria-hidden": "true", focusable: "false", children: [
+                  area ? series.map((s, i) => /* @__PURE__ */ jsx14("path", { className: "bk-line-chart-area", d: linePath(s.data, scale, true, base), style: { ["--c"]: colorAt(s, i) } }, `a${i}`)) : null,
+                  series.map((s, i) => /* @__PURE__ */ jsx14("path", { className: "bk-line-chart-line", d: linePath(s.data, scale), style: { ["--c"]: colorAt(s, i) } }, `l${i}`))
+                ] }),
+                active !== null ? /* @__PURE__ */ jsxs14("div", { className: "bk-line-chart-cursor", style: { ["--x"]: `${xOf(active)}%` }, "aria-hidden": "true", children: [
+                  series.map(
+                    (s, i) => s.data[active] == null ? null : /* @__PURE__ */ jsx14("span", { className: "bk-line-chart-dot", style: { ["--y"]: `${yOf(s.data[active])}%`, ["--c"]: colorAt(s, i) } }, i)
+                  ),
+                  /* @__PURE__ */ jsxs14("div", { className: "bk-line-chart-tip", "data-side": xOf(active) > 60 ? "start" : "end", children: [
+                    /* @__PURE__ */ jsx14("div", { className: "bk-line-chart-tip-title", children: labels[active] }),
+                    series.map((s, i) => /* @__PURE__ */ jsxs14("div", { className: "bk-line-chart-tip-row", style: { ["--c"]: colorAt(s, i) }, children: [
+                      /* @__PURE__ */ jsx14("span", { children: s.label }),
+                      /* @__PURE__ */ jsx14("b", { children: s.data[active] == null ? "\u2013" : formatValue(s.data[active]) })
+                    ] }, i))
+                  ] })
+                ] }) : null
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx14("div", { className: "bk-line-chart-x", "aria-hidden": "true", children: labels.map(
+            (l, i) => (
+              // Every `every`-th label, plus the last; a regular label too close to the last is dropped.
+              i % every === 0 && labels.length - 1 - i >= every || i === labels.length - 1 ? /* @__PURE__ */ jsx14("span", { style: { ["--x"]: `${xOf(i)}%` }, "data-edge": i === 0 ? "start" : i === labels.length - 1 ? "end" : void 0, children: l }, i) : null
+            )
+          ) })
+        ] }),
+        showLegend ? /* @__PURE__ */ jsx14(Legend, { items: series.map((s, i) => ({ label: s.label, color: colorAt(s, i) })) }) : null,
+        /* @__PURE__ */ jsxs14("table", { className: "bk-sr-only", children: [
+          /* @__PURE__ */ jsx14("caption", { children: label }),
+          /* @__PURE__ */ jsx14("thead", { children: /* @__PURE__ */ jsxs14("tr", { children: [
+            /* @__PURE__ */ jsx14("td", {}),
+            series.map((s) => /* @__PURE__ */ jsx14("th", { scope: "col", children: s.label }, s.label))
+          ] }) }),
+          /* @__PURE__ */ jsx14("tbody", { children: labels.map((l, i) => /* @__PURE__ */ jsxs14("tr", { children: [
+            /* @__PURE__ */ jsx14("th", { scope: "row", children: l }),
+            series.map((s) => /* @__PURE__ */ jsx14("td", { children: s.data[i] == null ? "No value" : formatValue(s.data[i]) }, s.label))
+          ] }, i)) })
+        ] }),
+        /* @__PURE__ */ jsx14("span", { className: "bk-sr-only", "aria-live": "polite", children: announce })
+      ]
+    }
+  );
+});
+
+// src/react/theme.tsx
+import * as React16 from "react";
 import { getTheme, onThemeChange, resolveTheme, setTheme, themeScript } from "./index.js";
-import { jsx as jsx13, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs15 } from "react/jsx-runtime";
 var subscribe = (callback) => onThemeChange(() => callback());
 var getServerTheme = () => "system";
 var getServerResolved = () => "light";
 function useTheme() {
-  const theme = React14.useSyncExternalStore(subscribe, getTheme, getServerTheme);
-  const resolvedTheme = React14.useSyncExternalStore(subscribe, () => resolveTheme(getTheme()), getServerResolved);
+  const theme = React16.useSyncExternalStore(subscribe, getTheme, getServerTheme);
+  const resolvedTheme = React16.useSyncExternalStore(subscribe, () => resolveTheme(getTheme()), getServerResolved);
   return { theme, resolvedTheme, setTheme };
 }
 function ThemeScript({ nonce }) {
-  return /* @__PURE__ */ jsx13("script", { nonce, dangerouslySetInnerHTML: { __html: themeScript } });
+  return /* @__PURE__ */ jsx15("script", { nonce, dangerouslySetInnerHTML: { __html: themeScript } });
 }
 var ICONS = {
-  light: /* @__PURE__ */ jsxs13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx13("circle", { cx: "12", cy: "12", r: "4" }),
-    /* @__PURE__ */ jsx13("path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" })
+  light: /* @__PURE__ */ jsxs15("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx15("circle", { cx: "12", cy: "12", r: "4" }),
+    /* @__PURE__ */ jsx15("path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" })
   ] }),
-  dark: /* @__PURE__ */ jsx13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx13("path", { d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" }) }),
-  system: /* @__PURE__ */ jsxs13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx13("rect", { x: "2", y: "3", width: "20", height: "14", rx: "2" }),
-    /* @__PURE__ */ jsx13("path", { d: "M8 21h8M12 17v4" })
+  dark: /* @__PURE__ */ jsx15("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx15("path", { d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" }) }),
+  system: /* @__PURE__ */ jsxs15("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx15("rect", { x: "2", y: "3", width: "20", height: "14", rx: "2" }),
+    /* @__PURE__ */ jsx15("path", { d: "M8 21h8M12 17v4" })
   ] })
 };
 function ThemeToggle({ className, labels = {} }) {
   const { theme } = useTheme();
   const names = { light: "Light theme", dark: "Dark theme", system: "System theme", ...labels };
-  return /* @__PURE__ */ jsx13("div", { role: "group", "aria-label": "Theme", className: cx("bk-toggle-group", className), "data-bk-react": "", children: ["light", "dark", "system"].map((t) => /* @__PURE__ */ jsx13("button", { type: "button", className: "bk-toggle", "aria-pressed": theme === t, "aria-label": names[t], onClick: () => setTheme(t), children: ICONS[t] }, t)) });
+  return /* @__PURE__ */ jsx15("div", { role: "group", "aria-label": "Theme", className: cx("bk-toggle-group", className), "data-bk-react": "", children: ["light", "dark", "system"].map((t) => /* @__PURE__ */ jsx15("button", { type: "button", className: "bk-toggle", "aria-pressed": theme === t, "aria-label": names[t], onClick: () => setTheme(t), children: ICONS[t] }, t)) });
 }
 
 // src/react/illustration.tsx
-import * as React15 from "react";
+import * as React17 from "react";
 import { renderCharacter } from "./illustrations.js";
-import { jsx as jsx14, jsxs as jsxs14 } from "react/jsx-runtime";
-var PencilCharacter = React15.forwardRef(function PencilCharacter2({ character, mood = "neutral", size = 160, label, className, style, ...props }, ref) {
+import { jsx as jsx16, jsxs as jsxs16 } from "react/jsx-runtime";
+var PencilCharacter = React17.forwardRef(function PencilCharacter2({ character, mood = "neutral", size = 160, label, className, style, ...props }, ref) {
   const idPrefix = useSafeId("ch");
-  const svg = React15.useMemo(() => renderCharacter(character, mood, { idPrefix, title: label }), [character, mood, idPrefix, label]);
-  return /* @__PURE__ */ jsx14(
+  const svg = React17.useMemo(() => renderCharacter(character, mood, { idPrefix, title: label }), [character, mood, idPrefix, label]);
+  return /* @__PURE__ */ jsx16(
     "span",
     {
       ref,
@@ -2199,8 +2393,8 @@ var PencilCharacter = React15.forwardRef(function PencilCharacter2({ character, 
     }
   );
 });
-var Tip = React15.forwardRef(function Tip2({ character, mood = "neutral", title, actions, side = "start", tone = "default", size = 96, onDismiss, dismissLabel = "Dismiss", className, children, ...props }, ref) {
-  return /* @__PURE__ */ jsxs14(
+var Tip = React17.forwardRef(function Tip2({ character, mood = "neutral", title, actions, side = "start", tone = "default", size = 96, onDismiss, dismissLabel = "Dismiss", className, children, ...props }, ref) {
+  return /* @__PURE__ */ jsxs16(
     "div",
     {
       ref,
@@ -2210,12 +2404,12 @@ var Tip = React15.forwardRef(function Tip2({ character, mood = "neutral", title,
       "data-tone": tone === "default" ? void 0 : tone,
       ...props,
       children: [
-        /* @__PURE__ */ jsx14(PencilCharacter, { character, mood, size }),
-        /* @__PURE__ */ jsxs14("div", { className: "bk-tip-bubble", children: [
-          title ? /* @__PURE__ */ jsx14("p", { className: "bk-tip-title", children: title }) : null,
-          children ? /* @__PURE__ */ jsx14("div", { className: "bk-tip-text", children }) : null,
-          actions ? /* @__PURE__ */ jsx14("div", { className: "bk-tip-actions", children: actions }) : null,
-          onDismiss ? /* @__PURE__ */ jsx14("button", { type: "button", className: "bk-button bk-tip-close", "data-variant": "ghost", "data-size": "icon-sm", "aria-label": dismissLabel, onClick: onDismiss, children: /* @__PURE__ */ jsx14("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx14("path", { d: "M18 6 6 18M6 6l12 12" }) }) }) : null
+        /* @__PURE__ */ jsx16(PencilCharacter, { character, mood, size }),
+        /* @__PURE__ */ jsxs16("div", { className: "bk-tip-bubble", children: [
+          title ? /* @__PURE__ */ jsx16("p", { className: "bk-tip-title", children: title }) : null,
+          children ? /* @__PURE__ */ jsx16("div", { className: "bk-tip-text", children }) : null,
+          actions ? /* @__PURE__ */ jsx16("div", { className: "bk-tip-actions", children: actions }) : null,
+          onDismiss ? /* @__PURE__ */ jsx16("button", { type: "button", className: "bk-button bk-tip-close", "data-variant": "ghost", "data-size": "icon-sm", "aria-label": dismissLabel, onClick: onDismiss, children: /* @__PURE__ */ jsx16("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx16("path", { d: "M18 6 6 18M6 6l12 12" }) }) }) : null
         ] })
       ]
     }
@@ -2265,6 +2459,7 @@ export {
   Empty,
   Eyebrow,
   Field,
+  HoverCard,
   Input,
   InputGroup,
   InputOTP,
@@ -2272,6 +2467,7 @@ export {
   KbdGroup,
   Label,
   Legend,
+  LineChart,
   List,
   ListItem,
   Media,

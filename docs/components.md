@@ -36,7 +36,7 @@
 - [Badge](components/badge.md), [Avatar](components/avatar.md)
 - [Table](components/table.md), [List](components/list.md), [Data list](components/data-list.md)
 - [Timeline](components/timeline.md): events with markers, times and icons
-- [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Progress](components/progress.md) with ring
+- [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Line chart](components/line-chart.md), [Progress](components/progress.md) with ring
 - [Accordion](components/accordion.md)
 
 ## Feedback
@@ -46,7 +46,7 @@
 
 ## Overlays
 
-- [Dialog](components/dialog.md), [Sheet](components/sheet.md), [Dropdown menu](components/dropdown-menu.md), [Popover](components/popover.md), [Command](components/command.md)
+- [Dialog](components/dialog.md), [Sheet](components/sheet.md), [Dropdown menu](components/dropdown-menu.md), [Popover](components/popover.md), [Hover card](components/hover-card.md), [Command](components/command.md)
 
 ## Navigation
 
