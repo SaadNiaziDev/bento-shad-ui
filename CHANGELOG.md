@@ -2,6 +2,33 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes; they are listed under **Breaking**.
 
+## [Unreleased]
+
+### Added
+
+- **Combobox**: a text field that filters a list as you type, for one value or several shown as chips. It has option groups, descriptions, disabled options, a clear button, form submission through hidden inputs, and matching that ignores case and accents (every typed word must match the label or its keywords).
+  - React: `<Combobox options value onValueChange />`; with `multiple`, the value is a `string[]` and `onValueChange` is typed to match. `filter={false}`, `onInputChange` and `loading` handle results fetched from a server. `filterComboboxOptions` is exported.
+  - HTML: `.bk-combobox` with `.bk-combobox-control`, `.bk-combobox-input`, `.bk-combobox-list[popover]` and `.bk-combobox-option`; `data-multiple`, `data-name`, `data-value`, `data-label` and `data-keywords`. Fires `bk:change` with `{ value, values }`.
+  - Core exports `matchesQuery`, `foldText`, `showListbox`, `hideListbox` and the `ComboboxChangeDetail` type.
+- **Tags input**: free-text values as chips. Enter or a comma adds a tag; pasted lists are split on commas and line breaks. Repeats are skipped (ignoring case) with a brief outline on the existing chip, and `max` keeps text past the limit in the field. ← from the start of the field moves through the chips' remove buttons; changes are announced in a polite live region.
+  - React: `<TagsInput value onValueChange max delimiter allowDuplicates addOnBlur name />`.
+  - HTML: `.bk-tags` with `.bk-chip` children and `input.bk-tags-input`; `data-name`, `data-max`, `data-delimiter`, `data-allow-duplicates`, `data-add-on-blur`, `data-required`. Fires `bk:change` with `{ values }`.
+  - Core exports `splitTags`, `addTags`, `describeTagChange` and the `TagsChangeDetail` type.
+- `.bk-chip` and `.bk-chip-remove`: the chip shared by the multiple combobox and the tags input.
+- **Date picker** (React): `<DatePicker />` is a field-like button that opens the Calendar in a popover, for one date or a range (`mode="range"`). It closes on pick and returns focus to the button, writes the date in the reader's locale, has a clear button and `isDisabled`, and `name` submits `YYYY-MM-DD` hidden inputs. `formatDateValue` is exported. In plain HTML, the docs recommend a native `<input type="date" class="bk-input">`.
+- **Number input**: a native `<input type="number">` between − and + buttons (`.bk-number`, `.bk-number-input`, `.bk-number-step[data-direction]`). The buttons respect `min`, `max` and `step`, disable at the limits and fire `input`/`change`; out-of-range typing is clamped on blur. React `<NumberInput value onValueChange min max step />` reports `null` for an empty field. Core exports `stepNumberInput` and `clampNumber`.
+- **Rating**: native radio buttons styled as stars (`.bk-rating`, `.bk-rating-input`, `.bk-rating-star`), filled with CSS only; a read-only `.bk-rating[data-readonly]` image draws fractional scores from `--rating` and `--max`. `data-size="sm|lg"`. React `<Rating value onValueChange max label readOnly />`.
+- **Steps**: progress through a fixed sequence, horizontal or vertical (`.bk-steps`, `.bk-step[data-status="complete|current|upcoming"]`). React `<Steps steps current orientation />`.
+- **Timeline**: events with markers, optional icons and tones, and `<time>` stamps (`.bk-timeline`, `.bk-timeline-item[data-tone]`). React `<Timeline>` and `<TimelineItem title time dateTime icon tone>`.
+- **Data list**: labelled values as a `<dl>` (`.bk-data-list`, `.bk-data-list-item`), side by side or `data-orientation="vertical"`. React `<DataList>` and `<DataListItem label>`.
+- **Tip**: a pencil character with a speech bubble for hints, empty-state advice and announcements. Five tints, character on either side, optional actions and dismiss. React `<Tip character mood title actions onDismiss />`; HTML `.bk-tip` with `data-side`, `data-tone` and a `data-bk-dismiss` button.
+
+### Changed
+
+- `placePopover` sets `--anchor-width` on the popover to the trigger's width.
+- React `Calendar` keyboard: the grid is one Tab stop (roving tabindex) instead of one per day. Arrow keys continue into the next or previous month; Home/End, Page Up/Page Down and Shift+Page Up/Down are added. Days rejected by `isDisabled` now use `aria-disabled` instead of `disabled`, so arrow keys can pass over them. If you styled them with `:disabled`, add `[aria-disabled="true"]`. Day buttons carry `data-date="YYYY-MM-DD"`.
+- Added contrast tests for `muted-foreground` on `accent` and on `popover`, and 3:1 tests for `warning` (filled rating stars) on `card` and `background`.
+
 ## [0.2.2] - 2026-11-24
 
 ### Changed

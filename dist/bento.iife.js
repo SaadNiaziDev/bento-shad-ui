@@ -24,18 +24,27 @@ var BentoUI = (() => {
   __export(browser_exports, {
     THEME_EVENT: () => THEME_EVENT,
     THEME_STORAGE_KEY: () => THEME_STORAGE_KEY,
+    addTags: () => addTags,
+    clampNumber: () => clampNumber,
+    describeTagChange: () => describeTagChange,
     enablePopoverPlacement: () => enablePopoverPlacement,
     fillSlider: () => fillSlider,
+    foldText: () => foldText,
     getStoredTheme: () => getStoredTheme,
     getTheme: () => getTheme,
+    hideListbox: () => hideListbox,
     init: () => init,
     isTheme: () => isTheme,
+    matchesQuery: () => matchesQuery,
     onThemeChange: () => onThemeChange,
     openCommand: () => openCommand,
     placePopover: () => placePopover,
     resolveTheme: () => resolveTheme,
     setTheme: () => setTheme,
+    showListbox: () => showListbox,
+    splitTags: () => splitTags,
     start: () => start,
+    stepNumberInput: () => stepNumberInput,
     themeScript: () => themeScript,
     toast: () => toast,
     version: () => version
@@ -70,14 +79,17 @@ var BentoUI = (() => {
   }
 
   // src/core/popover.ts
-  var SELECTOR = ".bk-menu[popover], .bk-popover[popover]";
+  var SELECTOR = ".bk-menu[popover], .bk-popover[popover], .bk-combobox-list[popover]";
   function invokerFor(popover) {
+    const combobox = popover.closest(".bk-combobox");
+    if (combobox) return combobox.querySelector(".bk-combobox-control, .bk-combobox-input");
     if (!popover.id) return null;
     return document.querySelector(`[popovertarget="${CSS.escape(popover.id)}"]`);
   }
   function placePopover(popover, anchor = invokerFor(popover)) {
     if (!isBrowser || !anchor) return;
     const rect = anchor.getBoundingClientRect();
+    popover.style.setProperty("--anchor-width", `${Math.round(rect.width)}px`);
     const width = popover.offsetWidth;
     const height = popover.offsetHeight;
     const gap = 6;
@@ -96,7 +108,7 @@ var BentoUI = (() => {
   }
   function openPopovers() {
     try {
-      return $$(".bk-menu:popover-open, .bk-popover:popover-open");
+      return $$(".bk-menu:popover-open, .bk-popover:popover-open, .bk-combobox-list:popover-open");
     } catch {
       return [];
     }
@@ -266,6 +278,503 @@ var BentoUI = (() => {
     document.addEventListener("visibilitychange", syncTimer);
     syncTimer();
     return dismiss;
+  }
+
+  // src/core/combobox.ts
+  function foldText(text) {
+    return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+  function matchesQuery(text, query) {
+    const haystack = foldText(text);
+    return foldText(query).split(/\s+/).filter(Boolean).every((word) => haystack.includes(word));
+  }
+  function popoverOpen(el) {
+    try {
+      return el.matches(":popover-open");
+    } catch {
+      return false;
+    }
+  }
+  function showListbox(list, anchor) {
+    if (typeof list.showPopover === "function" && !popoverOpen(list)) {
+      try {
+        list.showPopover();
+      } catch {
+      }
+    }
+    placePopover(list, anchor);
+  }
+  function hideListbox(list) {
+    if (typeof list.hidePopover === "function" && popoverOpen(list)) {
+      try {
+        list.hidePopover();
+      } catch {
+      }
+    }
+    list.removeAttribute("data-placed");
+  }
+  var uid = 0;
+  var nextId = (prefix) => `bk-${prefix}-${++uid}`;
+  var escapeId = (id) => typeof CSS !== "undefined" && CSS.escape ? CSS.escape(id) : id.replace(/"/g, '\\"');
+  function initCombobox(root, once2) {
+    for (const box of $$(".bk-combobox", root)) {
+      if (isManaged(box) || !once2(box, "combobox")) continue;
+      const input = box.querySelector(".bk-combobox-input");
+      const list = box.querySelector(".bk-combobox-list");
+      if (!input || !list) continue;
+      const control = box.querySelector(".bk-combobox-control") ?? input;
+      const clear = box.querySelector(".bk-combobox-clear");
+      const multiple = box.hasAttribute("data-multiple");
+      const placeholder = input.placeholder;
+      let typed = false;
+      list.id || (list.id = nextId("listbox"));
+      list.setAttribute("role", "listbox");
+      if (!list.hasAttribute("popover")) list.setAttribute("popover", "manual");
+      if (multiple) list.setAttribute("aria-multiselectable", "true");
+      input.setAttribute("role", "combobox");
+      input.setAttribute("aria-autocomplete", "list");
+      input.setAttribute("aria-expanded", "false");
+      input.setAttribute("aria-controls", list.id);
+      input.setAttribute("autocomplete", "off");
+      if (input.id && !list.hasAttribute("aria-label") && !list.hasAttribute("aria-labelledby")) {
+        const label = document.querySelector(`label[for="${escapeId(input.id)}"]`);
+        if (label) {
+          label.id || (label.id = nextId("label"));
+          list.setAttribute("aria-labelledby", label.id);
+        }
+      }
+      const options = () => $$(".bk-combobox-option", list);
+      for (const option of options()) {
+        option.setAttribute("role", "option");
+        option.id || (option.id = nextId("option"));
+        if (!option.hasAttribute("aria-selected")) option.setAttribute("aria-selected", "false");
+      }
+      for (const group of $$(".bk-combobox-group", list)) group.setAttribute("role", "group");
+      const labelOf = (o) => o.getAttribute("data-label") ?? o.textContent?.trim() ?? "";
+      const valueOf = (o) => o.getAttribute("data-value") ?? labelOf(o);
+      const selected = () => options().filter((o) => o.getAttribute("aria-selected") === "true");
+      const enabled = () => options().filter((o) => !o.hidden && o.getAttribute("aria-disabled") !== "true");
+      const active = () => options().find((o) => o.hasAttribute("data-active"));
+      const isOpen = () => input.getAttribute("aria-expanded") === "true";
+      const setActive = (option) => {
+        for (const o of options()) {
+          if (o === option) o.setAttribute("data-active", "");
+          else o.removeAttribute("data-active");
+        }
+        if (!option) {
+          input.removeAttribute("aria-activedescendant");
+          return;
+        }
+        input.setAttribute("aria-activedescendant", option.id);
+        const top = option.offsetTop;
+        const bottom = top + option.offsetHeight;
+        if (top < list.scrollTop) list.scrollTop = top;
+        else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
+      };
+      const filter = (query) => {
+        let any = false;
+        for (const o of options()) {
+          const match = matchesQuery(`${labelOf(o)} ${o.getAttribute("data-keywords") ?? ""}`, query);
+          o.hidden = !match;
+          any || (any = match);
+        }
+        for (const group of $$(".bk-combobox-group", list)) group.hidden = !$$(".bk-combobox-option", group).some((o) => !o.hidden);
+        const empty = list.querySelector(".bk-combobox-empty");
+        if (empty) empty.hidden = any;
+      };
+      const render = () => {
+        const chosen = selected();
+        if (multiple) {
+          for (const chip of $$(".bk-chip", control)) chip.remove();
+          for (const o of chosen) {
+            const chip = document.createElement("span");
+            chip.className = "bk-chip";
+            chip.setAttribute("data-value", valueOf(o));
+            chip.textContent = labelOf(o);
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "bk-chip-remove";
+            remove.tabIndex = -1;
+            remove.setAttribute("aria-label", `Remove ${labelOf(o)}`);
+            chip.append(remove);
+            control.insertBefore(chip, input);
+          }
+          input.placeholder = chosen.length ? "" : placeholder;
+        } else if (!typed) {
+          input.value = chosen[0] ? labelOf(chosen[0]) : "";
+        }
+        const name = box.getAttribute("data-name");
+        if (name) {
+          for (const hidden of $$("input[data-bk-combobox-value]", box)) hidden.remove();
+          const values = chosen.length ? chosen.map(valueOf) : multiple ? [] : [""];
+          for (const value of values) {
+            const hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.name = name;
+            hidden.value = value;
+            hidden.setAttribute("data-bk-combobox-value", "");
+            box.append(hidden);
+          }
+        }
+        if (chosen.length) box.setAttribute("data-has-value", "");
+        else box.removeAttribute("data-has-value");
+      };
+      const changed = () => {
+        render();
+        const values = selected().map(valueOf);
+        emit(box, "bk:change", { value: values[0] ?? null, values });
+      };
+      const open = () => {
+        if (isOpen() || input.disabled || input.readOnly) return;
+        input.setAttribute("aria-expanded", "true");
+        box.setAttribute("data-open", "");
+        showListbox(list, control);
+        const first = selected().find((o) => !o.hidden);
+        setActive(first ?? enabled()[0]);
+      };
+      const close = () => {
+        if (!isOpen()) return;
+        input.setAttribute("aria-expanded", "false");
+        box.removeAttribute("data-open");
+        hideListbox(list);
+        setActive(void 0);
+        const cleared = !multiple && typed && !input.value.trim() && selected().length > 0;
+        typed = false;
+        if (multiple) input.value = "";
+        filter("");
+        if (cleared) {
+          for (const o of options()) o.setAttribute("aria-selected", "false");
+          changed();
+        } else render();
+      };
+      const choose = (option) => {
+        if (option.getAttribute("aria-disabled") === "true") return;
+        if (multiple) {
+          option.setAttribute("aria-selected", String(option.getAttribute("aria-selected") !== "true"));
+          input.value = "";
+          typed = false;
+          filter("");
+          changed();
+          setActive(option);
+          showListbox(list, control);
+        } else {
+          for (const o of options()) o.setAttribute("aria-selected", String(o === option));
+          typed = false;
+          changed();
+          close();
+        }
+      };
+      input.addEventListener("input", () => {
+        typed = true;
+        open();
+        filter(input.value);
+        setActive(enabled()[0]);
+      });
+      input.addEventListener("keydown", (e) => {
+        const items = enabled();
+        const current = active();
+        const i = current ? items.indexOf(current) : -1;
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          if (!isOpen()) {
+            open();
+            if (e.key === "ArrowUp" && !selected().length) setActive(items[items.length - 1]);
+            return;
+          }
+          setActive(e.key === "ArrowDown" ? items[Math.min(i + 1, items.length - 1)] : items[Math.max(i - 1, 0)]);
+        } else if (e.key === "Enter") {
+          if (isOpen() && current) {
+            e.preventDefault();
+            choose(current);
+          }
+        } else if (e.key === "Escape") {
+          if (isOpen()) {
+            e.preventDefault();
+            e.stopPropagation();
+            close();
+          }
+        } else if (e.key === "Backspace" && multiple && !input.value) {
+          const last = selected().at(-1);
+          if (last) {
+            last.setAttribute("aria-selected", "false");
+            changed();
+          }
+        } else if (e.key === "Tab") {
+          close();
+        }
+      });
+      list.addEventListener("mousedown", (e) => e.preventDefault());
+      list.addEventListener("click", (e) => {
+        const option = e.target instanceof Element ? e.target.closest(".bk-combobox-option") : null;
+        if (option) choose(option);
+      });
+      list.addEventListener("mousemove", (e) => {
+        const option = e.target instanceof Element ? e.target.closest(".bk-combobox-option") : null;
+        if (option && !option.hasAttribute("data-active") && option.getAttribute("aria-disabled") !== "true") setActive(option);
+      });
+      control.addEventListener("mousedown", (e) => {
+        if (e.target !== input) e.preventDefault();
+      });
+      control.addEventListener("click", (e) => {
+        if (input.disabled) return;
+        const target = e.target instanceof Element ? e.target : null;
+        const chip = target?.closest(".bk-chip-remove")?.closest(".bk-chip");
+        if (chip) {
+          const option = options().find((o) => valueOf(o) === chip.getAttribute("data-value"));
+          if (option) {
+            option.setAttribute("aria-selected", "false");
+            changed();
+          }
+        } else if (target?.closest(".bk-combobox-clear")) {
+          for (const o of options()) o.setAttribute("aria-selected", "false");
+          input.value = "";
+          typed = false;
+          filter("");
+          changed();
+        } else if (target?.closest(".bk-combobox-toggle") && isOpen()) {
+          close();
+        } else {
+          open();
+        }
+        input.focus();
+      });
+      box.addEventListener("focusout", (e) => {
+        const next = e.relatedTarget;
+        if (!(next instanceof Node) || !box.contains(next)) close();
+      });
+      clear?.setAttribute("type", "button");
+      filter("");
+      render();
+    }
+  }
+
+  // src/core/number.ts
+  function clampNumber(value, min, max) {
+    if (min !== void 0 && value < min) return min;
+    if (max !== void 0 && value > max) return max;
+    return value;
+  }
+  var bound2 = (raw) => raw === null || raw === "" ? void 0 : Number(raw);
+  function stepNumberInput(input, direction) {
+    if (input.disabled || input.readOnly) return;
+    try {
+      if (direction === 1) input.stepUp();
+      else input.stepDown();
+    } catch {
+      return;
+    }
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+  function syncButtons(box, input) {
+    const value = input.value === "" ? NaN : Number(input.value);
+    const min = bound2(input.getAttribute("min"));
+    const max = bound2(input.getAttribute("max"));
+    for (const button of $$(".bk-number-step", box)) {
+      const up = button.getAttribute("data-direction") === "up";
+      const limit = up ? max : min;
+      button.disabled = input.disabled || limit !== void 0 && !Number.isNaN(value) && (up ? value >= limit : value <= limit);
+    }
+  }
+  function initNumber(root, once2) {
+    for (const box of $$(".bk-number", root)) {
+      if (isManaged(box) || !once2(box, "number")) continue;
+      const input = box.querySelector(".bk-number-input");
+      if (!input) continue;
+      for (const button of $$(".bk-number-step", box)) {
+        button.type = "button";
+        button.addEventListener("mousedown", (e) => e.preventDefault());
+        button.addEventListener("click", () => {
+          stepNumberInput(input, button.getAttribute("data-direction") === "up" ? 1 : -1);
+          syncButtons(box, input);
+        });
+      }
+      input.addEventListener("input", () => syncButtons(box, input));
+      input.addEventListener("blur", () => {
+        if (input.value === "") return;
+        const value = Number(input.value);
+        const clamped = clampNumber(value, bound2(input.getAttribute("min")), bound2(input.getAttribute("max")));
+        if (clamped !== value) {
+          input.value = String(clamped);
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        syncButtons(box, input);
+      });
+      syncButtons(box, input);
+    }
+  }
+
+  // src/core/tags.ts
+  function splitTags(text, delimiter = ",") {
+    return text.split(delimiter).flatMap((part) => part.split(/\r?\n/)).map((part) => part.replace(/\s+/g, " ").trim()).filter(Boolean);
+  }
+  function addTags(current, incoming, options = {}) {
+    const { max = Infinity, allowDuplicates = false } = options;
+    const tags = [...current];
+    const seen = new Set(tags.map((t) => t.toLowerCase()));
+    const result = { tags, added: [], duplicates: [], rejected: [] };
+    for (const tag of incoming) {
+      const key = tag.toLowerCase();
+      if (!allowDuplicates && seen.has(key)) result.duplicates.push(tag);
+      else if (tags.length >= max) result.rejected.push(tag);
+      else {
+        tags.push(tag);
+        result.added.push(tag);
+        seen.add(key);
+      }
+    }
+    return result;
+  }
+  function describeTagChange(result, max) {
+    const parts = [];
+    if (result.added.length === 1) parts.push(`Added ${result.added[0]}.`);
+    else if (result.added.length > 1) parts.push(`Added ${result.added.length} tags.`);
+    if (result.duplicates.length === 1) parts.push(`${result.duplicates[0]} is already added.`);
+    else if (result.duplicates.length > 1) parts.push(`${result.duplicates.length} tags were already added.`);
+    if (result.rejected.length) parts.push(`Limit of ${max} tags reached.`);
+    return parts.join(" ");
+  }
+  function initTags(root, once2) {
+    for (const box of $$(".bk-tags", root)) {
+      if (isManaged(box) || !once2(box, "tags")) continue;
+      const input = box.querySelector(".bk-tags-input");
+      if (!input) continue;
+      const delimiter = box.getAttribute("data-delimiter") || ",";
+      const max = Number(box.getAttribute("data-max")) || void 0;
+      const allowDuplicates = box.hasAttribute("data-allow-duplicates");
+      const placeholder = input.placeholder;
+      let tags = $$(".bk-chip", box).map((chip) => chip.getAttribute("data-value") ?? chip.textContent?.trim() ?? "").filter(Boolean);
+      const status = document.createElement("span");
+      status.className = "bk-sr-only";
+      status.setAttribute("aria-live", "polite");
+      box.append(status);
+      const announce = (text) => {
+        status.textContent = text;
+      };
+      const removeButtons = () => $$(".bk-chip-remove", box);
+      const render = () => {
+        for (const chip of $$(".bk-chip", box)) chip.remove();
+        for (const tag of tags) {
+          const chip = document.createElement("span");
+          chip.className = "bk-chip";
+          chip.setAttribute("data-value", tag);
+          chip.textContent = tag;
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "bk-chip-remove";
+          remove.tabIndex = -1;
+          remove.disabled = input.disabled;
+          remove.setAttribute("aria-label", `Remove ${tag}`);
+          chip.append(remove);
+          box.insertBefore(chip, input);
+        }
+        input.placeholder = tags.length ? "" : placeholder;
+        input.required = box.hasAttribute("data-required") && !tags.length;
+        const name = box.getAttribute("data-name");
+        if (name) {
+          for (const hidden of $$("input[data-bk-tags-value]", box)) hidden.remove();
+          for (const tag of tags) {
+            const hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.name = name;
+            hidden.value = tag;
+            hidden.setAttribute("data-bk-tags-value", "");
+            box.append(hidden);
+          }
+        }
+        if (tags.length) box.setAttribute("data-has-value", "");
+        else box.removeAttribute("data-has-value");
+      };
+      const changed = () => {
+        render();
+        emit(box, "bk:change", { values: [...tags] });
+      };
+      const commit = (text) => {
+        const parts = splitTags(text, delimiter);
+        if (!parts.length) return "";
+        const result = addTags(tags, parts, { max, allowDuplicates });
+        if (result.added.length) {
+          tags = result.tags;
+          changed();
+        }
+        for (const dup of result.duplicates) {
+          const chip = $$(".bk-chip", box).find((c) => c.getAttribute("data-value")?.toLowerCase() === dup.toLowerCase());
+          if (!chip) continue;
+          chip.setAttribute("data-duplicate", "");
+          setTimeout(() => chip.removeAttribute("data-duplicate"), 700);
+        }
+        announce(describeTagChange(result, max));
+        return result.rejected.join(`${delimiter} `);
+      };
+      const removeAt = (index) => {
+        const [tag] = tags.splice(index, 1);
+        if (tag === void 0) return;
+        changed();
+        announce(`Removed ${tag}.`);
+      };
+      input.addEventListener("keydown", (e) => {
+        const atStart = input.selectionStart === 0 && input.selectionEnd === 0;
+        if ((e.key === "Enter" || e.key === delimiter) && input.value.trim()) {
+          e.preventDefault();
+          const kept = commit(input.value);
+          input.value = kept && e.key === delimiter ? `${kept}${delimiter} ` : kept;
+        } else if (e.key === delimiter) {
+          e.preventDefault();
+        } else if (e.key === "Backspace" && !input.value && tags.length) {
+          e.preventDefault();
+          removeAt(tags.length - 1);
+        } else if (e.key === "ArrowLeft" && atStart && tags.length) {
+          e.preventDefault();
+          removeButtons().at(-1)?.focus();
+        }
+      });
+      input.addEventListener("input", () => {
+        const at = input.value.lastIndexOf(delimiter);
+        if (at < 0) return;
+        const rest = input.value.slice(at + 1).trimStart();
+        const kept = commit(input.value.slice(0, at));
+        input.value = kept ? `${kept}${delimiter} ${rest}` : rest;
+      });
+      input.addEventListener("paste", (e) => {
+        const text = e.clipboardData?.getData("text") ?? "";
+        if (!text.includes(delimiter) && !/\r?\n/.test(text)) return;
+        e.preventDefault();
+        input.value = commit(`${input.value}${delimiter}${text}`);
+      });
+      box.addEventListener("keydown", (e) => {
+        const button = e.target instanceof Element ? e.target.closest(".bk-chip-remove") : null;
+        if (!button) return;
+        const buttons = removeButtons();
+        const i = buttons.indexOf(button);
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          buttons[Math.max(0, i - 1)]?.focus();
+        } else if (e.key === "ArrowRight" || e.key === "Escape") {
+          e.preventDefault();
+          (e.key === "ArrowRight" ? buttons[i + 1] ?? input : input).focus();
+        } else if (e.key === "Backspace" || e.key === "Delete") {
+          e.preventDefault();
+          removeAt(i);
+          (removeButtons()[Math.max(0, i - 1)] ?? input).focus();
+        }
+      });
+      box.addEventListener("click", (e) => {
+        if (input.disabled) return;
+        const button = e.target instanceof Element ? e.target.closest(".bk-chip-remove") : null;
+        if (button) {
+          removeAt(removeButtons().indexOf(button));
+          input.focus();
+        } else if (e.target === box) {
+          input.focus();
+        }
+      });
+      box.addEventListener("focusout", (e) => {
+        const next = e.relatedTarget;
+        if (next instanceof Node && box.contains(next)) return;
+        if (box.getAttribute("data-add-on-blur") !== "false" && input.value.trim()) input.value = commit(input.value);
+      });
+      render();
+    }
   }
 
   // src/core/widgets.ts
@@ -444,6 +953,9 @@ var BentoUI = (() => {
     if (!isBrowser || !root) return;
     initTabs(root);
     initCommand(root);
+    initCombobox(root, once);
+    initTags(root, once);
+    initNumber(root, once);
     initCalendar(root);
     for (const range of $$(".bk-slider", root)) if (!isManaged(range)) fillSlider(range);
     for (const box of $$(".bk-checkbox[data-indeterminate]", root)) box.indeterminate = true;
@@ -500,6 +1012,10 @@ var BentoUI = (() => {
       }
     }
     if ((el = closestFrom(target, ".bk-calendar-day")) && !isManaged(el)) pickCalendarDay(el);
+    if ((el = closestFrom(target, "[data-bk-dismiss]")) && !isManaged(el)) {
+      const tip = el.closest(".bk-tip");
+      if (tip) tip.hidden = true;
+    }
     if (el = closestFrom(target, "[data-bk-copy]")) {
       const selector = el.getAttribute("data-bk-copy-target");
       const text = selector ? document.querySelector(selector)?.textContent ?? "" : el.getAttribute("data-bk-copy") ?? "";

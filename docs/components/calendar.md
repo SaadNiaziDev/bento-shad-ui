@@ -218,10 +218,14 @@ Helpers for building your own views: `getMonthGrid(year, month, weekStartsOn)` r
 
 <!-- props: CalendarProps -->
 
-In HTML, `data-mode="range"` enables range picking and the calendar fires `bk:change` with `{ start, end }` day numbers.
+In HTML, `data-mode="range"` enables range picking and the calendar fires `bk:change` with `{ start, end }` day numbers. The HTML calendar shows the month in its markup: the script doesn't redraw it for another month. For a date field on a page without React, use a native date input (see [Date picker](date-picker.md)).
+
+To open a calendar from a field, use a [Date picker](date-picker.md).
 
 ## Accessibility
 
-- Arrow keys move by day (←/→) and week (↑/↓); Enter or Space picks.
+- The grid is one Tab stop: the selected day, else today, else the 1st. Arrow keys move by day (←/→) and week (↑/↓) and continue into the next or previous month.
+- Home and End go to the start and end of the week. Page Up and Page Down change month; with Shift, year. Enter or Space picks.
+- Days made unavailable by `isDisabled` can still be reached with the arrow keys and are announced as unavailable, but can't be picked.
 - Each day has a full label ("Thursday 12 March 2026") and `aria-pressed` when selected.
 - The month title is a live region, so month changes are announced.

@@ -1,3 +1,4 @@
+export declare function once(el: Element, key: string): boolean;
 export declare function initTabs(root: ParentNode): void;
 export declare function initCommand(root: ParentNode): void;
 /** Opens (or closes) a command dialog. Defaults to the first `dialog.bk-command[data-bk-hotkey]`. */

@@ -14,7 +14,7 @@ Instructions for AI agents and contributors working **on this repository**. To *
 | `registry/bento-grid.tsx` | shadcn registry component source (not type-checked here: it imports `@/lib/utils`) | yes |
 | `docs/*.md` | Guides; concatenated into `llms-full.txt` and rendered on the website | yes |
 | `docs/components/*.md` | One page per component (see "Component pages" below) | yes |
-| `site/home.html`, `site/kit.html`, `site/assets/*` | Website landing page, live kit, docs CSS/JS | yes |
+| `site/home.html`, `site/sprite.svg`, `site/assets/*` | Website landing page, icon sprite, docs CSS/JS | yes |
 | `scripts/docs.mjs` | Builds the website into `_site/` (not committed; Pages builds it) | yes |
 | `scripts/build.mjs`, `scripts/color.mjs` | Build | yes |
 | `test/*.test.mjs` | Node test runner tests against `dist/` | yes |
@@ -44,7 +44,7 @@ CI runs `npm run check` and fails if `dist/` differs from a fresh build, so alwa
 - **React components** forward refs, spread remaining props onto the root, support controlled and uncontrolled state, and put `data-bk-react` on stateful roots so the vanilla core skips them.
 - **Public API = class names, data attributes, token names, exported functions and React props.** Changing or removing any of them is a breaking change: note it in `CHANGELOG.md`.
 - **Characters.** Draw in painting order with the `Sketch` kit; colours only from the palette (tint tokens). Lines stay `currentColor`. A new character needs at least three distinctive traits, suggested uses, and must read clearly in all six moods and in dark mode. Keep characters original: no likeness of existing mascots or brands.
-- **Docs.** A new component needs a page in `docs/components/`, a link in `docs/components.md` and a tile in `site/kit.html`. Tests check that every `bk-` class used in the docs and the site exists in the CSS.
+- **Docs.** A new component needs a page in `docs/components/` and a link in `docs/components.md`; update the component list in its group tile on `site/home.html` and the count in `llms.txt`. Tests check that every `bk-` class used in the docs and the site exists in the CSS.
 
 ## Component pages
 

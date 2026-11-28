@@ -3,7 +3,7 @@ import type { CalendarChangeDetail } from './types';
 
 type Flagged<T extends Element> = T & { __bk?: Record<string, unknown> };
 
-function once(el: Element, key: string): boolean {
+export function once(el: Element, key: string): boolean {
   const flagged = el as Flagged<Element>;
   flagged.__bk ??= {};
   if (flagged.__bk[key]) return false;

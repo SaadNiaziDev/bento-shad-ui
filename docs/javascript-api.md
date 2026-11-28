@@ -60,6 +60,9 @@ Kit popovers (`.bk-menu[popover]`, `.bk-popover[popover]`) are placed under the 
 ```ts
 openCommand(dialog?: HTMLDialogElement | null): void   // toggles a command dialog (default: dialog.bk-command[data-bk-hotkey])
 fillSlider(range: HTMLInputElement): void              // updates --val and <output for>
+matchesQuery(text: string, query: string): boolean    // combobox matching: every word, ignoring case and accents
+splitTags(text: string, delimiter?: string): string[]  // tags from typed or pasted text
+addTags(tags, incoming, { max?, allowDuplicates? })     // { tags, added, duplicates, rejected }
 version: string
 ```
 
@@ -70,6 +73,8 @@ version: string
 | `bk:theme` | `document` | `{ theme, resolved }` |
 | `bk:change` | `[data-bk-tabs]` | `{ tab }`: the selected tab element |
 | `bk:change` | `.bk-calendar` | `{ start, end }`: day-of-month numbers |
+| `bk:change` | `.bk-combobox` | `{ value, values }`: the selected value (or the first one) and every selected value |
+| `bk:change` | `.bk-tags` | `{ values }`: every tag |
 
 All events bubble.
 
@@ -85,6 +90,10 @@ All events bubble.
 | `data-bk-tabs` | wrapper | enables tabs |
 | `data-bk-hotkey` | `dialog.bk-command` | ⌘K / Ctrl+K toggles it |
 | `data-keep-open` | `.bk-menu-item` | don't close the menu on click |
+| `data-multiple` / `data-name` | `.bk-combobox` | pick several values; submit them as hidden inputs with this name |
+| `data-value` / `data-label` / `data-keywords` | `.bk-combobox-option` | value sent, text shown, extra search words |
+| `data-name` / `data-max` / `data-delimiter` / `data-allow-duplicates` / `data-add-on-blur` / `data-required` | `.bk-tags` | form name, tag limit, separator, repeats, keeping leftover text on blur, at least one tag |
+| `data-bk-dismiss` | button inside `.bk-tip` | hides the tip |
 | `data-indeterminate` | `.bk-checkbox` | sets `indeterminate` on init |
 | `data-prefix` / `data-suffix` | `.bk-slider` | text around the `<output>` value |
 | `data-bk-react` | any | marks React-managed elements; the core ignores them |

@@ -907,6 +907,27 @@ var Calendar = React7.forwardRef(function Calendar2(props, ref) {
     return "middle";
   };
   const step = (delta) => setShown(new Date(year, monthIndex + delta, 1));
+  const [focused, setFocused] = React7.useState(null);
+  const focusPending = React7.useRef(false);
+  const gridRef = React7.useRef(null);
+  const inMonth = (d) => !!d && d.getFullYear() === year && d.getMonth() === monthIndex;
+  const selectedDay = selected instanceof Date ? selected : from;
+  const tabbable = [focused, selectedDay, today].find((d) => inMonth(d)) ?? new Date(year, monthIndex, 1);
+  React7.useEffect(() => {
+    if (!focusPending.current || !focused) return;
+    focusPending.current = false;
+    gridRef.current?.querySelector(`[data-date="${toDateKey(focused)}"]`)?.focus();
+  });
+  const moveFocus = (date) => {
+    setFocused(date);
+    if (!inMonth(date)) setShown(new Date(date.getFullYear(), date.getMonth(), 1));
+    focusPending.current = true;
+  };
+  const addMonths = (date, delta) => {
+    const target = new Date(date.getFullYear(), date.getMonth() + delta, 1);
+    const last = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+    return new Date(target.getFullYear(), target.getMonth(), Math.min(date.getDate(), last));
+  };
   return /* @__PURE__ */ jsxs6("div", { ref, className: cx("bk-calendar", className), "data-mode": mode, "data-bk-react": "", ...rest, children: [
     /* @__PURE__ */ jsxs6("div", { className: "bk-calendar-head", children: [
       /* @__PURE__ */ jsx6(Button, { variant: "ghost", size: "icon-sm", "aria-label": "Previous month", onClick: () => step(-1), children: /* @__PURE__ */ jsx6("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx6("path", { d: "m15 6-6 6 6 6" }) }) }),
@@ -916,18 +937,28 @@ var Calendar = React7.forwardRef(function Calendar2(props, ref) {
     /* @__PURE__ */ jsxs6(
       "div",
       {
+        ref: gridRef,
         className: "bk-calendar-grid",
         onKeyDown: (e) => {
-          const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
-          const delta = moves[e.key];
-          if (delta === void 0) return;
-          const buttons = Array.from(e.currentTarget.querySelectorAll(".bk-calendar-day"));
-          const i = buttons.indexOf(document.activeElement);
-          const next = buttons[i + delta];
-          if (i >= 0 && next) {
-            e.preventDefault();
-            next.focus();
-          }
+          const key = e.target.getAttribute?.("data-date");
+          if (!key) return;
+          const [y, m, d] = key.split("-").map(Number);
+          const current = new Date(y, m - 1, d);
+          const weekday = (current.getDay() - weekStartsOn + 7) % 7;
+          const moves = {
+            ArrowLeft: () => new Date(y, m - 1, d - 1),
+            ArrowRight: () => new Date(y, m - 1, d + 1),
+            ArrowUp: () => new Date(y, m - 1, d - 7),
+            ArrowDown: () => new Date(y, m - 1, d + 7),
+            Home: () => new Date(y, m - 1, d - weekday),
+            End: () => new Date(y, m - 1, d + 6 - weekday),
+            PageUp: () => addMonths(current, e.shiftKey ? -12 : -1),
+            PageDown: () => addMonths(current, e.shiftKey ? 12 : 1)
+          };
+          const move = moves[e.key];
+          if (!move) return;
+          e.preventDefault();
+          moveFocus(move());
         },
         children: [
           weekdays.map((w, i) => /* @__PURE__ */ jsx6("span", { className: "bk-calendar-weekday", "aria-hidden": "true", children: w }, i)),
@@ -935,20 +966,27 @@ var Calendar = React7.forwardRef(function Calendar2(props, ref) {
             const single = mode !== "range" && selected instanceof Date && isSameDay(day.date, selected);
             const state = mode === "range" && !day.outside ? rangeState(day.date) : void 0;
             const pressed = single || state === "start" || state === "end" || state === "single";
-            const disabled = day.outside || isDisabled?.(day.date) === true;
+            const unavailable = !day.outside && isDisabled?.(day.date) === true;
             return /* @__PURE__ */ jsx6(
               "button",
               {
                 type: "button",
                 className: "bk-calendar-day",
+                "data-date": day.key,
                 "data-outside": day.outside ? "" : void 0,
                 "data-today": today && isSameDay(day.date, today) ? "" : void 0,
                 "data-range": state,
                 "aria-pressed": pressed,
                 "aria-label": dayLabel.format(day.date),
-                disabled,
-                tabIndex: day.outside ? -1 : 0,
-                onClick: () => choose(day.date),
+                "aria-disabled": unavailable || void 0,
+                disabled: day.outside,
+                tabIndex: !day.outside && isSameDay(day.date, tabbable) ? 0 : -1,
+                onFocus: () => {
+                  if (!isSameDay(day.date, focused)) setFocused(day.date);
+                },
+                onClick: () => {
+                  if (!unavailable) choose(day.date);
+                },
                 children: day.date.getDate()
               },
               day.key
@@ -960,16 +998,180 @@ var Calendar = React7.forwardRef(function Calendar2(props, ref) {
   ] });
 });
 
-// src/react/overlay.tsx
+// src/react/datepicker.tsx
 import * as React8 from "react";
 import { enablePopoverPlacement } from "./index.js";
-import { Fragment as Fragment5, jsx as jsx7, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx7, jsxs as jsxs7 } from "react/jsx-runtime";
+function formatDateValue(value, locale, options = { dateStyle: "medium" }) {
+  if (!value) return "";
+  const format = new Intl.DateTimeFormat(locale, options);
+  if (value instanceof Date) return format.format(value);
+  if (!value.to) return `${format.format(value.from)} \u2013`;
+  return typeof format.formatRange === "function" ? format.formatRange(value.from, value.to) : `${format.format(value.from)} \u2013 ${format.format(value.to)}`;
+}
+function CalendarIcon() {
+  return /* @__PURE__ */ jsxs7("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx7("rect", { x: "3", y: "4", width: "18", height: "18", rx: "2" }),
+    /* @__PURE__ */ jsx7("path", { d: "M16 2v4M8 2v4M3 10h18" })
+  ] });
+}
+var DatePicker = React8.forwardRef(function DatePicker2({
+  mode = "single",
+  value,
+  defaultValue = null,
+  onValueChange,
+  placeholder = "Pick a date",
+  locale,
+  formatOptions,
+  weekStartsOn,
+  isDisabled,
+  today,
+  clearable,
+  disabled,
+  invalid,
+  required,
+  name,
+  calendarLabel = "Choose date",
+  id,
+  className,
+  "aria-describedby": describedBy,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  "aria-labelledby": labelledBy,
+  ...props
+}, forwarded) {
+  const [selected, setSelected] = useControllableState(
+    value,
+    defaultValue,
+    onValueChange
+  );
+  const [open, setOpen] = React8.useState(false);
+  const [opened, setOpened] = React8.useState(0);
+  const triggerRef = React8.useRef(null);
+  const panelRef = React8.useRef(null);
+  const panelId = useSafeId("datepicker");
+  const textId = useSafeId("datepicker-text");
+  React8.useEffect(() => {
+    enablePopoverPlacement();
+    const panel = panelRef.current;
+    if (!panel) return;
+    const onToggle = (e) => {
+      const isOpen = e.newState === "open";
+      setOpen(isOpen);
+      if (isOpen) setOpened((n) => n + 1);
+    };
+    panel.addEventListener("toggle", onToggle);
+    return () => panel.removeEventListener("toggle", onToggle);
+  }, []);
+  const [autoLabelledBy, setAutoLabelledBy] = React8.useState();
+  React8.useEffect(() => {
+    if (!id || labelledBy || ariaLabel) return;
+    const label = document.querySelector(`label[for="${CSS.escape(id)}"]`);
+    if (!label) return;
+    label.id || (label.id = `${panelId}-label`);
+    setAutoLabelledBy(`${label.id} ${textId}`);
+  }, [id, labelledBy, ariaLabel, panelId, textId]);
+  React8.useEffect(() => {
+    if (opened) panelRef.current?.querySelector('.bk-calendar-day[tabindex="0"]')?.focus();
+  }, [opened]);
+  const close = () => {
+    const panel = panelRef.current;
+    if (panel && typeof panel.hidePopover === "function") {
+      try {
+        panel.hidePopover();
+      } catch {
+      }
+    }
+    triggerRef.current?.focus();
+  };
+  const text = formatDateValue(selected, locale, formatOptions);
+  const range = mode === "range" && selected && !(selected instanceof Date) ? selected : null;
+  const submitted = selected instanceof Date ? [toDateKey(selected)] : range ? [toDateKey(range.from), range.to ? toDateKey(range.to) : ""] : [""];
+  return /* @__PURE__ */ jsxs7("div", { className: cx("bk-datepicker", className), "data-has-value": flag(!!selected), "data-bk-react": "", ...props, children: [
+    /* @__PURE__ */ jsxs7(
+      "button",
+      {
+        ref: composeRefs(triggerRef, forwarded),
+        id,
+        type: "button",
+        className: "bk-input bk-datepicker-trigger",
+        "aria-haspopup": "dialog",
+        "aria-expanded": open,
+        "aria-label": ariaLabel,
+        "aria-labelledby": labelledBy ?? autoLabelledBy,
+        "aria-describedby": describedBy,
+        "aria-invalid": invalid || ariaInvalid || void 0,
+        "aria-required": required || void 0,
+        disabled,
+        ...popoverTargetProps(panelId),
+        children: [
+          /* @__PURE__ */ jsx7(CalendarIcon, {}),
+          /* @__PURE__ */ jsx7("span", { id: textId, className: "bk-datepicker-value", "data-placeholder": flag(!text), children: text || placeholder })
+        ]
+      }
+    ),
+    clearable && selected && !disabled ? /* @__PURE__ */ jsx7(
+      "button",
+      {
+        type: "button",
+        className: "bk-datepicker-clear",
+        "aria-label": "Clear date",
+        onClick: () => {
+          setSelected(null);
+          triggerRef.current?.focus();
+        }
+      }
+    ) : null,
+    /* @__PURE__ */ jsx7(
+      "div",
+      {
+        ref: panelRef,
+        id: panelId,
+        ...{ popover: "auto" },
+        role: "dialog",
+        "aria-label": calendarLabel,
+        className: "bk-popover bk-datepicker-panel",
+        "data-bk-react": "",
+        children: mode === "range" ? /* @__PURE__ */ jsx7(
+          Calendar,
+          {
+            mode: "range",
+            value: range,
+            onValueChange: (next) => {
+              setSelected(next);
+              if (next.to) close();
+            },
+            ...{ locale, weekStartsOn, isDisabled, today }
+          },
+          opened
+        ) : /* @__PURE__ */ jsx7(
+          Calendar,
+          {
+            value: selected instanceof Date ? selected : null,
+            onValueChange: (next) => {
+              setSelected(next);
+              close();
+            },
+            ...{ locale, weekStartsOn, isDisabled, today }
+          },
+          opened
+        )
+      }
+    ),
+    name ? submitted.map((v, i) => /* @__PURE__ */ jsx7("input", { type: "hidden", name, value: v }, i)) : null
+  ] });
+});
+
+// src/react/overlay.tsx
+import * as React9 from "react";
+import { enablePopoverPlacement as enablePopoverPlacement2 } from "./index.js";
+import { Fragment as Fragment5, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 function CloseIcon() {
-  return /* @__PURE__ */ jsx7("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx7("path", { d: "M18 6 6 18M6 6l12 12" }) });
+  return /* @__PURE__ */ jsx8("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx8("path", { d: "M18 6 6 18M6 6l12 12" }) });
 }
 function useModal(open, onOpenChange, closeOnBackdrop) {
-  const ref = React8.useRef(null);
-  React8.useEffect(() => {
+  const ref = React9.useRef(null);
+  React9.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (open && !el.open) el.showModal();
@@ -999,23 +1201,23 @@ function ModalContent({
   children,
   handle
 }) {
-  return /* @__PURE__ */ jsxs7(Fragment5, { children: [
-    handle ? /* @__PURE__ */ jsx7("div", { className: "bk-sheet-handle", "aria-hidden": "true" }) : null,
-    hideClose ? null : /* @__PURE__ */ jsx7(Button, { variant: "ghost", size: "icon-sm", className: "bk-dialog-close", "aria-label": "Close", onClick: () => onOpenChange(false), children: /* @__PURE__ */ jsx7(CloseIcon, {}) }),
-    icon ? /* @__PURE__ */ jsx7("span", { className: "bk-dialog-icon", "aria-hidden": "true", children: icon }) : null,
-    title || description ? /* @__PURE__ */ jsxs7("div", { className: "bk-dialog-header", children: [
-      title ? /* @__PURE__ */ jsx7("h2", { className: "bk-dialog-title", id: titleId, children: title }) : null,
-      description ? /* @__PURE__ */ jsx7("p", { className: "bk-dialog-description", id: descriptionId, children: description }) : null
+  return /* @__PURE__ */ jsxs8(Fragment5, { children: [
+    handle ? /* @__PURE__ */ jsx8("div", { className: "bk-sheet-handle", "aria-hidden": "true" }) : null,
+    hideClose ? null : /* @__PURE__ */ jsx8(Button, { variant: "ghost", size: "icon-sm", className: "bk-dialog-close", "aria-label": "Close", onClick: () => onOpenChange(false), children: /* @__PURE__ */ jsx8(CloseIcon, {}) }),
+    icon ? /* @__PURE__ */ jsx8("span", { className: "bk-dialog-icon", "aria-hidden": "true", children: icon }) : null,
+    title || description ? /* @__PURE__ */ jsxs8("div", { className: "bk-dialog-header", children: [
+      title ? /* @__PURE__ */ jsx8("h2", { className: "bk-dialog-title", id: titleId, children: title }) : null,
+      description ? /* @__PURE__ */ jsx8("p", { className: "bk-dialog-description", id: descriptionId, children: description }) : null
     ] }) : null,
-    children ? /* @__PURE__ */ jsx7("div", { className: "bk-dialog-body", children }) : null,
-    footer ? /* @__PURE__ */ jsx7("div", { className: "bk-dialog-footer", children: footer }) : null
+    children ? /* @__PURE__ */ jsx8("div", { className: "bk-dialog-body", children }) : null,
+    footer ? /* @__PURE__ */ jsx8("div", { className: "bk-dialog-footer", children: footer }) : null
   ] });
 }
-var Dialog = React8.forwardRef(function Dialog2({ open, onOpenChange, title, description, footer, hideClose, closeOnBackdrop, variant = "default", icon, className, children, ...props }, forwarded) {
+var Dialog = React9.forwardRef(function Dialog2({ open, onOpenChange, title, description, footer, hideClose, closeOnBackdrop, variant = "default", icon, className, children, ...props }, forwarded) {
   const { ref, handlers } = useModal(open, onOpenChange, closeOnBackdrop ?? variant !== "alert");
   const titleId = useSafeId("dialog-title");
   const descriptionId = useSafeId("dialog-description");
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "dialog",
     {
       ref: composeRefs(ref, forwarded),
@@ -1027,15 +1229,15 @@ var Dialog = React8.forwardRef(function Dialog2({ open, onOpenChange, title, des
       "data-bk-react": "",
       ...handlers,
       ...props,
-      children: open ? /* @__PURE__ */ jsx7(ModalContent, { ...{ title, description, footer, hideClose, icon, titleId, descriptionId, onOpenChange }, hideClose: hideClose ?? variant === "alert", children }) : null
+      children: open ? /* @__PURE__ */ jsx8(ModalContent, { ...{ title, description, footer, hideClose, icon, titleId, descriptionId, onOpenChange }, hideClose: hideClose ?? variant === "alert", children }) : null
     }
   );
 });
-var Sheet = React8.forwardRef(function Sheet2({ open, onOpenChange, title, description, footer, hideClose, closeOnBackdrop = true, side = "right", className, children, ...props }, forwarded) {
+var Sheet = React9.forwardRef(function Sheet2({ open, onOpenChange, title, description, footer, hideClose, closeOnBackdrop = true, side = "right", className, children, ...props }, forwarded) {
   const { ref, handlers } = useModal(open, onOpenChange, closeOnBackdrop);
   const titleId = useSafeId("sheet-title");
   const descriptionId = useSafeId("sheet-description");
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "dialog",
     {
       ref: composeRefs(ref, forwarded),
@@ -1046,16 +1248,16 @@ var Sheet = React8.forwardRef(function Sheet2({ open, onOpenChange, title, descr
       "data-bk-react": "",
       ...handlers,
       ...props,
-      children: open ? /* @__PURE__ */ jsx7(ModalContent, { ...{ title, description, footer, titleId, descriptionId, onOpenChange }, hideClose: hideClose ?? side === "bottom", handle: side === "bottom", children }) : null
+      children: open ? /* @__PURE__ */ jsx8(ModalContent, { ...{ title, description, footer, titleId, descriptionId, onOpenChange }, hideClose: hideClose ?? side === "bottom", handle: side === "bottom", children }) : null
     }
   );
 });
 function usePopoverSurface(onOpen) {
-  const ref = React8.useRef(null);
-  const onOpenRef = React8.useRef(onOpen);
+  const ref = React9.useRef(null);
+  const onOpenRef = React9.useRef(onOpen);
   onOpenRef.current = onOpen;
-  React8.useEffect(() => {
-    enablePopoverPlacement();
+  React9.useEffect(() => {
+    enablePopoverPlacement2();
     const el = ref.current;
     if (!el) return;
     const onToggle = (e) => {
@@ -1070,9 +1272,9 @@ var POPOVER_AUTO = { popover: "auto" };
 function DropdownMenu({ trigger, align = "start", className, children, onKeyDown, ...props }) {
   const id = useSafeId("menu");
   const ref = usePopoverSurface((el) => el.querySelector('[role^="menuitem"]:not(:disabled)')?.focus());
-  return /* @__PURE__ */ jsxs7(Fragment5, { children: [
-    React8.cloneElement(trigger, { ...popoverTargetProps(id), "aria-haspopup": "menu" }),
-    /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsxs8(Fragment5, { children: [
+    React9.cloneElement(trigger, { ...popoverTargetProps(id), "aria-haspopup": "menu" }),
+    /* @__PURE__ */ jsx8(
       "div",
       {
         ref,
@@ -1102,8 +1304,8 @@ function hideClosestPopover(el) {
   const popover = el.closest("[popover]");
   if (popover && typeof popover.hidePopover === "function") popover.hidePopover();
 }
-var DropdownMenuItem = React8.forwardRef(function DropdownMenuItem2({ icon, shortcut, variant = "default", onSelect, keepOpen, className, onClick, children, ...props }, ref) {
-  return /* @__PURE__ */ jsxs7(
+var DropdownMenuItem = React9.forwardRef(function DropdownMenuItem2({ icon, shortcut, variant = "default", onSelect, keepOpen, className, onClick, children, ...props }, ref) {
+  return /* @__PURE__ */ jsxs8(
     "button",
     {
       ref,
@@ -1121,13 +1323,13 @@ var DropdownMenuItem = React8.forwardRef(function DropdownMenuItem2({ icon, shor
       children: [
         icon,
         children,
-        shortcut ? /* @__PURE__ */ jsx7("span", { className: "bk-menu-shortcut", children: shortcut }) : null
+        shortcut ? /* @__PURE__ */ jsx8("span", { className: "bk-menu-shortcut", children: shortcut }) : null
       ]
     }
   );
 });
-var DropdownMenuCheckboxItem = React8.forwardRef(function DropdownMenuCheckboxItem2({ checked, onCheckedChange, className, onClick, ...props }, ref) {
-  return /* @__PURE__ */ jsx7(
+var DropdownMenuCheckboxItem = React9.forwardRef(function DropdownMenuCheckboxItem2({ checked, onCheckedChange, className, onClick, ...props }, ref) {
+  return /* @__PURE__ */ jsx8(
     "button",
     {
       ref,
@@ -1144,17 +1346,17 @@ var DropdownMenuCheckboxItem = React8.forwardRef(function DropdownMenuCheckboxIt
   );
 });
 function DropdownMenuLabel({ className, ...props }) {
-  return /* @__PURE__ */ jsx7("div", { className: cx("bk-menu-label", className), ...props });
+  return /* @__PURE__ */ jsx8("div", { className: cx("bk-menu-label", className), ...props });
 }
 function DropdownMenuSeparator({ className, ...props }) {
-  return /* @__PURE__ */ jsx7("hr", { className: cx("bk-menu-separator", className), ...props });
+  return /* @__PURE__ */ jsx8("hr", { className: cx("bk-menu-separator", className), ...props });
 }
 function Popover({ trigger, align = "start", className, children, ...props }) {
   const id = useSafeId("popover");
   const ref = usePopoverSurface((el) => el.querySelector("input, select, textarea, button, [tabindex]")?.focus());
-  return /* @__PURE__ */ jsxs7(Fragment5, { children: [
-    React8.cloneElement(trigger, { ...popoverTargetProps(id), "aria-haspopup": "dialog" }),
-    /* @__PURE__ */ jsx7("div", { ref, id, ...POPOVER_AUTO, role: "dialog", className: cx("bk-popover", className), "data-align": align, "data-bk-react": "", ...props, children })
+  return /* @__PURE__ */ jsxs8(Fragment5, { children: [
+    React9.cloneElement(trigger, { ...popoverTargetProps(id), "aria-haspopup": "dialog" }),
+    /* @__PURE__ */ jsx8("div", { ref, id, ...POPOVER_AUTO, role: "dialog", className: cx("bk-popover", className), "data-align": align, "data-bk-react": "", ...props, children })
   ] });
 }
 function closePopover(event) {
@@ -1166,14 +1368,14 @@ function filterCommandGroups(groups, query) {
   return groups.map((g) => ({ heading: g.heading, items: g.items.filter((item) => `${item.label} ${(item.keywords ?? []).join(" ")}`.toLowerCase().includes(q)) })).filter((g) => g.items.length > 0);
 }
 function CommandBody({ groups, placeholder = "Type a command or search", emptyText = "No results.", onSelect, autoFocus }) {
-  const [query, setQuery] = React8.useState("");
-  const [active, setActive] = React8.useState(0);
+  const [query, setQuery] = React9.useState("");
+  const [active, setActive] = React9.useState(0);
   const listId = useSafeId("command-list");
-  const listRef = React8.useRef(null);
-  const visible = React8.useMemo(() => filterCommandGroups(groups, query), [groups, query]);
-  const flat = React8.useMemo(() => visible.flatMap((g) => g.items.filter((i) => !i.disabled)), [visible]);
-  React8.useEffect(() => setActive(0), [query]);
-  React8.useEffect(() => {
+  const listRef = React9.useRef(null);
+  const visible = React9.useMemo(() => filterCommandGroups(groups, query), [groups, query]);
+  const flat = React9.useMemo(() => visible.flatMap((g) => g.items.filter((i) => !i.disabled)), [visible]);
+  React9.useEffect(() => setActive(0), [query]);
+  React9.useEffect(() => {
     const el = listRef.current?.querySelector('[aria-selected="true"]');
     const list = listRef.current;
     if (!el || !list) return;
@@ -1187,13 +1389,13 @@ function CommandBody({ groups, placeholder = "Type a command or search", emptyTe
     onSelect?.(item);
   };
   const activeItem = flat[active];
-  return /* @__PURE__ */ jsxs7(Fragment5, { children: [
-    /* @__PURE__ */ jsxs7("div", { className: "bk-command-search", children: [
-      /* @__PURE__ */ jsxs7("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
-        /* @__PURE__ */ jsx7("circle", { cx: "11", cy: "11", r: "7" }),
-        /* @__PURE__ */ jsx7("path", { d: "m20 20-4.3-4.3" })
+  return /* @__PURE__ */ jsxs8(Fragment5, { children: [
+    /* @__PURE__ */ jsxs8("div", { className: "bk-command-search", children: [
+      /* @__PURE__ */ jsxs8("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+        /* @__PURE__ */ jsx8("circle", { cx: "11", cy: "11", r: "7" }),
+        /* @__PURE__ */ jsx8("path", { d: "m20 20-4.3-4.3" })
       ] }),
-      /* @__PURE__ */ jsx7(
+      /* @__PURE__ */ jsx8(
         "input",
         {
           className: "bk-command-input",
@@ -1221,10 +1423,10 @@ function CommandBody({ groups, placeholder = "Type a command or search", emptyTe
         }
       )
     ] }),
-    /* @__PURE__ */ jsxs7("div", { className: "bk-command-list", role: "listbox", id: listId, ref: listRef, children: [
-      visible.map((group) => /* @__PURE__ */ jsxs7("div", { className: "bk-command-group", role: "group", "aria-label": group.heading, children: [
-        /* @__PURE__ */ jsx7("div", { className: "bk-command-group-heading", "aria-hidden": "true", children: group.heading }),
-        group.items.map((item) => /* @__PURE__ */ jsxs7(
+    /* @__PURE__ */ jsxs8("div", { className: "bk-command-list", role: "listbox", id: listId, ref: listRef, children: [
+      visible.map((group) => /* @__PURE__ */ jsxs8("div", { className: "bk-command-group", role: "group", "aria-label": group.heading, children: [
+        /* @__PURE__ */ jsx8("div", { className: "bk-command-group-heading", "aria-hidden": "true", children: group.heading }),
+        group.items.map((item) => /* @__PURE__ */ jsxs8(
           "div",
           {
             id: `${listId}-${item.id}`,
@@ -1240,24 +1442,24 @@ function CommandBody({ groups, placeholder = "Type a command or search", emptyTe
             children: [
               item.icon,
               item.label,
-              item.shortcut ? /* @__PURE__ */ jsx7(KbdGroup, { children: item.shortcut.map((k) => /* @__PURE__ */ jsx7(Kbd, { children: k }, k)) }) : null
+              item.shortcut ? /* @__PURE__ */ jsx8(KbdGroup, { children: item.shortcut.map((k) => /* @__PURE__ */ jsx8(Kbd, { children: k }, k)) }) : null
             ]
           },
           item.id
         ))
       ] }, group.heading)),
-      visible.length === 0 ? /* @__PURE__ */ jsx7("div", { className: "bk-command-empty", children: emptyText }) : null
+      visible.length === 0 ? /* @__PURE__ */ jsx8("div", { className: "bk-command-empty", children: emptyText }) : null
     ] })
   ] });
 }
 function Command({ className, ...props }) {
-  return /* @__PURE__ */ jsx7("div", { className: cx("bk-command", className), "data-inline": "", "data-bk-react": "", children: /* @__PURE__ */ jsx7(CommandBody, { ...props }) });
+  return /* @__PURE__ */ jsx8("div", { className: cx("bk-command", className), "data-inline": "", "data-bk-react": "", children: /* @__PURE__ */ jsx8(CommandBody, { ...props }) });
 }
 function CommandDialog({ open, onOpenChange, hotkey = "k", className, onSelect, ...props }) {
   const { ref, handlers } = useModal(open, onOpenChange, true);
-  const openRef = React8.useRef(open);
+  const openRef = React9.useRef(open);
   openRef.current = open;
-  React8.useEffect(() => {
+  React9.useEffect(() => {
     if (!hotkey) return;
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === hotkey.toLowerCase()) {
@@ -1268,7 +1470,7 @@ function CommandDialog({ open, onOpenChange, hotkey = "k", className, onSelect, 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [hotkey, onOpenChange]);
-  return /* @__PURE__ */ jsx7("dialog", { ref, className: cx("bk-command", className), "data-bk-react": "", "aria-label": props.placeholder ?? "Command palette", ...handlers, children: open ? /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8("dialog", { ref, className: cx("bk-command", className), "data-bk-react": "", "aria-label": props.placeholder ?? "Command palette", ...handlers, children: open ? /* @__PURE__ */ jsx8(
     CommandBody,
     {
       ...props,
@@ -1281,46 +1483,712 @@ function CommandDialog({ open, onOpenChange, hotkey = "k", className, onSelect, 
   ) : null });
 }
 
+// src/react/combobox.tsx
+import * as React10 from "react";
+import { enablePopoverPlacement as enablePopoverPlacement3, hideListbox, matchesQuery, placePopover, showListbox } from "./index.js";
+import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
+var toList = (value) => value == null ? [] : typeof value === "string" ? [value] : [...value];
+var defaultFilter = (option, query) => matchesQuery(`${option.label} ${(option.keywords ?? []).join(" ")}`, query);
+function filterComboboxOptions(options, query) {
+  return query.trim() ? options.filter((o) => defaultFilter(o, query)) : [...options];
+}
+var Combobox = React10.forwardRef(function Combobox2({
+  options,
+  placeholder,
+  emptyText = "No matches.",
+  clearable,
+  disabled,
+  invalid,
+  required,
+  name,
+  filter,
+  onInputChange,
+  loading,
+  loadingText = "Loading\u2026",
+  toggleLabel = "Show options",
+  multiple,
+  value,
+  defaultValue,
+  onValueChange,
+  id,
+  className,
+  onBlur,
+  "aria-describedby": describedBy,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  "aria-labelledby": labelledBy,
+  ...props
+}, forwarded) {
+  const isMultiple = multiple === true;
+  const [raw, setRaw] = useControllableState(
+    value,
+    defaultValue ?? (isMultiple ? [] : null),
+    onValueChange
+  );
+  const selected = toList(raw);
+  const setSelected = (next) => setRaw(isMultiple ? next : next[0] ?? null);
+  const [open, setOpen] = React10.useState(false);
+  const [query, setQuery] = React10.useState("");
+  const [typed, setTyped] = React10.useState(false);
+  const [active, setActive] = React10.useState(null);
+  const inputRef = React10.useRef(null);
+  const controlRef = React10.useRef(null);
+  const listRef = React10.useRef(null);
+  const listId = useSafeId("combobox-list");
+  const byValue = React10.useMemo(() => new Map(options.map((o) => [o.value, o])), [options]);
+  const indexOf = React10.useMemo(() => new Map(options.map((o, i) => [o.value, i])), [options]);
+  const search = typed ? query : "";
+  const shown = React10.useMemo(() => {
+    if (filter === false || !search.trim()) return [...options];
+    const match = filter ?? defaultFilter;
+    return options.filter((o) => match(o, search));
+  }, [options, filter, search]);
+  const enabled = shown.filter((o) => !o.disabled);
+  const sections = React10.useMemo(() => {
+    const out = [];
+    for (const o of shown) {
+      const last = out[out.length - 1];
+      const section = o.group === void 0 ? last && last.heading === void 0 ? last : void 0 : out.find((s) => s.heading === o.group);
+      if (section) section.items.push(o);
+      else out.push({ heading: o.group, items: [o] });
+    }
+    return out;
+  }, [shown]);
+  const optionId = (v) => `${listId}-${indexOf.get(v) ?? 0}`;
+  const selectedLabel = !isMultiple && selected[0] !== void 0 ? byValue.get(selected[0])?.label ?? selected[0] : "";
+  const inputValue = isMultiple || typed ? query : selectedLabel;
+  const activeOption = active !== null && enabled.some((o) => o.value === active) ? active : null;
+  React10.useEffect(() => enablePopoverPlacement3(), []);
+  React10.useEffect(() => {
+    const list = listRef.current;
+    if (!list || !id || ariaLabel || labelledBy) return;
+    const label = document.querySelector(`label[for="${CSS.escape(id)}"]`);
+    if (!label) return;
+    label.id || (label.id = `${listId}-label`);
+    list.setAttribute("aria-labelledby", label.id);
+  }, [id, ariaLabel, labelledBy, listId]);
+  React10.useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    if (open) showListbox(list, controlRef.current);
+    else hideListbox(list);
+  }, [open]);
+  React10.useEffect(() => {
+    if (open && listRef.current) placePopover(listRef.current, controlRef.current);
+  }, [open, shown.length, selected.length]);
+  React10.useEffect(() => {
+    const list = listRef.current;
+    const el = activeOption === null ? null : list?.querySelector(`[data-value="${CSS.escape(activeOption)}"]`);
+    if (!list || !el) return;
+    if (el.offsetTop < list.scrollTop) list.scrollTop = el.offsetTop;
+    else if (el.offsetTop + el.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = el.offsetTop + el.offsetHeight - list.clientHeight;
+  }, [activeOption]);
+  const show = () => {
+    if (open || disabled) return;
+    setOpen(true);
+    const current = selected.find((v) => enabled.some((o) => o.value === v));
+    setActive(current ?? enabled[0]?.value ?? null);
+  };
+  const updateQuery = (next) => {
+    setQuery(next);
+    onInputChange?.(next);
+  };
+  const hide = () => {
+    if (!open) return;
+    setOpen(false);
+    setActive(null);
+    if (!isMultiple && typed && !query.trim() && selected.length) setSelected([]);
+    setTyped(false);
+    if (query) updateQuery("");
+  };
+  const choose = (option) => {
+    if (!option || option.disabled) return;
+    if (isMultiple) {
+      setSelected(selected.includes(option.value) ? selected.filter((v) => v !== option.value) : [...selected, option.value]);
+      setTyped(false);
+      if (query) updateQuery("");
+      setActive(option.value);
+    } else {
+      setSelected([option.value]);
+      setOpen(false);
+      setActive(null);
+      setTyped(false);
+      if (query) updateQuery("");
+    }
+  };
+  const move = (step) => {
+    const i = enabled.findIndex((o) => o.value === activeOption);
+    const next = i < 0 ? step === 1 ? 0 : enabled.length - 1 : Math.max(0, Math.min(enabled.length - 1, i + step));
+    setActive(enabled[next]?.value ?? null);
+  };
+  const renderOption = (o) => {
+    const isSelected = selected.includes(o.value);
+    return /* @__PURE__ */ jsxs9(
+      "div",
+      {
+        id: optionId(o.value),
+        role: "option",
+        className: "bk-combobox-option",
+        "data-value": o.value,
+        "aria-selected": isSelected,
+        "aria-disabled": o.disabled || void 0,
+        "data-active": flag(activeOption === o.value),
+        onMouseMove: () => {
+          if (!o.disabled && activeOption !== o.value) setActive(o.value);
+        },
+        onClick: () => choose(o),
+        children: [
+          o.icon,
+          o.description ? /* @__PURE__ */ jsxs9("span", { className: "bk-combobox-option-text", children: [
+            /* @__PURE__ */ jsx9("span", { children: o.label }),
+            /* @__PURE__ */ jsx9("span", { className: "bk-combobox-option-description", children: o.description })
+          ] }) : o.label
+        ]
+      },
+      o.value
+    );
+  };
+  return /* @__PURE__ */ jsxs9(
+    "div",
+    {
+      className: cx("bk-combobox", className),
+      "data-multiple": flag(isMultiple),
+      "data-open": flag(open),
+      "data-has-value": flag(selected.length > 0),
+      "data-bk-react": "",
+      onBlur: (e) => {
+        onBlur?.(e);
+        if (!(e.relatedTarget instanceof Node) || !e.currentTarget.contains(e.relatedTarget)) hide();
+      },
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxs9(
+          "div",
+          {
+            ref: controlRef,
+            className: "bk-combobox-control",
+            onMouseDown: (e) => {
+              if (e.target !== inputRef.current) e.preventDefault();
+            },
+            onClick: (e) => {
+              if (disabled) return;
+              const target = e.target;
+              if (target.closest(".bk-chip-remove, .bk-combobox-clear")) return;
+              if (target.closest(".bk-combobox-toggle") && open) hide();
+              else show();
+              inputRef.current?.focus();
+            },
+            children: [
+              isMultiple ? selected.map((v) => {
+                const label = byValue.get(v)?.label ?? v;
+                return /* @__PURE__ */ jsxs9("span", { className: "bk-chip", "data-value": v, children: [
+                  label,
+                  /* @__PURE__ */ jsx9(
+                    "button",
+                    {
+                      type: "button",
+                      className: "bk-chip-remove",
+                      tabIndex: -1,
+                      "aria-label": `Remove ${label}`,
+                      disabled,
+                      onClick: () => {
+                        setSelected(selected.filter((s) => s !== v));
+                        inputRef.current?.focus();
+                      }
+                    }
+                  )
+                ] }, v);
+              }) : null,
+              /* @__PURE__ */ jsx9(
+                "input",
+                {
+                  ref: composeRefs(inputRef, forwarded),
+                  id,
+                  className: "bk-combobox-input",
+                  role: "combobox",
+                  "aria-autocomplete": "list",
+                  "aria-expanded": open,
+                  "aria-controls": listId,
+                  "aria-activedescendant": open && activeOption !== null ? optionId(activeOption) : void 0,
+                  "aria-describedby": describedBy,
+                  "aria-invalid": invalid || ariaInvalid || void 0,
+                  "aria-label": ariaLabel,
+                  "aria-labelledby": labelledBy,
+                  autoComplete: "off",
+                  placeholder: isMultiple && selected.length ? void 0 : placeholder,
+                  disabled,
+                  required: required && selected.length === 0,
+                  value: inputValue,
+                  onChange: (e) => {
+                    setTyped(true);
+                    updateQuery(e.target.value);
+                    if (!open && !disabled) setOpen(true);
+                    const match = filter === false ? options : options.filter((o) => (filter ?? defaultFilter)(o, e.target.value));
+                    setActive(match.find((o) => !o.disabled)?.value ?? null);
+                  },
+                  onKeyDown: (e) => {
+                    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                      e.preventDefault();
+                      if (!open) show();
+                      else move(e.key === "ArrowDown" ? 1 : -1);
+                    } else if (e.key === "Enter") {
+                      if (open && activeOption !== null) {
+                        e.preventDefault();
+                        choose(byValue.get(activeOption));
+                      }
+                    } else if (e.key === "Escape") {
+                      if (open) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        hide();
+                      }
+                    } else if (e.key === "Backspace" && isMultiple && !query && selected.length) {
+                      setSelected(selected.slice(0, -1));
+                    } else if (e.key === "Tab") {
+                      hide();
+                    }
+                  }
+                }
+              ),
+              clearable && selected.length > 0 ? /* @__PURE__ */ jsx9(
+                "button",
+                {
+                  type: "button",
+                  className: "bk-combobox-clear",
+                  tabIndex: -1,
+                  "aria-label": "Clear",
+                  disabled,
+                  onClick: () => {
+                    setSelected([]);
+                    setTyped(false);
+                    if (query) updateQuery("");
+                    inputRef.current?.focus();
+                  }
+                }
+              ) : null,
+              /* @__PURE__ */ jsx9("button", { type: "button", className: "bk-combobox-toggle", tabIndex: -1, "aria-label": toggleLabel, disabled })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs9(
+          "div",
+          {
+            ref: listRef,
+            id: listId,
+            ...{ popover: "manual" },
+            role: "listbox",
+            className: "bk-combobox-list",
+            "aria-multiselectable": isMultiple || void 0,
+            "aria-label": ariaLabel,
+            "aria-labelledby": labelledBy,
+            onMouseDown: (e) => e.preventDefault(),
+            children: [
+              sections.map(
+                (section, i) => section.heading === void 0 ? /* @__PURE__ */ jsx9(React10.Fragment, { children: section.items.map(renderOption) }, `_${i}`) : /* @__PURE__ */ jsxs9("div", { className: "bk-combobox-group", role: "group", "aria-label": section.heading, children: [
+                  /* @__PURE__ */ jsx9("div", { className: "bk-combobox-group-heading", "aria-hidden": "true", children: section.heading }),
+                  section.items.map(renderOption)
+                ] }, section.heading)
+              ),
+              loading ? /* @__PURE__ */ jsx9("div", { className: "bk-combobox-empty", role: "status", children: loadingText }) : shown.length === 0 ? /* @__PURE__ */ jsx9("div", { className: "bk-combobox-empty", children: emptyText }) : null
+            ]
+          }
+        ),
+        name ? (isMultiple ? selected : [selected[0] ?? ""]).map((v, i) => /* @__PURE__ */ jsx9("input", { type: "hidden", name, value: v }, `${v}-${i}`)) : null
+      ]
+    }
+  );
+});
+
+// src/react/tags.tsx
+import * as React11 from "react";
+import { addTags, describeTagChange, splitTags } from "./index.js";
+import { jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
+var TagsInput = React11.forwardRef(function TagsInput2({
+  value,
+  defaultValue = [],
+  onValueChange,
+  placeholder,
+  max,
+  allowDuplicates,
+  delimiter = ",",
+  addOnBlur = true,
+  disabled,
+  invalid,
+  required,
+  name,
+  id,
+  className,
+  onBlur,
+  "aria-describedby": describedBy,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  "aria-labelledby": labelledBy,
+  ...props
+}, forwarded) {
+  const [raw, setRaw] = useControllableState(value, defaultValue, onValueChange);
+  const tags = [...raw];
+  const [text, setText] = React11.useState("");
+  const [status, setStatus] = React11.useState("");
+  const [flash, setFlash] = React11.useState([]);
+  const inputRef = React11.useRef(null);
+  const boxRef = React11.useRef(null);
+  React11.useEffect(() => {
+    if (!flash.length) return;
+    const timer = setTimeout(() => setFlash([]), 700);
+    return () => clearTimeout(timer);
+  }, [flash]);
+  const commit = (input) => {
+    const parts = splitTags(input, delimiter);
+    if (!parts.length) return "";
+    const result = addTags(tags, parts, { max, allowDuplicates });
+    if (result.added.length) setRaw(result.tags);
+    if (result.duplicates.length) setFlash(result.duplicates.map((d) => d.toLowerCase()));
+    setStatus(describeTagChange(result, max));
+    return result.rejected.join(`${delimiter} `);
+  };
+  const removeAt = (index) => {
+    const tag = tags[index];
+    if (tag === void 0) return;
+    setRaw(tags.filter((_, i) => i !== index));
+    setStatus(`Removed ${tag}.`);
+  };
+  const removeButtons = () => Array.from(boxRef.current?.querySelectorAll(".bk-chip-remove") ?? []);
+  return /* @__PURE__ */ jsxs10(
+    "div",
+    {
+      ref: boxRef,
+      className: cx("bk-tags", className),
+      "data-has-value": flag(tags.length > 0),
+      "data-bk-react": "",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !disabled) inputRef.current?.focus();
+      },
+      onBlur: (e) => {
+        onBlur?.(e);
+        if (e.relatedTarget instanceof Node && e.currentTarget.contains(e.relatedTarget)) return;
+        if (addOnBlur && text.trim()) setText(commit(text));
+      },
+      ...props,
+      children: [
+        tags.map((tag, i) => /* @__PURE__ */ jsxs10("span", { className: "bk-chip", "data-value": tag, "data-duplicate": flag(flash.includes(tag.toLowerCase())), children: [
+          tag,
+          /* @__PURE__ */ jsx10(
+            "button",
+            {
+              type: "button",
+              className: "bk-chip-remove",
+              tabIndex: -1,
+              "aria-label": `Remove ${tag}`,
+              disabled,
+              onClick: () => {
+                removeAt(i);
+                inputRef.current?.focus();
+              },
+              onKeyDown: (e) => {
+                const buttons = removeButtons();
+                if (e.key === "ArrowLeft") {
+                  e.preventDefault();
+                  buttons[Math.max(0, i - 1)]?.focus();
+                } else if (e.key === "ArrowRight" || e.key === "Escape") {
+                  e.preventDefault();
+                  (e.key === "ArrowRight" ? buttons[i + 1] ?? inputRef.current : inputRef.current)?.focus();
+                } else if (e.key === "Backspace" || e.key === "Delete") {
+                  e.preventDefault();
+                  removeAt(i);
+                  requestAnimationFrame(() => (removeButtons()[Math.max(0, i - 1)] ?? inputRef.current)?.focus());
+                }
+              }
+            }
+          )
+        ] }, `${tag}-${i}`)),
+        /* @__PURE__ */ jsx10(
+          "input",
+          {
+            ref: composeRefs(inputRef, forwarded),
+            id,
+            className: "bk-tags-input",
+            value: text,
+            placeholder: tags.length ? void 0 : placeholder,
+            disabled,
+            required: required && tags.length === 0,
+            "aria-describedby": describedBy,
+            "aria-invalid": invalid || ariaInvalid || void 0,
+            "aria-label": ariaLabel,
+            "aria-labelledby": labelledBy,
+            autoComplete: "off",
+            enterKeyHint: "enter",
+            onChange: (e) => {
+              const next = e.target.value;
+              const at = next.lastIndexOf(delimiter);
+              if (at < 0) return setText(next);
+              const rest = next.slice(at + 1).trimStart();
+              const kept = commit(next.slice(0, at));
+              setText(kept ? `${kept}${delimiter} ${rest}` : rest);
+            },
+            onPaste: (e) => {
+              const pasted = e.clipboardData.getData("text");
+              if (!pasted.includes(delimiter) && !/\r?\n/.test(pasted)) return;
+              e.preventDefault();
+              setText(commit(`${text}${delimiter}${pasted}`));
+            },
+            onKeyDown: (e) => {
+              const input = e.currentTarget;
+              if ((e.key === "Enter" || e.key === delimiter) && text.trim()) {
+                e.preventDefault();
+                const kept = commit(text);
+                setText(kept && e.key === delimiter ? `${kept}${delimiter} ` : kept);
+              } else if (e.key === delimiter) {
+                e.preventDefault();
+              } else if (e.key === "Backspace" && !text && tags.length) {
+                e.preventDefault();
+                removeAt(tags.length - 1);
+              } else if (e.key === "ArrowLeft" && input.selectionStart === 0 && input.selectionEnd === 0 && tags.length) {
+                e.preventDefault();
+                removeButtons().at(-1)?.focus();
+              }
+            }
+          }
+        ),
+        /* @__PURE__ */ jsx10("span", { className: "bk-sr-only", "aria-live": "polite", children: status }),
+        name ? tags.map((tag, i) => /* @__PURE__ */ jsx10("input", { type: "hidden", name, value: tag }, `${tag}-${i}`)) : null
+      ]
+    }
+  );
+});
+
+// src/react/inputs.tsx
+import * as React12 from "react";
+import { clampNumber, stepNumberInput } from "./index.js";
+import { jsx as jsx11, jsxs as jsxs11 } from "react/jsx-runtime";
+var NumberInput = React12.forwardRef(function NumberInput2({
+  value,
+  defaultValue = null,
+  onValueChange,
+  min,
+  max,
+  step = 1,
+  placeholder,
+  disabled,
+  invalid,
+  required,
+  name,
+  decrementLabel = "Decrease",
+  incrementLabel = "Increase",
+  id,
+  className,
+  "aria-describedby": describedBy,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  "aria-labelledby": labelledBy,
+  ...props
+}, forwarded) {
+  const [number, setNumber] = useControllableState(value, defaultValue, onValueChange);
+  const [text, setText] = React12.useState(number === null ? "" : String(number));
+  const inputRef = React12.useRef(null);
+  React12.useEffect(() => {
+    const shown = text === "" ? null : Number(text);
+    if (shown !== number) setText(number === null ? "" : String(number));
+  }, [number]);
+  const readInput = (el) => {
+    setText(el.value);
+    if (el.value === "") setNumber(null);
+    else if (!Number.isNaN(el.valueAsNumber)) setNumber(el.valueAsNumber);
+  };
+  const press = (direction) => {
+    const el = inputRef.current;
+    if (!el) return;
+    stepNumberInput(el, direction);
+    readInput(el);
+  };
+  const atMin = min !== void 0 && number !== null && number <= min;
+  const atMax = max !== void 0 && number !== null && number >= max;
+  return /* @__PURE__ */ jsxs11("div", { className: cx("bk-number", className), "data-bk-react": "", ...props, children: [
+    /* @__PURE__ */ jsx11(
+      "button",
+      {
+        type: "button",
+        className: "bk-number-step",
+        "data-direction": "down",
+        tabIndex: -1,
+        "aria-label": decrementLabel,
+        disabled: disabled || atMin,
+        onMouseDown: (e) => e.preventDefault(),
+        onClick: () => press(-1)
+      }
+    ),
+    /* @__PURE__ */ jsx11(
+      "input",
+      {
+        ref: composeRefs(inputRef, forwarded),
+        id,
+        type: "number",
+        className: "bk-number-input",
+        inputMode: Number.isInteger(step) && (min === void 0 || min >= 0) ? "numeric" : "decimal",
+        value: text,
+        min,
+        max,
+        step,
+        name,
+        placeholder,
+        disabled,
+        required,
+        "aria-describedby": describedBy,
+        "aria-invalid": invalid || ariaInvalid || void 0,
+        "aria-label": ariaLabel,
+        "aria-labelledby": labelledBy,
+        onChange: (e) => readInput(e.currentTarget),
+        onBlur: (e) => {
+          if (number === null) return;
+          const clamped = clampNumber(number, min, max);
+          if (clamped !== number) {
+            setNumber(clamped);
+            setText(String(clamped));
+          } else if (e.currentTarget.value !== text) setText(e.currentTarget.value);
+        }
+      }
+    ),
+    /* @__PURE__ */ jsx11(
+      "button",
+      {
+        type: "button",
+        className: "bk-number-step",
+        "data-direction": "up",
+        tabIndex: -1,
+        "aria-label": incrementLabel,
+        disabled: disabled || atMax,
+        onMouseDown: (e) => e.preventDefault(),
+        onClick: () => press(1)
+      }
+    )
+  ] });
+});
+var defaultStarLabel = (n) => `${n} ${n === 1 ? "star" : "stars"}`;
+var Rating = React12.forwardRef(function Rating2({ value, defaultValue = 0, onValueChange, max = 5, label = "Rating", readOnly, starLabel = defaultStarLabel, name, className, style, disabled, ...props }, ref) {
+  const [stars, setStars] = useControllableState(value, defaultValue, onValueChange);
+  const group = useSafeId("rating");
+  if (readOnly) {
+    const shown = clampNumber(stars, 0, max);
+    return /* @__PURE__ */ jsx11(
+      "span",
+      {
+        className: cx("bk-rating", className),
+        "data-readonly": "",
+        role: "img",
+        "aria-label": `${label}: ${shown} out of ${max}`,
+        style: { ...style, ["--rating"]: shown, ["--max"]: max }
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxs11("fieldset", { ref, className: cx("bk-rating", className), disabled, style, "data-bk-react": "", ...props, children: [
+    /* @__PURE__ */ jsx11("legend", { className: "bk-sr-only", children: label }),
+    Array.from({ length: max }, (_, i) => {
+      const n = i + 1;
+      const inputId = `${group}-${n}`;
+      return /* @__PURE__ */ jsxs11(React12.Fragment, { children: [
+        /* @__PURE__ */ jsx11(
+          "input",
+          {
+            type: "radio",
+            className: "bk-rating-input",
+            id: inputId,
+            name: name ?? group,
+            value: n,
+            checked: stars === n,
+            onChange: () => setStars(n)
+          }
+        ),
+        /* @__PURE__ */ jsx11("label", { htmlFor: inputId, className: "bk-rating-star", children: /* @__PURE__ */ jsx11("span", { className: "bk-sr-only", children: starLabel(n, max) }) })
+      ] }, n);
+    })
+  ] });
+});
+
+// src/react/content.tsx
+import * as React13 from "react";
+import { jsx as jsx12, jsxs as jsxs12 } from "react/jsx-runtime";
+var Steps = React13.forwardRef(function Steps2({ steps, current, orientation = "horizontal", completedLabel = "Completed", className, ...props }, ref) {
+  return /* @__PURE__ */ jsx12("ol", { ref, className: cx("bk-steps", className), "data-orientation": orientation === "vertical" ? "vertical" : void 0, ...props, children: steps.map((step, i) => {
+    const status = i < current ? "complete" : i === current ? "current" : "upcoming";
+    return /* @__PURE__ */ jsxs12("li", { className: "bk-step", "data-status": status, "aria-current": status === "current" ? "step" : void 0, children: [
+      /* @__PURE__ */ jsx12("span", { className: "bk-step-marker", "aria-hidden": "true" }),
+      /* @__PURE__ */ jsxs12("span", { className: "bk-step-text", children: [
+        /* @__PURE__ */ jsxs12("span", { className: "bk-step-title", children: [
+          status === "complete" ? /* @__PURE__ */ jsxs12("span", { className: "bk-sr-only", children: [
+            completedLabel,
+            ": "
+          ] }) : null,
+          step.title
+        ] }),
+        step.description ? /* @__PURE__ */ jsx12("span", { className: "bk-step-description", children: step.description }) : null
+      ] })
+    ] }, i);
+  }) });
+});
+var Timeline = React13.forwardRef(function Timeline2({ className, ...props }, ref) {
+  return /* @__PURE__ */ jsx12("ol", { ref, className: cx("bk-timeline", className), ...props });
+});
+var TimelineItem = React13.forwardRef(function TimelineItem2({ title, time, dateTime, icon, tone = "default", className, children, ...props }, ref) {
+  return /* @__PURE__ */ jsxs12("li", { ref, className: cx("bk-timeline-item", className), "data-tone": tone === "default" ? void 0 : tone, ...props, children: [
+    /* @__PURE__ */ jsx12("span", { className: "bk-timeline-marker", "aria-hidden": "true", children: icon }),
+    /* @__PURE__ */ jsxs12("div", { className: "bk-timeline-content", children: [
+      /* @__PURE__ */ jsxs12("div", { className: "bk-timeline-head", children: [
+        /* @__PURE__ */ jsx12("p", { className: "bk-timeline-title", children: title }),
+        time ? /* @__PURE__ */ jsx12("time", { className: "bk-timeline-time", dateTime, children: time }) : null
+      ] }),
+      children ? /* @__PURE__ */ jsx12("div", { className: "bk-timeline-description", children }) : null
+    ] })
+  ] });
+});
+var DataList = React13.forwardRef(function DataList2({ orientation = "horizontal", className, ...props }, ref) {
+  return /* @__PURE__ */ jsx12("dl", { ref, className: cx("bk-data-list", className), "data-orientation": orientation === "vertical" ? "vertical" : void 0, ...props });
+});
+var DataListItem = React13.forwardRef(function DataListItem2({ label, className, children, ...props }, ref) {
+  return /* @__PURE__ */ jsxs12("div", { ref, className: cx("bk-data-list-item", className), ...props, children: [
+    /* @__PURE__ */ jsx12("dt", { children: label }),
+    /* @__PURE__ */ jsx12("dd", { children })
+  ] });
+});
+
 // src/react/theme.tsx
-import * as React9 from "react";
+import * as React14 from "react";
 import { getTheme, onThemeChange, resolveTheme, setTheme, themeScript } from "./index.js";
-import { jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs13 } from "react/jsx-runtime";
 var subscribe = (callback) => onThemeChange(() => callback());
 var getServerTheme = () => "system";
 var getServerResolved = () => "light";
 function useTheme() {
-  const theme = React9.useSyncExternalStore(subscribe, getTheme, getServerTheme);
-  const resolvedTheme = React9.useSyncExternalStore(subscribe, () => resolveTheme(getTheme()), getServerResolved);
+  const theme = React14.useSyncExternalStore(subscribe, getTheme, getServerTheme);
+  const resolvedTheme = React14.useSyncExternalStore(subscribe, () => resolveTheme(getTheme()), getServerResolved);
   return { theme, resolvedTheme, setTheme };
 }
 function ThemeScript({ nonce }) {
-  return /* @__PURE__ */ jsx8("script", { nonce, dangerouslySetInnerHTML: { __html: themeScript } });
+  return /* @__PURE__ */ jsx13("script", { nonce, dangerouslySetInnerHTML: { __html: themeScript } });
 }
 var ICONS = {
-  light: /* @__PURE__ */ jsxs8("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx8("circle", { cx: "12", cy: "12", r: "4" }),
-    /* @__PURE__ */ jsx8("path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" })
+  light: /* @__PURE__ */ jsxs13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx13("circle", { cx: "12", cy: "12", r: "4" }),
+    /* @__PURE__ */ jsx13("path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" })
   ] }),
-  dark: /* @__PURE__ */ jsx8("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx8("path", { d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" }) }),
-  system: /* @__PURE__ */ jsxs8("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx8("rect", { x: "2", y: "3", width: "20", height: "14", rx: "2" }),
-    /* @__PURE__ */ jsx8("path", { d: "M8 21h8M12 17v4" })
+  dark: /* @__PURE__ */ jsx13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx13("path", { d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" }) }),
+  system: /* @__PURE__ */ jsxs13("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx13("rect", { x: "2", y: "3", width: "20", height: "14", rx: "2" }),
+    /* @__PURE__ */ jsx13("path", { d: "M8 21h8M12 17v4" })
   ] })
 };
 function ThemeToggle({ className, labels = {} }) {
   const { theme } = useTheme();
   const names = { light: "Light theme", dark: "Dark theme", system: "System theme", ...labels };
-  return /* @__PURE__ */ jsx8("div", { role: "group", "aria-label": "Theme", className: cx("bk-toggle-group", className), "data-bk-react": "", children: ["light", "dark", "system"].map((t) => /* @__PURE__ */ jsx8("button", { type: "button", className: "bk-toggle", "aria-pressed": theme === t, "aria-label": names[t], onClick: () => setTheme(t), children: ICONS[t] }, t)) });
+  return /* @__PURE__ */ jsx13("div", { role: "group", "aria-label": "Theme", className: cx("bk-toggle-group", className), "data-bk-react": "", children: ["light", "dark", "system"].map((t) => /* @__PURE__ */ jsx13("button", { type: "button", className: "bk-toggle", "aria-pressed": theme === t, "aria-label": names[t], onClick: () => setTheme(t), children: ICONS[t] }, t)) });
 }
 
 // src/react/illustration.tsx
-import * as React10 from "react";
+import * as React15 from "react";
 import { renderCharacter } from "./illustrations.js";
-import { jsx as jsx9 } from "react/jsx-runtime";
-var PencilCharacter = React10.forwardRef(function PencilCharacter2({ character, mood = "neutral", size = 160, label, className, style, ...props }, ref) {
+import { jsx as jsx14, jsxs as jsxs14 } from "react/jsx-runtime";
+var PencilCharacter = React15.forwardRef(function PencilCharacter2({ character, mood = "neutral", size = 160, label, className, style, ...props }, ref) {
   const idPrefix = useSafeId("ch");
-  const svg = React10.useMemo(() => renderCharacter(character, mood, { idPrefix, title: label }), [character, mood, idPrefix, label]);
-  return /* @__PURE__ */ jsx9(
+  const svg = React15.useMemo(() => renderCharacter(character, mood, { idPrefix, title: label }), [character, mood, idPrefix, label]);
+  return /* @__PURE__ */ jsx14(
     "span",
     {
       ref,
@@ -1328,6 +2196,28 @@ var PencilCharacter = React10.forwardRef(function PencilCharacter2({ character, 
       style: { ...style, ["--size"]: `${size}px` },
       dangerouslySetInnerHTML: { __html: svg },
       ...props
+    }
+  );
+});
+var Tip = React15.forwardRef(function Tip2({ character, mood = "neutral", title, actions, side = "start", tone = "default", size = 96, onDismiss, dismissLabel = "Dismiss", className, children, ...props }, ref) {
+  return /* @__PURE__ */ jsxs14(
+    "div",
+    {
+      ref,
+      role: "note",
+      className: cx("bk-tip", className),
+      "data-side": side === "end" ? "end" : void 0,
+      "data-tone": tone === "default" ? void 0 : tone,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx14(PencilCharacter, { character, mood, size }),
+        /* @__PURE__ */ jsxs14("div", { className: "bk-tip-bubble", children: [
+          title ? /* @__PURE__ */ jsx14("p", { className: "bk-tip-title", children: title }) : null,
+          children ? /* @__PURE__ */ jsx14("div", { className: "bk-tip-text", children }) : null,
+          actions ? /* @__PURE__ */ jsx14("div", { className: "bk-tip-actions", children: actions }) : null,
+          onDismiss ? /* @__PURE__ */ jsx14("button", { type: "button", className: "bk-button bk-tip-close", "data-variant": "ghost", "data-size": "icon-sm", "aria-label": dismissLabel, onClick: onDismiss, children: /* @__PURE__ */ jsx14("svg", { className: "bk-icon", viewBox: "0 0 24 24", "aria-hidden": "true", children: /* @__PURE__ */ jsx14("path", { d: "M18 6 6 18M6 6l12 12" }) }) }) : null
+        ] })
+      ]
     }
   );
 });
@@ -1359,8 +2249,12 @@ export {
   CardTitle,
   Checkbox,
   ChoiceCard,
+  Combobox,
   Command,
   CommandDialog,
+  DataList,
+  DataListItem,
+  DatePicker,
   Dialog,
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -1387,12 +2281,14 @@ export {
   NavbarBrand,
   NavbarLink,
   NavbarLinks,
+  NumberInput,
   Pagination,
   PencilCharacter,
   Popover,
   Progress,
   Radio,
   RadioGroup,
+  Rating,
   Ring,
   Row,
   Select,
@@ -1410,6 +2306,7 @@ export {
   Spinner,
   Stack,
   Stat,
+  Steps,
   Switch,
   Table,
   TableBody,
@@ -1423,6 +2320,7 @@ export {
   TabsContent,
   TabsList,
   TabsTrigger,
+  TagsInput,
   Textarea,
   ThemeScript,
   ThemeToggle,
@@ -1432,6 +2330,9 @@ export {
   TileHeader,
   TileMedia,
   TileTitle,
+  Timeline,
+  TimelineItem,
+  Tip,
   Toggle,
   ToggleGroup,
   Tooltip,
@@ -1439,7 +2340,9 @@ export {
   characters,
   closePopover,
   cx,
+  filterComboboxOptions,
   filterCommandGroups,
+  formatDateValue,
   getMonthGrid,
   getPaginationRange,
   getTheme2 as getTheme,

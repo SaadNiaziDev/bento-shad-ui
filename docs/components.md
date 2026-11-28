@@ -22,6 +22,11 @@
 
 - [Field](components/field.md): label, help text and error, wired automatically
 - [Input](components/input.md), [Textarea](components/textarea.md), [Select](components/select.md)
+- [Combobox](components/combobox.md): type to filter a list; one value or several as chips
+- [Tags input](components/tags-input.md): free-text values as chips, added with Enter or a comma
+- [Date picker](components/date-picker.md): a field that opens a calendar; a native date input in HTML
+- [Number input](components/number-input.md): a native number field with − and + buttons
+- [Rating](components/rating.md): stars as radio buttons, or a read-only score
 - [Input group](components/input-group.md): icons and hints inside an input
 - [Checkbox](components/checkbox.md), [Radio group](components/radio-group.md), [Choice card](components/choice-card.md), [Switch](components/switch.md)
 - [Slider](components/slider.md), [Input OTP](components/input-otp.md), [Dropzone](components/dropzone.md), [Calendar](components/calendar.md)
@@ -29,13 +34,15 @@
 ## Data display
 
 - [Badge](components/badge.md), [Avatar](components/avatar.md)
-- [Table](components/table.md), [List](components/list.md)
+- [Table](components/table.md), [List](components/list.md), [Data list](components/data-list.md)
+- [Timeline](components/timeline.md): events with markers, times and icons
 - [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Progress](components/progress.md) with ring
 - [Accordion](components/accordion.md)
 
 ## Feedback
 
 - [Alert](components/alert.md), [Toast](components/toast.md), [Empty state](components/empty.md), [Skeleton](components/skeleton.md), [Spinner](components/spinner.md)
+- [Tip](components/tip.md): a pencil character with a speech bubble for hints and announcements
 
 ## Overlays
 
@@ -43,7 +50,7 @@
 
 ## Navigation
 
-- [Tabs](components/tabs.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
+- [Tabs](components/tabs.md), [Steps](components/steps.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
 
 ## Illustrations
 

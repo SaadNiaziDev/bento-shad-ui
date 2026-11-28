@@ -19,7 +19,7 @@ Key facts for generating code with this library:
 
 - [Getting started](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/getting-started.md): what the library is, the five layers, quick starts
 - [Installation](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/installation.md): npm, CDN, shadcn registry, Flutter, fonts, troubleshooting
-- [Components](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components.md): index of all 47 components; each has its own page in docs/components/ with HTML, React and props
+- [Components](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components.md): index of all 56 components; each has its own page in docs/components/ with HTML, React and props
 - [Characters](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/components/characters.md): the pencil-drawn cast, moods, React/HTML/Flutter usage, which character for which moment
 - [Typography](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/typography.md): type scale, classes, fonts
 - [Layout](https://raw.githubusercontent.com/SaadNiaziDev/bento-shad-ui/main/docs/layout.md): bento grid, spans, rows, tones, layout rules and recipes

@@ -27,6 +27,16 @@ export interface StartOptions {
     /** Restore the theme saved in localStorage. Default `true`. */
     restoreTheme?: boolean;
 }
+export interface ComboboxChangeDetail {
+    /** The selected value, or the first one in a multiple combobox. `null` when nothing is selected. */
+    value: string | null;
+    /** Every selected value, in list order. */
+    values: string[];
+}
+export interface TagsChangeDetail {
+    /** Every tag, in the order they were added. */
+    values: string[];
+}
 export interface CalendarChangeDetail {
     /** Day of month the range starts on (or the selected day in single mode). */
     start: number;

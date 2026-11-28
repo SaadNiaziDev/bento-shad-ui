@@ -114,3 +114,149 @@ test('ThemeScript and Badge render', () => {
   assert.match(html(h(UI.ThemeScript)), /bk-theme/);
   assert.match(html(h(UI.Badge, { variant: 'success', dot: true }, 'Paid')), /data-variant="success" data-dot=""/);
 });
+
+const CITIES = [
+  { value: 'lis', label: 'Lisbon', group: 'Portugal', keywords: ['portugal'] },
+  { value: 'opo', label: 'Porto', group: 'Portugal' },
+  { value: 'sao', label: 'São Paulo', group: 'Brazil', description: 'Largest city in Brazil' },
+  { value: 'rio', label: 'Rio de Janeiro', group: 'Brazil', disabled: true },
+];
+
+test('Combobox renders an ARIA combobox with a manual popover listbox and grouped options', () => {
+  const out = html(h(UI.Combobox, { options: CITIES, defaultValue: 'opo', name: 'city', placeholder: 'Choose a city', id: 'c1' }));
+  assert.match(out, /role="combobox"/);
+  assert.match(out, /aria-expanded="false"/);
+  assert.match(out, /popover="manual"/);
+  assert.match(out, /role="listbox"/);
+  assert.equal(attr(out, 'value'), 'Porto');
+  assert.match(out, /<input type="hidden" name="city" value="opo"\/>/);
+  assert.equal((out.match(/role="group"/g) ?? []).length, 2);
+  assert.match(out, /data-value="opo" aria-selected="true"/);
+  assert.match(out, /data-value="rio" aria-selected="false" aria-disabled="true"/);
+  assert.match(out, /bk-combobox-option-description">Largest city in Brazil/);
+  assert.match(out, /data-bk-react=""/);
+});
+
+test('Combobox multiple renders chips, one hidden input per value and no placeholder', () => {
+  const out = html(h(UI.Combobox, { multiple: true, options: CITIES, defaultValue: ['lis', 'sao'], name: 'cities', placeholder: 'Add cities', clearable: true }));
+  assert.match(out, /data-multiple=""/);
+  assert.match(out, /aria-multiselectable="true"/);
+  assert.equal((out.match(/class="bk-chip"/g) ?? []).length, 2);
+  assert.match(out, /aria-label="Remove São Paulo"/);
+  assert.equal((out.match(/type="hidden" name="cities"/g) ?? []).length, 2);
+  assert.doesNotMatch(out, /placeholder=/);
+  assert.match(out, /class="bk-combobox-clear"/);
+});
+
+test('Combobox inside Field gets the id, description and invalid state on its input', () => {
+  const out = html(h(UI.Field, { label: 'City', error: 'Pick a city', id: 'city' }, h(UI.Combobox, { options: CITIES })));
+  assert.match(out, /<input id="city" class="bk-combobox-input"/);
+  assert.match(out, /aria-describedby="city-error"/);
+  assert.match(out, /aria-invalid="true"/);
+});
+
+test('filterComboboxOptions matches labels and keywords without accents', () => {
+  assert.deepEqual(UI.filterComboboxOptions(CITIES, 'sao').map((o) => o.value), ['sao']);
+  assert.deepEqual(UI.filterComboboxOptions(CITIES, 'portugal').map((o) => o.value), ['lis']);
+  assert.equal(UI.filterComboboxOptions(CITIES, '').length, 4);
+});
+
+test('Tip draws a decorative character beside a note bubble', () => {
+  const out = html(h(UI.Tip, { character: 'pip', mood: 'thinking', title: 'Try a country', tone: 'sky', side: 'end', onDismiss: () => {} }, 'Search “Portugal” to see every city.'));
+  assert.match(out, /^<div role="note" class="bk-tip" data-side="end" data-tone="sky">/);
+  assert.match(out, /class="bk-character"[^>]*aria-hidden="true"/);
+  assert.match(out, /<p class="bk-tip-title">Try a country<\/p>/);
+  assert.match(out, /aria-label="Dismiss"/);
+  assert.doesNotMatch(html(h(UI.Tip, { character: 'pip' }, 'Hi')), /data-tone|data-side|bk-tip-close/);
+});
+
+test('TagsInput renders chips with named remove buttons, hidden inputs and a live region', () => {
+  const out = html(h(UI.TagsInput, { defaultValue: ['Design', 'UX'], name: 'topics', placeholder: 'Add a topic', id: 't1' }));
+  assert.match(out, /^<div class="bk-tags" data-has-value="" data-bk-react="">/);
+  assert.equal((out.match(/class="bk-chip"/g) ?? []).length, 2);
+  assert.match(out, /aria-label="Remove UX"/);
+  assert.match(out, /<input id="t1" class="bk-tags-input"/);
+  assert.doesNotMatch(out, /placeholder=/);
+  assert.equal((out.match(/type="hidden" name="topics"/g) ?? []).length, 2);
+  assert.match(out, /aria-live="polite"/);
+  const empty = html(h(UI.Field, { label: 'Topics', required: true }, h(UI.TagsInput, { placeholder: 'Add a topic' })));
+  assert.match(empty, /placeholder="Add a topic"/);
+  assert.match(empty, /required=""/);
+});
+
+test('Calendar has one Tab stop: the selected day, else today, else the 1st', () => {
+  const stops = (props) => [...html(h(UI.Calendar, props)).matchAll(/data-date="([\d-]+)"[^>]*tabindex="0"/g)].map((m) => m[1]);
+  assert.deepEqual(stops({ defaultValue: new Date(2026, 2, 12), today: new Date(2026, 2, 3) }), ['2026-03-12']);
+  assert.deepEqual(stops({ defaultMonth: new Date(2026, 2, 1), today: new Date(2026, 2, 3) }), ['2026-03-03']);
+  assert.deepEqual(stops({ defaultMonth: new Date(2026, 4, 1), today: null }), ['2026-05-01']);
+});
+
+test('Calendar marks unavailable days aria-disabled so they stay reachable by arrow keys', () => {
+  const out = html(h(UI.Calendar, { defaultMonth: new Date(2026, 2, 1), isDisabled: (d) => d.getDate() === 14 }));
+  assert.match(out, /data-date="2026-03-14"[^>]*aria-disabled="true"/);
+  assert.doesNotMatch(out, /data-date="2026-03-14"[^>]*disabled=""/);
+  assert.match(out, /data-date="2026-02-23"[^>]*disabled=""/, 'outside days stay natively disabled');
+});
+
+test('formatDateValue writes single dates and ranges', () => {
+  const opts = { dateStyle: 'medium' };
+  assert.equal(UI.formatDateValue(null), '');
+  assert.equal(UI.formatDateValue(new Date(2026, 2, 12), 'en-GB', opts), '12 Mar 2026');
+  assert.equal(UI.formatDateValue({ from: new Date(2026, 2, 12) }, 'en-GB', opts), '12 Mar 2026 –');
+  assert.match(UI.formatDateValue({ from: new Date(2026, 2, 12), to: new Date(2026, 2, 16) }, 'en-GB', opts), /^12\D+16 Mar 2026$/);
+});
+
+test('DatePicker renders a field-like button, a popover dialog and hidden ISO values', () => {
+  const out = html(h(UI.DatePicker, { id: 'd1', defaultValue: new Date(2026, 2, 12), locale: 'en-GB', name: 'departure', clearable: true }));
+  assert.match(out, /<button id="d1" type="button" class="bk-input bk-datepicker-trigger" aria-haspopup="dialog" aria-expanded="false"/);
+  assert.match(out, /popovertarget="datepicker-/i);
+  assert.match(out, />12 Mar 2026</);
+  assert.match(out, /role="dialog" aria-label="Choose date" class="bk-popover bk-datepicker-panel"/);
+  assert.match(out, /popover="auto"/);
+  assert.match(out, /<input type="hidden" name="departure" value="2026-03-12"\/>/);
+  assert.match(out, /aria-label="Clear date"/);
+  const empty = html(h(UI.DatePicker, { placeholder: 'Pick dates', mode: 'range', name: 'trip', disabled: true, clearable: true }));
+  assert.match(empty, /data-placeholder="">Pick dates</);
+  assert.equal((empty.match(/name="trip"/g) ?? []).length, 1);
+  assert.doesNotMatch(empty, /Clear date/);
+  const range = html(h(UI.DatePicker, { mode: 'range', name: 'trip', defaultValue: { from: new Date(2026, 2, 12), to: new Date(2026, 2, 16) } }));
+  assert.match(range, /name="trip" value="2026-03-12"\/><input type="hidden" name="trip" value="2026-03-16"/);
+});
+
+test('NumberInput renders a native number field between two named buttons', () => {
+  const out = html(h(UI.NumberInput, { id: 'n1', defaultValue: 1, min: 1, max: 8, name: 'guests' }));
+  assert.match(out, /^<div class="bk-number" data-bk-react="">/);
+  assert.match(out, /data-direction="down" tabindex="-1" aria-label="Decrease" disabled=""/, '− is disabled at min');
+  const input = out.match(/<input [^>]*>/)[0];
+  for (const a of ['id="n1"', 'type="number"', 'class="bk-number-input"', 'inputMode="numeric"', 'value="1"', 'min="1"', 'max="8"', 'step="1"', 'name="guests"']) assert.ok(input.includes(a), a);
+  assert.match(out, /data-direction="up" tabindex="-1" aria-label="Increase"><\/button>/);
+  assert.match(html(h(UI.NumberInput, { step: 0.5 })), /inputMode="decimal"/);
+});
+
+test('Rating renders radios in a named fieldset, or a read-only image', () => {
+  const out = html(h(UI.Rating, { defaultValue: 3, label: 'Rate your stay', name: 'stay' }));
+  assert.match(out, /^<fieldset class="bk-rating" data-bk-react=""><legend class="bk-sr-only">Rate your stay<\/legend>/);
+  assert.equal((out.match(/type="radio"/g) ?? []).length, 5);
+  assert.match(out, /<input [^>]*checked=""[^>]*value="3"|<input [^>]*value="3"[^>]*checked=""/);
+  assert.match(out, /<span class="bk-sr-only">1 star<\/span>/);
+  const shown = html(h(UI.Rating, { readOnly: true, value: 4.5, label: 'Average rating' }));
+  assert.match(shown, /role="img" aria-label="Average rating: 4.5 out of 5" style="--rating:4.5;--max:5"/);
+});
+
+test('Steps marks complete, current and upcoming steps', () => {
+  const out = html(h(UI.Steps, { current: 1, steps: [{ title: 'Details' }, { title: 'Travellers', description: 'Names' }, { title: 'Payment' }] }));
+  assert.match(out, /^<ol class="bk-steps">/);
+  assert.match(out, /data-status="complete"><span class="bk-step-marker" aria-hidden="true"><\/span><span class="bk-step-text"><span class="bk-step-title"><span class="bk-sr-only">Completed: <\/span>Details/);
+  assert.match(out, /data-status="current" aria-current="step"/);
+  assert.match(out, /data-status="upcoming"/);
+  assert.match(html(h(UI.Steps, { current: 0, steps: [{ title: 'A' }], orientation: 'vertical' })), /data-orientation="vertical"/);
+});
+
+test('Timeline and DataList render semantic lists', () => {
+  const tl = html(h(UI.Timeline, null, h(UI.TimelineItem, { title: 'Booked', time: '2 Mar', dateTime: '2026-03-02', tone: 'success' }, 'Four nights')));
+  assert.match(tl, /^<ol class="bk-timeline"><li class="bk-timeline-item" data-tone="success"><span class="bk-timeline-marker" aria-hidden="true"><\/span>/);
+  assert.match(tl, /<time class="bk-timeline-time" dateTime="2026-03-02">2 Mar<\/time>/i);
+  assert.match(tl, /<div class="bk-timeline-description">Four nights<\/div>/);
+  const dl = html(h(UI.DataList, { orientation: 'vertical' }, h(UI.DataListItem, { label: 'Guest' }, 'Mira')));
+  assert.equal(dl, '<dl class="bk-data-list" data-orientation="vertical"><div class="bk-data-list-item"><dt>Guest</dt><dd>Mira</dd></div></dl>');
+});

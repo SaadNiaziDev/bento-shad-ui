@@ -34,6 +34,8 @@ const TEXT = [
   ['muted-foreground', 'card'],
   ['muted-foreground', 'muted'],
   ['accent-foreground', 'accent'],
+  ['muted-foreground', 'accent'],
+  ['muted-foreground', 'popover'],
   ['destructive-foreground', 'destructive'],
   ['destructive', 'card'],
   ['destructive', 'background'],
@@ -54,6 +56,8 @@ const TEXT = [
 
 // Non-text UI that must be perceivable: control borders and focus rings, 3:1
 const UI = [
+  ['warning', 'card'],       // filled rating stars
+  ['warning', 'background'],
   ['input', 'card'],
   ['input', 'background'],
   ['ring', 'card'],

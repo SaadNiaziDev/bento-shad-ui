@@ -7,25 +7,36 @@ import { enablePopoverPlacement } from './popover';
 import { getStoredTheme, getTheme, setTheme, syncThemeButtons, watchSystemTheme } from './theme';
 import { toast } from './toast';
 import type { StartOptions, ToastOptions } from './types';
-import { fillSlider, initCalendar, initCommand, initTabs, openCommand, pickCalendarDay } from './widgets';
+import { initCombobox } from './combobox';
+import { initNumber } from './number';
+import { initTags } from './tags';
+import { fillSlider, initCalendar, initCommand, initTabs, once, openCommand, pickCalendarDay } from './widgets';
 
+export { foldText, hideListbox, matchesQuery, showListbox } from './combobox';
+export { clampNumber, stepNumberInput } from './number';
+export { addTags, describeTagChange, splitTags } from './tags';
+export type { AddTagsOptions, AddTagsResult } from './tags';
 export { getStoredTheme, getTheme, isTheme, onThemeChange, resolveTheme, setTheme, THEME_EVENT, THEME_STORAGE_KEY, themeScript } from './theme';
 export { toast } from './toast';
 export { enablePopoverPlacement, placePopover } from './popover';
 export { fillSlider, openCommand } from './widgets';
-export type { CalendarChangeDetail, DismissToast, ResolvedTheme, StartOptions, Theme, ThemeChangeDetail, ToastAction, ToastOptions, ToastVariant } from './types';
+export type { CalendarChangeDetail, ComboboxChangeDetail, DismissToast, ResolvedTheme, StartOptions, TagsChangeDetail, Theme, ThemeChangeDetail, ToastAction, ToastOptions, ToastVariant } from './types';
 
 /** Library version. */
 export const version: string = __VERSION__;
 
 /**
- * Wires up widgets that need per-element setup (tabs, command palettes, calendars, sliders,
- * indeterminate checkboxes) inside `root`. Safe to call repeatedly; each element is set up once.
+ * Wires up widgets that need per-element setup (tabs, command palettes, comboboxes, tags inputs,
+ * number inputs, calendars, sliders, indeterminate checkboxes) inside `root`. Safe to call repeatedly;
+ * each element is set up once.
  */
 export function init(root: ParentNode = isBrowser ? document : (undefined as unknown as ParentNode)): void {
   if (!isBrowser || !root) return;
   initTabs(root);
   initCommand(root);
+  initCombobox(root, once);
+  initTags(root, once);
+  initNumber(root, once);
   initCalendar(root);
   for (const range of $$<HTMLInputElement>('.bk-slider', root)) if (!isManaged(range)) fillSlider(range);
   for (const box of $$<HTMLInputElement>('.bk-checkbox[data-indeterminate]', root)) box.indeterminate = true;
@@ -93,6 +104,11 @@ function onClick(event: MouseEvent): void {
   }
 
   if ((el = closestFrom(target, '.bk-calendar-day')) && !isManaged(el)) pickCalendarDay(el);
+
+  if ((el = closestFrom(target, '[data-bk-dismiss]')) && !isManaged(el)) {
+    const tip = el.closest<HTMLElement>('.bk-tip');
+    if (tip) tip.hidden = true;
+  }
 
   if ((el = closestFrom(target, '[data-bk-copy]'))) {
     const selector = el.getAttribute('data-bk-copy-target');

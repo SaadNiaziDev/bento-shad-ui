@@ -132,6 +132,9 @@ Without JavaScript, everything renders and these still work: buttons, inputs, na
 | `.bk-otp` | Digits only, auto-advance, backspace, paste |
 | `.bk-calendar[data-mode="single\|range"]` | Day selection; fires `bk:change` with `{ start, end }` |
 | `dialog.bk-command[data-bk-hotkey]` | ⌘K / Ctrl+K opens it; typing filters `.bk-command-item`s |
+| `.bk-combobox` (`data-multiple`, `data-name`) | Filters `.bk-combobox-option`s as you type, keyboard picking, chips; fires `bk:change` with `{ value, values }` |
+| `.bk-tags` (`data-name`, `data-max`) | Enter or a comma adds a tag, Backspace removes; fires `bk:change` with `{ values }` |
+| `[data-bk-dismiss]` inside `.bk-tip` | Hides the tip |
 | `.bk-dropzone` | Drag-over state and selected file names |
 
 Content added later (fetch, htmx swaps, Turbo) is set up automatically through a `MutationObserver`. To control it yourself, load the ES module and call `start({ observe: false })`, then `init(newElement)` after each swap.

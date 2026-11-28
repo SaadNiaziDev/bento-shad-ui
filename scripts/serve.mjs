@@ -26,9 +26,16 @@ createServer((req, res) => {
     res.writeHead(403);
     return res.end();
   }
-  if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
-  const found = existsSync(file);
-  if (!found) file = join(SITE, '404.html');
-  res.writeHead(found ? 200 : 404, { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' });
-  res.end(readFileSync(file));
+  // `npm run docs` empties _site/ while it rebuilds: answer 503 instead of crashing.
+  try {
+    if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
+    const found = existsSync(file);
+    if (!found) file = join(SITE, '404.html');
+    const body = readFileSync(file);
+    res.writeHead(found ? 200 : 404, { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' });
+    res.end(body);
+  } catch {
+    res.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8', 'Retry-After': '1' });
+    res.end('The docs are rebuilding. Reload in a moment.');
+  }
 }).listen(PORT, () => console.log(`Docs at http://localhost:${PORT}${BASE}`));

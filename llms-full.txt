@@ -876,6 +876,9 @@ Without JavaScript, everything renders and these still work: buttons, inputs, na
 | `.bk-otp` | Digits only, auto-advance, backspace, paste |
 | `.bk-calendar[data-mode="single\|range"]` | Day selection; fires `bk:change` with `{ start, end }` |
 | `dialog.bk-command[data-bk-hotkey]` | ⌘K / Ctrl+K opens it; typing filters `.bk-command-item`s |
+| `.bk-combobox` (`data-multiple`, `data-name`) | Filters `.bk-combobox-option`s as you type, keyboard picking, chips; fires `bk:change` with `{ value, values }` |
+| `.bk-tags` (`data-name`, `data-max`) | Enter or a comma adds a tag, Backspace removes; fires `bk:change` with `{ values }` |
+| `[data-bk-dismiss]` inside `.bk-tip` | Hides the tip |
 | `.bk-dropzone` | Drag-over state and selected file names |
 
 Content added later (fetch, htmx swaps, Turbo) is set up automatically through a `MutationObserver`. To control it yourself, load the ES module and call `start({ observe: false })`, then `init(newElement)` after each swap.
@@ -1717,6 +1720,11 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 
 - [Field](components/field.md): label, help text and error, wired automatically
 - [Input](components/input.md), [Textarea](components/textarea.md), [Select](components/select.md)
+- [Combobox](components/combobox.md): type to filter a list; one value or several as chips
+- [Tags input](components/tags-input.md): free-text values as chips, added with Enter or a comma
+- [Date picker](components/date-picker.md): a field that opens a calendar; a native date input in HTML
+- [Number input](components/number-input.md): a native number field with − and + buttons
+- [Rating](components/rating.md): stars as radio buttons, or a read-only score
 - [Input group](components/input-group.md): icons and hints inside an input
 - [Checkbox](components/checkbox.md), [Radio group](components/radio-group.md), [Choice card](components/choice-card.md), [Switch](components/switch.md)
 - [Slider](components/slider.md), [Input OTP](components/input-otp.md), [Dropzone](components/dropzone.md), [Calendar](components/calendar.md)
@@ -1724,13 +1732,15 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 ## Data display
 
 - [Badge](components/badge.md), [Avatar](components/avatar.md)
-- [Table](components/table.md), [List](components/list.md)
+- [Table](components/table.md), [List](components/list.md), [Data list](components/data-list.md)
+- [Timeline](components/timeline.md): events with markers, times and icons
 - [Stat](components/stat.md) with sparkline, [Bar chart](components/bar-chart.md) with meter and legend, [Progress](components/progress.md) with ring
 - [Accordion](components/accordion.md)
 
 ## Feedback
 
 - [Alert](components/alert.md), [Toast](components/toast.md), [Empty state](components/empty.md), [Skeleton](components/skeleton.md), [Spinner](components/spinner.md)
+- [Tip](components/tip.md): a pencil character with a speech bubble for hints and announcements
 
 ## Overlays
 
@@ -1738,7 +1748,7 @@ Not every page needs a bento grid. Use `Card` (header, content, footer) in a sin
 
 ## Navigation
 
-- [Tabs](components/tabs.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
+- [Tabs](components/tabs.md), [Steps](components/steps.md), [Breadcrumb](components/breadcrumb.md), [Pagination](components/pagination.md), [Navbar](components/navbar.md), [Sidebar](components/sidebar.md), [Bottom nav](components/bottom-nav.md)
 
 ## Illustrations
 
@@ -1814,6 +1824,9 @@ Kit popovers (`.bk-menu[popover]`, `.bk-popover[popover]`) are placed under the 
 ```ts
 openCommand(dialog?: HTMLDialogElement | null): void   // toggles a command dialog (default: dialog.bk-command[data-bk-hotkey])
 fillSlider(range: HTMLInputElement): void              // updates --val and <output for>
+matchesQuery(text: string, query: string): boolean    // combobox matching: every word, ignoring case and accents
+splitTags(text: string, delimiter?: string): string[]  // tags from typed or pasted text
+addTags(tags, incoming, { max?, allowDuplicates? })     // { tags, added, duplicates, rejected }
 version: string
 ```
 
@@ -1824,6 +1837,8 @@ version: string
 | `bk:theme` | `document` | `{ theme, resolved }` |
 | `bk:change` | `[data-bk-tabs]` | `{ tab }`: the selected tab element |
 | `bk:change` | `.bk-calendar` | `{ start, end }`: day-of-month numbers |
+| `bk:change` | `.bk-combobox` | `{ value, values }`: the selected value (or the first one) and every selected value |
+| `bk:change` | `.bk-tags` | `{ values }`: every tag |
 
 All events bubble.
 
@@ -1839,6 +1854,10 @@ All events bubble.
 | `data-bk-tabs` | wrapper | enables tabs |
 | `data-bk-hotkey` | `dialog.bk-command` | ⌘K / Ctrl+K toggles it |
 | `data-keep-open` | `.bk-menu-item` | don't close the menu on click |
+| `data-multiple` / `data-name` | `.bk-combobox` | pick several values; submit them as hidden inputs with this name |
+| `data-value` / `data-label` / `data-keywords` | `.bk-combobox-option` | value sent, text shown, extra search words |
+| `data-name` / `data-max` / `data-delimiter` / `data-allow-duplicates` / `data-add-on-blur` / `data-required` | `.bk-tags` | form name, tag limit, separator, repeats, keeping leftover text on blur, at least one tag |
+| `data-bk-dismiss` | button inside `.bk-tip` | hides the tip |
 | `data-indeterminate` | `.bk-checkbox` | sets `indeterminate` on init |
 | `data-prefix` / `data-suffix` | `.bk-slider` | text around the `<output>` value |
 | `data-bk-react` | any | marks React-managed elements; the core ignores them |
@@ -3712,11 +3731,15 @@ Helpers for building your own views: `getMonthGrid(year, month, weekStartsOn)` r
 
 <!-- props: CalendarProps -->
 
-In HTML, `data-mode="range"` enables range picking and the calendar fires `bk:change` with `{ start, end }` day numbers.
+In HTML, `data-mode="range"` enables range picking and the calendar fires `bk:change` with `{ start, end }` day numbers. The HTML calendar shows the month in its markup: the script doesn't redraw it for another month. For a date field on a page without React, use a native date input (see [Date picker](date-picker.md)).
+
+To open a calendar from a field, use a [Date picker](date-picker.md).
 
 ## Accessibility
 
-- Arrow keys move by day (←/→) and week (↑/↓); Enter or Space picks.
+- The grid is one Tab stop: the selected day, else today, else the 1st. Arrow keys move by day (←/→) and week (↑/↓) and continue into the next or previous month.
+- Home and End go to the start and end of the week. Page Up and Page Down change month; with Shift, year. Enter or Space picks.
+- Days made unavailable by `isDisabled` can still be reached with the arrow keys and are announced as unavailable, but can't be picked.
 - Each day has a full label ("Thursday 12 March 2026") and `aria-pressed` when selected.
 - The month title is a live region, so month changes are announced.
 
@@ -3872,6 +3895,603 @@ The selected card gets a 2px outline in `--foreground` through `:has(:checked)`.
 ## Accessibility
 
 - The whole card is the label, so clicking anywhere selects it. Keyboard behaviour is the native radio or checkbox behaviour.
+
+<!-- docs/components/combobox.md -->
+
+# Combobox
+
+> A text field that filters a list as you type. Pick one value, or several shown as chips.
+
+```html
+<div
+    class="bk-field"
+    style="width: 300px"
+>
+    <label
+        class="bk-label"
+        for="cb-city"
+    >
+        Destination
+    </label>
+    <div
+        class="bk-combobox"
+        data-name="city"
+    >
+        <div class="bk-combobox-control">
+            <input
+                class="bk-combobox-input"
+                id="cb-city"
+                placeholder="Search cities"
+            />
+            <button
+                class="bk-combobox-clear"
+                aria-label="Clear destination"
+            ></button>
+            <button
+                class="bk-combobox-toggle"
+                tabindex="-1"
+                aria-label="Show cities"
+            ></button>
+        </div>
+        <div
+            class="bk-combobox-list"
+            popover="manual"
+        >
+            <div
+                class="bk-combobox-group"
+                aria-label="Portugal"
+            >
+                <div class="bk-combobox-group-heading">Portugal</div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="lisbon"
+                    data-keywords="portugal"
+                    aria-selected="true"
+                >
+                    Lisbon
+                </div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="porto"
+                    data-keywords="portugal"
+                >
+                    Porto
+                </div>
+            </div>
+            <div
+                class="bk-combobox-group"
+                aria-label="Brazil"
+            >
+                <div class="bk-combobox-group-heading">Brazil</div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="sao-paulo"
+                    data-keywords="brazil"
+                >
+                    São Paulo
+                </div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="rio"
+                    data-keywords="brazil"
+                    aria-disabled="true"
+                >
+                    Rio de Janeiro (sold out)
+                </div>
+            </div>
+            <div class="bk-combobox-empty">No cities match.</div>
+        </div>
+    </div>
+</div>
+```
+
+Type "sao" to find São Paulo, or "portugal" to list both Portuguese cities. Matching ignores case and accents, and every word you type has to appear in the label or its keywords.
+
+## Usage
+
+```tsx
+import { Combobox, Field } from 'bento-shad-ui/react';
+
+const cities = [
+    { value: 'lisbon', label: 'Lisbon', group: 'Portugal' },
+    { value: 'porto', label: 'Porto', group: 'Portugal' },
+    { value: 'sao-paulo', label: 'São Paulo', group: 'Brazil' },
+];
+
+const [city, setCity] = useState<string | null>('lisbon');
+
+<Field label="Destination">
+    <Combobox
+        options={cities}
+        value={city}
+        onValueChange={setCity}
+        placeholder="Search cities"
+        clearable
+    />
+</Field>;
+```
+
+Add `multiple` to pick several. The value becomes a `string[]`, and `onValueChange` is typed to match:
+
+```tsx
+const [cities, setCities] = useState<string[]>([]);
+
+<Combobox
+    multiple
+    options={options}
+    value={cities}
+    onValueChange={setCities}
+    placeholder="Add cities"
+/>;
+```
+
+### HTML
+
+Write the options in the markup. The script adds the ARIA roles, ids and keyboard handling. Mark the starting choice with `aria-selected="true"` and unavailable options with `aria-disabled="true"`.
+
+```html
+<div
+    class="bk-combobox"
+    data-name="city"
+>
+    <div class="bk-combobox-control">
+        <input
+            class="bk-combobox-input"
+            id="city"
+            placeholder="Search cities"
+        />
+        <button
+            class="bk-combobox-toggle"
+            tabindex="-1"
+            aria-label="Show cities"
+        ></button>
+    </div>
+    <div
+        class="bk-combobox-list"
+        popover="manual"
+    >
+        <div
+            class="bk-combobox-option"
+            data-value="lisbon"
+        >
+            Lisbon
+        </div>
+        <div class="bk-combobox-empty">No cities match.</div>
+    </div>
+</div>
+```
+
+| Attribute | On | Effect |
+|---|---|---|
+| `data-multiple` | `.bk-combobox` | Pick several values, shown as chips |
+| `data-name` | `.bk-combobox` | Adds hidden inputs with this name, so the value is sent with the form |
+| `data-value` | `.bk-combobox-option` | Value sent and reported. Defaults to the option's text |
+| `data-label` | `.bk-combobox-option` | Text for the field and chips, when the option holds more than its label |
+| `data-keywords` | `.bk-combobox-option` | Extra words that match the search |
+
+The combobox fires `bk:change` with `{ value, values }`. `value` is the selected value, or the first one in a multiple combobox; `values` lists them all.
+
+## Examples
+
+### Several values
+
+Selected people show as chips. Backspace in the empty field removes the last chip, and the list stays open so you can keep picking.
+
+```html
+<div
+    class="bk-field"
+    style="width: 340px"
+>
+    <label
+        class="bk-label"
+        for="cb-people"
+    >
+        Travellers
+    </label>
+    <div
+        class="bk-combobox"
+        data-multiple
+        data-name="travellers"
+    >
+        <div class="bk-combobox-control">
+            <input
+                class="bk-combobox-input"
+                id="cb-people"
+                placeholder="Add people"
+            />
+            <button
+                class="bk-combobox-clear"
+                aria-label="Remove everyone"
+            ></button>
+            <button
+                class="bk-combobox-toggle"
+                tabindex="-1"
+                aria-label="Show people"
+            ></button>
+        </div>
+        <div
+            class="bk-combobox-list"
+            popover="manual"
+        >
+            <div
+                class="bk-combobox-option"
+                data-value="mira"
+                data-label="Mira Okafor"
+                data-keywords="mira@example.com design"
+                aria-selected="true"
+            >
+                <span class="bk-combobox-option-text">
+                    <span>Mira Okafor</span>
+                    <span class="bk-combobox-option-description">
+                        Design · mira@example.com
+                    </span>
+                </span>
+            </div>
+            <div
+                class="bk-combobox-option"
+                data-value="theo"
+                data-label="Theo Lindqvist"
+                data-keywords="theo@example.com engineering"
+            >
+                <span class="bk-combobox-option-text">
+                    <span>Theo Lindqvist</span>
+                    <span class="bk-combobox-option-description">
+                        Engineering · theo@example.com
+                    </span>
+                </span>
+            </div>
+            <div
+                class="bk-combobox-option"
+                data-value="zara"
+                data-label="Zara Haddad"
+                data-keywords="zara@example.com finance"
+            >
+                <span class="bk-combobox-option-text">
+                    <span>Zara Haddad</span>
+                    <span class="bk-combobox-option-description">
+                        Finance · zara@example.com
+                    </span>
+                </span>
+            </div>
+            <div
+                class="bk-combobox-option"
+                data-value="kofi"
+                data-label="Kofi Mensah"
+                data-keywords="kofi@example.com operations"
+            >
+                <span class="bk-combobox-option-text">
+                    <span>Kofi Mensah</span>
+                    <span class="bk-combobox-option-description">
+                        Operations · kofi@example.com
+                    </span>
+                </span>
+            </div>
+            <div class="bk-combobox-empty">Nobody by that name.</div>
+        </div>
+    </div>
+    <p class="bk-field-description">Search by name, team or email.</p>
+</div>
+```
+
+### React to a change
+
+Listen for `bk:change` to update the rest of the page. The script below is the one running in this preview.
+
+```html
+<div
+    class="bk-stack"
+    style="width: 300px"
+>
+    <div class="bk-field">
+        <label
+            class="bk-label"
+            for="cb-currency"
+        >
+            Currency
+        </label>
+        <div
+            class="bk-combobox"
+            data-currency
+        >
+            <div class="bk-combobox-control">
+                <input
+                    class="bk-combobox-input"
+                    id="cb-currency"
+                    placeholder="Search currencies"
+                />
+                <button
+                    class="bk-combobox-toggle"
+                    tabindex="-1"
+                    aria-label="Show currencies"
+                ></button>
+            </div>
+            <div
+                class="bk-combobox-list"
+                popover="manual"
+            >
+                <div
+                    class="bk-combobox-option"
+                    data-value="EUR"
+                    data-keywords="euro"
+                    aria-selected="true"
+                >
+                    EUR, Euro
+                </div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="GBP"
+                    data-keywords="pound sterling"
+                >
+                    GBP, British pound
+                </div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="JPY"
+                    data-keywords="yen"
+                >
+                    JPY, Japanese yen
+                </div>
+                <div
+                    class="bk-combobox-option"
+                    data-value="PKR"
+                    data-keywords="rupee pakistan"
+                >
+                    PKR, Pakistani rupee
+                </div>
+                <div class="bk-combobox-empty">No currency found.</div>
+            </div>
+        </div>
+    </div>
+    <p
+        class="bk-field-description"
+        data-currency-status
+        aria-live="polite"
+    >
+        Prices show in EUR.
+    </p>
+</div>
+```
+
+```js
+document
+    .querySelector('[data-currency]')
+    .addEventListener('bk:change', (event) => {
+        const status = document.querySelector('[data-currency-status]');
+        status.textContent = event.detail.value
+            ? `Prices show in ${event.detail.value}.`
+            : 'Pick a currency to see prices.';
+    });
+```
+
+### Results from a server
+
+Pass `filter={false}` so the component shows `options` as given, and load them in `onInputChange`. `loading` shows a status row while a request is in flight.
+
+```tsx
+const [query, setQuery] = useState('');
+const [results, setResults] = useState<ComboboxOption[]>([]);
+const [loading, setLoading] = useState(false);
+
+useEffect(() => {
+    if (!query) return setResults([]);
+    setLoading(true);
+    const request = new AbortController();
+    fetch(`/api/airports?q=${encodeURIComponent(query)}`, {
+        signal: request.signal,
+    })
+        .then((response) => response.json())
+        .then((airports) =>
+            setResults(
+                airports.map((a) => ({
+                    value: a.code,
+                    label: a.name,
+                    description: a.city,
+                })),
+            ),
+        )
+        .finally(() => setLoading(false));
+    return () => request.abort();
+}, [query]);
+
+<Combobox
+    options={results}
+    filter={false}
+    onInputChange={setQuery}
+    loading={loading}
+    emptyText={query ? 'No airports found.' : 'Type to search airports.'}
+/>;
+```
+
+## API
+
+### Combobox
+
+<!-- props: ComboboxProps -->
+
+### Combobox with `multiple`
+
+<!-- props: ComboboxMultipleProps -->
+
+### ComboboxOption
+
+| Field | Type | Description |
+|---|---|---|
+| `value` | `string` | Value sent and passed to `onValueChange`. Unique within the list |
+| `label` | `string` | Text in the list, the field and chips |
+| `description` | `string` | Second line in the list |
+| `icon` | `ReactNode` | Icon before the label |
+| `keywords` | `string[]` | Extra words that match the search |
+| `group` | `string` | Heading the option is listed under |
+| `disabled` | `boolean` | Shown but not selectable |
+
+`filterComboboxOptions(options, query)` applies the default matching if you render your own list.
+
+## Accessibility
+
+- Follows the ARIA combobox pattern with a listbox popup. Focus stays in the input, and `aria-activedescendant` points at the highlighted option so screen readers follow it.
+- ↓ / ↑ open the list and move through options, skipping disabled ones. Enter picks, Esc closes and restores the selected label, and Tab moves on.
+- In a multiple combobox the listbox is `aria-multiselectable`, and each chip's × button is named "Remove …". The × buttons are left out of the Tab order: Backspace removes the last chip.
+- The list is labelled by the field's `<label>`. Without a visible label, give the input an `aria-label`.
+- Selected options have a check mark as well as heavier text, so the state does not depend on colour.
+- For a short fixed list on phones, a native [Select](select.md) may be easier to use.
+
+<!-- docs/components/date-picker.md -->
+
+# Date picker
+
+> A field that opens a calendar to pick a date or a range. In plain HTML, a styled native date input.
+
+```html
+<div
+    class="bk-field"
+    style="width: 280px"
+>
+    <label
+        class="bk-label"
+        for="dp-departure"
+    >
+        Departure
+    </label>
+    <input
+        class="bk-input"
+        type="date"
+        id="dp-departure"
+        name="departure"
+        value="2026-03-12"
+        min="2026-01-01"
+    />
+</div>
+```
+
+This preview is the HTML version: a native date input with the kit's field styles. The browser supplies the calendar, the keyboard handling and the date format for the reader's language. The React `DatePicker` below opens the kit's own [Calendar](calendar.md) instead. This site doesn't run React, so it has no live preview here.
+
+## Usage
+
+```tsx
+import { DatePicker, Field, type DateRange } from 'bento-shad-ui/react';
+
+const [departure, setDeparture] = useState<Date | null>(null);
+
+<Field label="Departure">
+    <DatePicker
+        value={departure}
+        onValueChange={setDeparture}
+        clearable
+    />
+</Field>;
+
+const [trip, setTrip] = useState<DateRange | null>(null);
+
+<Field label="Trip dates">
+    <DatePicker
+        mode="range"
+        value={trip}
+        onValueChange={setTrip}
+        placeholder="Pick dates"
+    />
+</Field>;
+```
+
+The button shows the date in the reader's locale ("12 Mar 2026", or "12–16 Mar 2026" for a range). Picking a day closes the panel and returns focus to the button; in a range, the panel closes after the end day.
+
+### HTML
+
+```html
+<input
+    class="bk-input"
+    type="date"
+    name="departure"
+    min="2026-01-01"
+/>
+```
+
+`min`, `max` and `required` work as usual, and the form receives `YYYY-MM-DD`. For a range, use two inputs. The browser doesn't link them, so set the second one's `min` from the first in your own script if you need to.
+
+## Examples
+
+### Unavailable days
+
+`isDisabled` greys out days that can't be booked, here weekends and the past. They stay reachable with the arrow keys and are announced as unavailable.
+
+```tsx
+const startOfToday = new Date(new Date().setHours(0, 0, 0, 0));
+
+<DatePicker
+    value={day}
+    onValueChange={setDay}
+    isDisabled={(d) => d < startOfToday || d.getDay() === 0 || d.getDay() === 6}
+/>;
+```
+
+### Sending it with a form
+
+`name` adds a hidden input with the date as `YYYY-MM-DD` in local time. A range sends two inputs with that name: the start, then the end.
+
+```tsx
+<form action="/bookings">
+    <DatePicker
+        mode="range"
+        name="stay"
+        defaultValue={{
+            from: new Date(2026, 2, 12),
+            to: new Date(2026, 2, 16),
+        }}
+    />
+</form>;
+// submits stay=2026-03-12&stay=2026-03-16
+```
+
+### A range in HTML
+
+```html
+<div
+    class="bk-form-row"
+    style="width: 100%; max-width: 420px"
+>
+    <div class="bk-field">
+        <label
+            class="bk-label"
+            for="dp-in"
+        >
+            Check-in
+        </label>
+        <input
+            class="bk-input"
+            type="date"
+            id="dp-in"
+            value="2026-03-12"
+        />
+    </div>
+    <div class="bk-field">
+        <label
+            class="bk-label"
+            for="dp-out"
+        >
+            Check-out
+        </label>
+        <input
+            class="bk-input"
+            type="date"
+            id="dp-out"
+            value="2026-03-16"
+            min="2026-03-12"
+        />
+    </div>
+</div>
+```
+
+## API
+
+<!-- props: DatePickerProps -->
+
+`formatDateValue(value, locale, options)` writes a date or range the same way the button does.
+
+## Accessibility
+
+- The button has `aria-haspopup="dialog"` and `aria-expanded`. Inside a `Field`, its name is the label followed by the chosen date ("Departure, 12 Mar 2026").
+- Opening the panel moves focus to the chosen day, or today. The keys are the [Calendar](calendar.md)'s. Esc or a click outside closes it and focus returns to the button.
+- A button can't stop a form from submitting, so `required` only sets `aria-required`. Check the value before you submit.
+- The native date input in HTML is accessible and localised by the browser. Its look inside the open picker differs between browsers.
 
 <!-- docs/components/dropzone.md -->
 
@@ -4418,6 +5038,151 @@ import { InputOTP } from 'bento-shad-ui/react';
 - The first slot uses `autocomplete="one-time-code"`, so phones can fill codes from SMS.
 - ←/→ move between slots; Backspace on an empty slot goes back.
 
+<!-- docs/components/number-input.md -->
+
+# Number input
+
+> A native number field with − and + buttons, for quantities, guests and other small counts.
+
+```html
+<div
+    class="bk-field"
+    style="width: 180px"
+>
+    <label
+        class="bk-label"
+        for="ni-guests"
+    >
+        Guests
+    </label>
+    <div class="bk-number">
+        <button
+            class="bk-number-step"
+            data-direction="down"
+            tabindex="-1"
+            aria-label="Fewer guests"
+        ></button>
+        <input
+            class="bk-number-input"
+            type="number"
+            id="ni-guests"
+            name="guests"
+            value="2"
+            min="1"
+            max="8"
+        />
+        <button
+            class="bk-number-step"
+            data-direction="up"
+            tabindex="-1"
+            aria-label="More guests"
+        ></button>
+    </div>
+</div>
+```
+
+The field is a native `<input type="number">`, so ↑ and ↓ step it, `min`, `max` and `step` work, and the form receives the number. The buttons stop at the limits, and a typed value outside them is pulled back when you leave the field.
+
+## Usage
+
+```tsx
+import { Field, NumberInput } from 'bento-shad-ui/react';
+
+const [guests, setGuests] = useState<number | null>(2);
+
+<Field label="Guests">
+    <NumberInput
+        value={guests}
+        onValueChange={setGuests}
+        min={1}
+        max={8}
+    />
+</Field>;
+```
+
+`onValueChange` gets `null` when the field is emptied, so you can tell "no value" from 0.
+
+### HTML
+
+```html
+<div class="bk-number">
+    <button
+        class="bk-number-step"
+        data-direction="down"
+        tabindex="-1"
+        aria-label="Decrease"
+    ></button>
+    <input
+        class="bk-number-input"
+        type="number"
+        name="quantity"
+        value="1"
+        min="0"
+    />
+    <button
+        class="bk-number-step"
+        data-direction="up"
+        tabindex="-1"
+        aria-label="Increase"
+    ></button>
+</div>
+```
+
+The buttons fire `input` and `change` on the field, like typing does.
+
+## Examples
+
+### Decimal steps
+
+```html
+<div
+    class="bk-field"
+    style="width: 200px"
+>
+    <label
+        class="bk-label"
+        for="ni-weight"
+    >
+        Luggage weight (kg)
+    </label>
+    <div class="bk-number">
+        <button
+            class="bk-number-step"
+            data-direction="down"
+            tabindex="-1"
+            aria-label="Decrease weight"
+        ></button>
+        <input
+            class="bk-number-input"
+            type="number"
+            id="ni-weight"
+            value="18.5"
+            min="0"
+            max="32"
+            step="0.5"
+        />
+        <button
+            class="bk-number-step"
+            data-direction="up"
+            tabindex="-1"
+            aria-label="Increase weight"
+        ></button>
+    </div>
+</div>
+```
+
+Put the unit in the label rather than inside the field, so it is read with the value.
+
+## API
+
+<!-- props: NumberInputProps -->
+
+## Accessibility
+
+- The field keeps its native role (spinbutton), so screen readers announce the value and its limits.
+- The − and + buttons are left out of the Tab order because ↑ and ↓ do the same from the field. They need an accessible name, and are disabled at the limits.
+- The browser also changes a focused number field when it's scrolled with a mouse wheel or trackpad. Use a plain text field with `inputmode="numeric"` for values that aren't quantities, such as card or phone numbers.
+
 <!-- docs/components/radio-group.md -->
 
 # Radio group
@@ -4505,6 +5270,143 @@ import { RadioGroup, Radio } from 'bento-shad-ui/react';
 
 - Arrow keys move between radios in a group; Tab moves in and out of the group (native behaviour).
 - The `legend` names the group. Use `aria-label` on `RadioGroup` if you hide it.
+
+<!-- docs/components/rating.md -->
+
+# Rating
+
+> Stars built from native radio buttons, plus a read-only version for showing a score.
+
+```html
+<fieldset class="bk-rating">
+    <legend class="bk-sr-only">Rate your stay</legend>
+    <input
+        class="bk-rating-input"
+        type="radio"
+        name="stay"
+        value="1"
+        id="rt-1"
+    />
+    <label
+        class="bk-rating-star"
+        for="rt-1"
+    >
+        <span class="bk-sr-only">1 star</span>
+    </label>
+    <input
+        class="bk-rating-input"
+        type="radio"
+        name="stay"
+        value="2"
+        id="rt-2"
+    />
+    <label
+        class="bk-rating-star"
+        for="rt-2"
+    >
+        <span class="bk-sr-only">2 stars</span>
+    </label>
+    <input
+        class="bk-rating-input"
+        type="radio"
+        name="stay"
+        value="3"
+        id="rt-3"
+    />
+    <label
+        class="bk-rating-star"
+        for="rt-3"
+    >
+        <span class="bk-sr-only">3 stars</span>
+    </label>
+    <input
+        class="bk-rating-input"
+        type="radio"
+        name="stay"
+        value="4"
+        id="rt-4"
+        checked
+    />
+    <label
+        class="bk-rating-star"
+        for="rt-4"
+    >
+        <span class="bk-sr-only">4 stars</span>
+    </label>
+    <input
+        class="bk-rating-input"
+        type="radio"
+        name="stay"
+        value="5"
+        id="rt-5"
+    />
+    <label
+        class="bk-rating-star"
+        for="rt-5"
+    >
+        <span class="bk-sr-only">5 stars</span>
+    </label>
+</fieldset>
+```
+
+Each star is a radio button, so the rating needs no script: arrow keys move, the form gets the number, and screen readers announce each star by its label ("4 stars"). Stars fill with CSS only.
+
+## Usage
+
+```tsx
+import { Rating } from 'bento-shad-ui/react';
+
+const [stars, setStars] = useState(0);
+
+<Rating
+    label="Rate your stay"
+    value={stars}
+    onValueChange={setStars}
+/>;
+
+<Rating
+    readOnly
+    value={4.5}
+    label="Average rating"
+/>;
+```
+
+## Examples
+
+### Showing a score
+
+The read-only version is a single image named with the score ("Average rating: 4.5 out of 5"), and can show fractions.
+
+```html
+<div
+    class="bk-row"
+    style="--gap: 8px"
+>
+    <span
+        class="bk-rating"
+        data-readonly
+        role="img"
+        aria-label="Average rating: 4.5 out of 5"
+        style="--rating: 4.5; --max: 5"
+    ></span>
+    <span style="font-size: 13.5px; color: var(--muted-foreground)">
+        4.5 · 128 reviews
+    </span>
+</div>
+```
+
+Sizes: `data-size="sm"` (16px stars) and `data-size="lg"` (30px). The default is 22px.
+
+## API
+
+<!-- props: RatingProps -->
+
+## Accessibility
+
+- The group is a `<fieldset>` named by its `<legend>`. Keep the legend, even if it's visually hidden.
+- Native radio buttons give the keyboard behaviour: Tab enters the group, the arrow keys change the rating.
+- Filled stars use `--warning` and empty stars `--input`. Both pass 3:1 against the background in light and dark mode, and a test checks this.
+- Hover previews the rating only on devices with a precise pointer; on touch the stars change on tap.
 
 <!-- docs/components/select.md -->
 
@@ -4697,6 +5599,167 @@ With `label`, the switch sits at the end of a full-width clickable row.
 
 - It's a native checkbox with `role="switch"`, so screen readers announce "on" or "off". Space toggles it.
 - Use a switch only for changes that take effect at once. Inside a form that needs saving, use a checkbox.
+
+<!-- docs/components/tags-input.md -->
+
+# Tags input
+
+> A field for short free-text values such as topics or labels. Press Enter or type a comma to add one.
+
+```html
+<div
+    class="bk-field"
+    style="width: 340px"
+>
+    <label
+        class="bk-label"
+        for="tg-topics"
+    >
+        Topics
+    </label>
+    <div
+        class="bk-tags"
+        data-name="topics"
+    >
+        <span
+            class="bk-chip"
+            data-value="Design"
+        >
+            Design
+        </span>
+        <span
+            class="bk-chip"
+            data-value="Research"
+        >
+            Research
+        </span>
+        <input
+            class="bk-tags-input"
+            id="tg-topics"
+            placeholder="Add a topic"
+        />
+    </div>
+    <p class="bk-field-description">
+        Press Enter or type a comma after each topic.
+    </p>
+</div>
+```
+
+Use a tags input when people write their own values. When they choose from a known list, use a [Combobox](combobox.md) with `multiple`.
+
+## Usage
+
+```tsx
+import { Field, TagsInput } from 'bento-shad-ui/react';
+
+const [topics, setTopics] = useState<string[]>(['Design', 'Research']);
+
+<Field
+    label="Topics"
+    description="Press Enter or type a comma after each topic."
+>
+    <TagsInput
+        value={topics}
+        onValueChange={setTopics}
+        placeholder="Add a topic"
+    />
+</Field>;
+```
+
+### HTML
+
+Write the starting tags as `.bk-chip` elements before the input. The script adds the remove buttons and keeps the hidden form inputs in sync.
+
+```html
+<div
+    class="bk-tags"
+    data-name="topics"
+>
+    <span
+        class="bk-chip"
+        data-value="Design"
+    >
+        Design
+    </span>
+    <input
+        class="bk-tags-input"
+        id="topics"
+        placeholder="Add a topic"
+    />
+</div>
+```
+
+| Attribute | On | Effect |
+|---|---|---|
+| `data-name` | `.bk-tags` | Adds one hidden input per tag with this name, so the tags are sent with the form |
+| `data-max` | `.bk-tags` | Most tags allowed |
+| `data-delimiter` | `.bk-tags` | Character that ends a tag. Default `,` |
+| `data-allow-duplicates` | `.bk-tags` | Keep tags that repeat one already added |
+| `data-add-on-blur="false"` | `.bk-tags` | Don't turn leftover text into a tag when focus leaves |
+| `data-required` | `.bk-tags` | Requires at least one tag before the form submits |
+
+The field fires `bk:change` with `{ values }` after a tag is added or removed.
+
+## Examples
+
+### With a limit
+
+`data-max` (`max` in React) caps the list. Text that doesn't fit stays in the field, so nothing typed is lost. Pasting `Lisbon, Porto, Faro` or a list with one item per line adds each one.
+
+```html
+<div
+    class="bk-field"
+    style="width: 340px"
+>
+    <label
+        class="bk-label"
+        for="tg-cities"
+    >
+        Shortlist
+    </label>
+    <div
+        class="bk-tags"
+        data-max="3"
+    >
+        <span
+            class="bk-chip"
+            data-value="Lisbon"
+        >
+            Lisbon
+        </span>
+        <input
+            class="bk-tags-input"
+            id="tg-cities"
+            placeholder="Add up to three cities"
+            aria-describedby="tg-cities-hint"
+        />
+    </div>
+    <p
+        class="bk-field-description"
+        id="tg-cities-hint"
+    >
+        Up to three cities.
+    </p>
+</div>
+```
+
+### Repeated tags
+
+A tag that is already in the list isn't added again. The existing chip is outlined briefly, and screen readers hear "… is already added". Matching ignores case, so "design" repeats "Design". Set `allowDuplicates` when repeats are meaningful.
+
+## API
+
+<!-- props: TagsInputProps -->
+
+`splitTags(text, delimiter)` and `addTags(tags, incoming, { max, allowDuplicates })` are exported from `bento-shad-ui` if you build your own field.
+
+## Accessibility
+
+- Each chip's × button is named "Remove …". The buttons are not in the Tab order, so Tab moves past the field in one step.
+- From the start of the text field, ← moves onto the last chip's × button. ← and → move between them, Delete or Backspace removes the focused tag, and Esc returns to the text field. Backspace in an empty field removes the last tag.
+- Additions, repeats, the limit and removals are announced through a polite live region, because new chips appear outside the text field.
+- Enter adds a tag when the field has text. In an empty field, Enter submits the form as usual.
+- With `required`, the text field is required until there is at least one tag.
 
 <!-- docs/components/textarea.md -->
 
@@ -5149,6 +6212,99 @@ For line, area or stacked charts, use a chart library (Recharts, Chart.js) with 
 
 - Charts render as `role="img"` with a text summary. Keep the summary specific: the values, not "a chart".
 - Don't rely on colour alone to tell series apart; label them in a legend or in text.
+
+<!-- docs/components/data-list.md -->
+
+# Data list
+
+> Labelled values such as booking details or an account summary, as a description list.
+
+```html
+<dl
+    class="bk-data-list"
+    style="width: 100%; max-width: 420px"
+>
+    <div class="bk-data-list-item">
+        <dt>Booking</dt>
+        <dd>LIS-48213</dd>
+    </div>
+    <div class="bk-data-list-item">
+        <dt>Guest</dt>
+        <dd>Mira Okafor</dd>
+    </div>
+    <div class="bk-data-list-item">
+        <dt>Dates</dt>
+        <dd>12–16 March 2026 · 4 nights</dd>
+    </div>
+    <div class="bk-data-list-item">
+        <dt>Status</dt>
+        <dd>
+            <span
+                class="bk-badge"
+                data-variant="success"
+                data-dot
+            >
+                Paid
+            </span>
+        </dd>
+    </div>
+</dl>
+```
+
+Use a data list for a few labelled facts about one thing. For many things with the same fields, use a [Table](table.md).
+
+## Usage
+
+```tsx
+import { Badge, DataList, DataListItem } from 'bento-shad-ui/react';
+
+<DataList>
+    <DataListItem label="Booking">LIS-48213</DataListItem>
+    <DataListItem label="Guest">Mira Okafor</DataListItem>
+    <DataListItem label="Status">
+        <Badge
+            variant="success"
+            dot
+        >
+            Paid
+        </Badge>
+    </DataListItem>
+</DataList>;
+```
+
+## Examples
+
+### Vertical
+
+`data-orientation="vertical"` (`orientation="vertical"` in React) puts each label above its value, which suits narrow tiles and long values.
+
+```html
+<dl
+    class="bk-data-list"
+    data-orientation="vertical"
+    style="width: 260px"
+>
+    <div class="bk-data-list-item">
+        <dt>Billing address</dt>
+        <dd>Rua Augusta 24, 1100-053 Lisboa, Portugal</dd>
+    </div>
+    <div class="bk-data-list-item">
+        <dt>VAT number</dt>
+        <dd>PT 509 123 456</dd>
+    </div>
+</dl>
+```
+
+## API
+
+<!-- props: DataListProps -->
+
+<!-- props: DataListItemProps -->
+
+## Accessibility
+
+- It renders a `<dl>` with `<dt>` and `<dd>` pairs, so screen readers announce each label with its value.
+- Long values wrap instead of overflowing, including unbroken strings such as IDs.
 
 <!-- docs/components/list.md -->
 
@@ -5686,6 +6842,131 @@ Keep the table headings visible and span the empty row across every column. Filt
 - Use `TableHead` (`<th scope="col">`) for column headers and a `TableCaption` that says what the table shows.
 - Right-align numbers with `align="end"` so digits line up.
 
+<!-- docs/components/timeline.md -->
+
+# Timeline
+
+> A vertical list of events with markers, times and optional icons, for activity and history.
+
+```html
+<ol
+    class="bk-timeline"
+    style="max-width: 380px"
+>
+    <li
+        class="bk-timeline-item"
+        data-tone="success"
+    >
+        <span
+            class="bk-timeline-marker"
+            aria-hidden="true"
+        >
+            <svg
+                class="bk-icon"
+                aria-hidden="true"
+            >
+                <use href="#i-check" />
+            </svg>
+        </span>
+        <div class="bk-timeline-content">
+            <div class="bk-timeline-head">
+                <p class="bk-timeline-title">Booking confirmed</p>
+                <time
+                    class="bk-timeline-time"
+                    datetime="2026-03-02T09:30"
+                >
+                    2 Mar, 09:30
+                </time>
+            </div>
+            <p class="bk-timeline-description">Hotel Lisboa Plaza, 4 nights.</p>
+        </div>
+    </li>
+    <li class="bk-timeline-item">
+        <span
+            class="bk-timeline-marker"
+            aria-hidden="true"
+        ></span>
+        <div class="bk-timeline-content">
+            <div class="bk-timeline-head">
+                <p class="bk-timeline-title">Mira joined the trip</p>
+                <time
+                    class="bk-timeline-time"
+                    datetime="2026-03-03T14:05"
+                >
+                    3 Mar, 14:05
+                </time>
+            </div>
+        </div>
+    </li>
+    <li
+        class="bk-timeline-item"
+        data-tone="warning"
+    >
+        <span
+            class="bk-timeline-marker"
+            aria-hidden="true"
+        >
+            <svg
+                class="bk-icon"
+                aria-hidden="true"
+            >
+                <use href="#i-clock" />
+            </svg>
+        </span>
+        <div class="bk-timeline-content">
+            <div class="bk-timeline-head">
+                <p class="bk-timeline-title">Flight time changed</p>
+                <time
+                    class="bk-timeline-time"
+                    datetime="2026-03-05T18:40"
+                >
+                    5 Mar, 18:40
+                </time>
+            </div>
+            <p class="bk-timeline-description">
+                TP 1351 now departs at 07:55 instead of 07:20.
+            </p>
+        </div>
+    </li>
+</ol>
+```
+
+## Usage
+
+```tsx
+import { Timeline, TimelineItem } from 'bento-shad-ui/react';
+import { Check } from 'lucide-react';
+
+<Timeline>
+    <TimelineItem
+        title="Booking confirmed"
+        time="2 Mar, 09:30"
+        dateTime="2026-03-02T09:30"
+        tone="success"
+        icon={<Check />}
+    >
+        Hotel Lisboa Plaza, 4 nights.
+    </TimelineItem>
+    <TimelineItem
+        title="Mira joined the trip"
+        time="3 Mar, 14:05"
+    />
+</Timeline>;
+```
+
+Items without an icon get a dot. `tone` takes `brand`, `success`, `warning`, `destructive` or `info`; use it for the events that matter, not on every item.
+
+## API
+
+<!-- props: TimelineItemProps -->
+
+`Timeline` is an `<ol>` and accepts its attributes.
+
+## Accessibility
+
+- The timeline is an ordered list, and each time is a `<time>` with a machine-readable `datetime`.
+- Markers and icons are decorative. A tone colours the marker only, so put anything important, such as "cancelled", in the title.
+
 <!-- docs/components/alert.md -->
 
 # Alert
@@ -6091,6 +7372,243 @@ Inside a button, use `<Button loading>` instead.
 ## Accessibility
 
 - With a `label`, the spinner is a `status` that screen readers announce. Next to visible text, pass `label=""` to hide it from them.
+
+<!-- docs/components/tip.md -->
+
+# Tip
+
+> A pencil character with a speech bubble, for onboarding hints, advice in empty states and short announcements.
+
+```html
+<div
+    class="bk-tip"
+    role="note"
+    style="max-width: 420px"
+>
+    <span
+        class="bk-illustration"
+        data-bk-character="pip"
+        data-mood="thinking"
+    ></span>
+    <div class="bk-tip-bubble">
+        <p class="bk-tip-title">Search by country</p>
+        <p class="bk-tip-text">
+            Type “Portugal” to see every city there, or press ⌘K from any page.
+        </p>
+    </div>
+</div>
+```
+
+A tip puts a short piece of advice in a character's voice. The drawing is decorative: the bubble carries the meaning, so the tip reads the same without the picture.
+
+## Usage
+
+```tsx
+import { Button, Tip } from 'bento-shad-ui/react';
+
+<Tip
+    character="pip"
+    mood="thinking"
+    title="Search by country"
+>
+    Type “Portugal” to see every city there, or press ⌘K from any page.
+</Tip>;
+
+function SharedTripsTip() {
+    const [show, setShow] = useState(true);
+    if (!show) return null;
+    return (
+        <Tip
+            character="mira"
+            mood="happy"
+            tone="peach"
+            title="Shared trips are here"
+            onDismiss={() => setShow(false)}
+            actions={<Button size="sm">Invite someone</Button>}
+        >
+            Plan together: everyone you invite can add places and vote on dates.
+        </Tip>
+    );
+}
+```
+
+### HTML
+
+```html
+<div
+    class="bk-tip"
+    role="note"
+>
+    <span
+        class="bk-illustration"
+        data-bk-character="pip"
+        data-mood="thinking"
+    ></span>
+    <div class="bk-tip-bubble">
+        <p class="bk-tip-title">Search by country</p>
+        <p class="bk-tip-text">Type “Portugal” to see every city there.</p>
+    </div>
+</div>
+```
+
+Load `dist/illustrations.iife.min.js` to draw the character (see [Characters](characters.md)). `data-side="end"` puts the character on the right; `data-tone` takes `peach`, `sky`, `mint`, `lilac` or `butter`. A button with `data-bk-dismiss` inside a tip hides it.
+
+## Examples
+
+### Announcement with actions
+
+Use a tint and an action for something new. Let people dismiss it, and remember that choice in your application.
+
+```html
+<div
+    class="bk-tip"
+    role="note"
+    data-tone="peach"
+    style="max-width: 460px"
+>
+    <span
+        class="bk-illustration"
+        data-bk-character="mira"
+        data-mood="happy"
+    ></span>
+    <div class="bk-tip-bubble">
+        <p class="bk-tip-title">Shared trips are here</p>
+        <p class="bk-tip-text">
+            Plan together: everyone you invite can add places and vote on dates.
+        </p>
+        <div class="bk-tip-actions">
+            <button
+                class="bk-button"
+                data-size="sm"
+                type="button"
+                data-bk-toast='{"title":"Invite link copied","variant":"success"}'
+            >
+                Invite someone
+            </button>
+            <button
+                class="bk-button"
+                data-variant="ghost"
+                data-size="sm"
+                type="button"
+                data-bk-dismiss
+            >
+                Not now
+            </button>
+        </div>
+        <button
+            class="bk-button bk-tip-close"
+            data-variant="ghost"
+            data-size="icon-sm"
+            type="button"
+            aria-label="Dismiss"
+            data-bk-dismiss
+        >
+            <svg
+                class="bk-icon"
+                aria-hidden="true"
+            >
+                <use href="#i-x" />
+            </svg>
+        </button>
+    </div>
+</div>
+```
+
+### Character on the right
+
+Put the character on the side the content flows towards, for example next to a form it explains.
+
+```html
+<div
+    class="bk-tip"
+    role="note"
+    data-side="end"
+    data-tone="sky"
+    style="max-width: 420px"
+>
+    <span
+        class="bk-illustration"
+        data-bk-character="moss"
+        data-mood="sleepy"
+    ></span>
+    <div class="bk-tip-bubble">
+        <p class="bk-tip-title">No rush</p>
+        <p class="bk-tip-text">
+            Your draft saves as you type. Come back to it any time this week.
+        </p>
+    </div>
+</div>
+```
+
+### In a tile
+
+A tip fits a bento tile as an onboarding step or a gentle nudge on a dashboard.
+
+```html
+<div class="bk-bento">
+    <div class="bk-bento-grid">
+        <article class="bk-tile bk-span-2">
+            <div class="bk-tile-header">
+                <h3 class="bk-tile-title">Getting started</h3>
+                <span
+                    class="bk-badge"
+                    data-variant="secondary"
+                >
+                    2 of 4
+                </span>
+            </div>
+            <div
+                class="bk-tip"
+                role="note"
+                data-tone="mint"
+            >
+                <span
+                    class="bk-illustration"
+                    data-bk-character="biscuit"
+                    data-mood="happy"
+                ></span>
+                <div class="bk-tip-bubble">
+                    <p class="bk-tip-title">Add your first stop</p>
+                    <p class="bk-tip-text">
+                        Pick a city and dates. You can reorder stops later by
+                        dragging.
+                    </p>
+                    <div class="bk-tip-actions">
+                        <button
+                            class="bk-button"
+                            data-size="sm"
+                            type="button"
+                        >
+                            Add a stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+```
+
+## Which character for which tip
+
+| Moment | Character and mood |
+|---|---|
+| A hint or a better way to do something | Pip, `thinking` |
+| Something new, or a success | Mira, `happy` |
+| Saved work, waiting, no hurry | Moss, `sleepy` |
+| A friendly first step | Biscuit, `happy` |
+| A gentle warning | Dumpling, `surprised` |
+
+## API
+
+<!-- props: TipProps -->
+
+## Accessibility
+
+- The tip has `role="note"`: supporting content, not an alert. For something urgent, use an [Alert](alert.md).
+- The character is hidden from screen readers. Never put information only in the drawing or the mood.
+- The × button needs an accessible name; React's defaults to "Dismiss". Dismissing removes the tip from the page, so move focus somewhere sensible if the button had it.
+- Tinted bubbles use the tint's own text colour, which passes 4.5:1 in both themes.
 
 <!-- docs/components/toast.md -->
 
@@ -7599,6 +9117,151 @@ The sidebar uses the `--sidebar-*` tokens, so it can be themed separately from t
 
 - Label the `nav`, and mark the current page with `current`.
 - Badges are read as part of the link ("Inbox 2"). Add hidden text if the number needs context ("2 unread").
+
+<!-- docs/components/steps.md -->
+
+# Steps
+
+> Shows progress through a fixed sequence such as checkout or onboarding, in a row or a column.
+
+```html
+<ol class="bk-steps">
+    <li
+        class="bk-step"
+        data-status="complete"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">
+                <span class="bk-sr-only">Completed:</span>
+                Trip details
+            </span>
+            <span class="bk-step-description">Lisbon, 12–16 March</span>
+        </span>
+    </li>
+    <li
+        class="bk-step"
+        data-status="current"
+        aria-current="step"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">Travellers</span>
+            <span class="bk-step-description">Names as on passports</span>
+        </span>
+    </li>
+    <li
+        class="bk-step"
+        data-status="upcoming"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">Payment</span>
+        </span>
+    </li>
+</ol>
+```
+
+Steps show where someone is; they don't move them. Put Back and Continue buttons below.
+
+## Usage
+
+```tsx
+import { Steps } from 'bento-shad-ui/react';
+
+<Steps
+    current={1}
+    steps={[
+        { title: 'Trip details', description: 'Lisbon, 12–16 March' },
+        { title: 'Travellers', description: 'Names as on passports' },
+        { title: 'Payment' },
+    ]}
+/>;
+```
+
+`current` counts from 0. Steps before it show a check mark, and `current={steps.length}` marks them all done.
+
+### HTML
+
+Set `data-status` to `complete`, `current` or `upcoming` on each `.bk-step`, and `aria-current="step"` on the current one. The numbers come from a CSS counter.
+
+## Examples
+
+### Vertical
+
+Use `data-orientation="vertical"` (`orientation="vertical"` in React) in narrow spaces or when steps have longer descriptions.
+
+```html
+<ol
+    class="bk-steps"
+    data-orientation="vertical"
+    style="max-width: 320px"
+>
+    <li
+        class="bk-step"
+        data-status="complete"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">
+                <span class="bk-sr-only">Completed:</span>
+                Create workspace
+            </span>
+            <span class="bk-step-description">Name it and pick a region.</span>
+        </span>
+    </li>
+    <li
+        class="bk-step"
+        data-status="current"
+        aria-current="step"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">Invite your team</span>
+            <span class="bk-step-description">
+                Add people by email. You can skip this.
+            </span>
+        </span>
+    </li>
+    <li
+        class="bk-step"
+        data-status="upcoming"
+    >
+        <span
+            class="bk-step-marker"
+            aria-hidden="true"
+        ></span>
+        <span class="bk-step-text">
+            <span class="bk-step-title">Connect a calendar</span>
+        </span>
+    </li>
+</ol>
+```
+
+## API
+
+<!-- props: StepsProps -->
+
+## Accessibility
+
+- The list is an `<ol>`, so screen readers announce the number of steps and each position.
+- The current step has `aria-current="step"`. Finished steps start with visually hidden "Completed:" text, because the check mark is decorative.
+- Upcoming steps are not just greyed: they keep their number, and the current step is marked with a ring as well as colour.
 
 <!-- docs/components/tabs.md -->
 

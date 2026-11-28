@@ -147,6 +147,32 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(function
 
   const step = (delta: number) => setShown(new Date(year, monthIndex + delta, 1));
 
+  // One day is in the Tab order (roving tabindex): the last one focused if it is in this month,
+  // else the selected day, today, or the 1st.
+  const [focused, setFocused] = React.useState<Date | null>(null);
+  const focusPending = React.useRef(false);
+  const gridRef = React.useRef<HTMLDivElement>(null);
+  const inMonth = (d: Date | null | undefined): boolean => !!d && d.getFullYear() === year && d.getMonth() === monthIndex;
+  const selectedDay = selected instanceof Date ? selected : from;
+  const tabbable = [focused, selectedDay, today].find((d): d is Date => inMonth(d)) ?? new Date(year, monthIndex, 1);
+
+  React.useEffect(() => {
+    if (!focusPending.current || !focused) return;
+    focusPending.current = false;
+    gridRef.current?.querySelector<HTMLButtonElement>(`[data-date="${toDateKey(focused)}"]`)?.focus();
+  });
+
+  const moveFocus = (date: Date) => {
+    setFocused(date);
+    if (!inMonth(date)) setShown(new Date(date.getFullYear(), date.getMonth(), 1));
+    focusPending.current = true;
+  };
+  const addMonths = (date: Date, delta: number) => {
+    const target = new Date(date.getFullYear(), date.getMonth() + delta, 1);
+    const last = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+    return new Date(target.getFullYear(), target.getMonth(), Math.min(date.getDate(), last));
+  };
+
   return (
     <div ref={ref} className={cx('bk-calendar', className)} data-mode={mode} data-bk-react="" {...rest}>
       <div className="bk-calendar-head">
@@ -159,18 +185,28 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(function
         </Button>
       </div>
       <div
+        ref={gridRef}
         className="bk-calendar-grid"
         onKeyDown={(e) => {
-          const moves: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
-          const delta = moves[e.key];
-          if (delta === undefined) return;
-          const buttons = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>('.bk-calendar-day'));
-          const i = buttons.indexOf(document.activeElement as HTMLButtonElement);
-          const next = buttons[i + delta];
-          if (i >= 0 && next) {
-            e.preventDefault();
-            next.focus();
-          }
+          const key = (e.target as HTMLElement).getAttribute?.('data-date');
+          if (!key) return;
+          const [y, m, d] = key.split('-').map(Number) as [number, number, number];
+          const current = new Date(y, m - 1, d);
+          const weekday = (current.getDay() - weekStartsOn + 7) % 7;
+          const moves: Record<string, () => Date> = {
+            ArrowLeft: () => new Date(y, m - 1, d - 1),
+            ArrowRight: () => new Date(y, m - 1, d + 1),
+            ArrowUp: () => new Date(y, m - 1, d - 7),
+            ArrowDown: () => new Date(y, m - 1, d + 7),
+            Home: () => new Date(y, m - 1, d - weekday),
+            End: () => new Date(y, m - 1, d + 6 - weekday),
+            PageUp: () => addMonths(current, e.shiftKey ? -12 : -1),
+            PageDown: () => addMonths(current, e.shiftKey ? 12 : 1),
+          };
+          const move = moves[e.key];
+          if (!move) return;
+          e.preventDefault();
+          moveFocus(move());
         }}
       >
         {weekdays.map((w, i) => (
@@ -182,20 +218,28 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(function
           const single = mode !== 'range' && selected instanceof Date && isSameDay(day.date, selected);
           const state = mode === 'range' && !day.outside ? rangeState(day.date) : undefined;
           const pressed = single || state === 'start' || state === 'end' || state === 'single';
-          const disabled = day.outside || isDisabled?.(day.date) === true;
+          // Unavailable days stay focusable (aria-disabled) so arrow keys can pass over them.
+          const unavailable = !day.outside && isDisabled?.(day.date) === true;
           return (
             <button
               key={day.key}
               type="button"
               className="bk-calendar-day"
+              data-date={day.key}
               data-outside={day.outside ? '' : undefined}
               data-today={today && isSameDay(day.date, today) ? '' : undefined}
               data-range={state}
               aria-pressed={pressed}
               aria-label={dayLabel.format(day.date)}
-              disabled={disabled}
-              tabIndex={day.outside ? -1 : 0}
-              onClick={() => choose(day.date)}
+              aria-disabled={unavailable || undefined}
+              disabled={day.outside}
+              tabIndex={!day.outside && isSameDay(day.date, tabbable) ? 0 : -1}
+              onFocus={() => {
+                if (!isSameDay(day.date, focused)) setFocused(day.date);
+              }}
+              onClick={() => {
+                if (!unavailable) choose(day.date);
+              }}
             >
               {day.date.getDate()}
             </button>
